@@ -1,3 +1,17 @@
+---
+layout:	post
+title:  "Hello world!"
+date: 2018-10-07 22:30
+author: "Adam"
+header-img: "img/post-bg-2015.jpg"
+catalog: true
+tags:
+    -生活
+    -感想
+---
+
+
+
 # Hello world!
 
 ## This is a prototype of my blog
