@@ -36,18 +36,16 @@ int main()
 
 
 $$
-P(x)=lim(x+1)
+P(x)=e^x\over \pm b^2-\sqrt{4ac}
 $$
 
-> This is a test of quote. www.baidu.com[baidu]
+> This is a test of quote.
 
 This is a test of image
 
-<<<<<<< HEAD
 ![Chongqing](https://github.com/AdamYoung71/AdamYoung71.github.io/blob/master/img/in-post/post-chongqing-tour.jpg?raw=true)
 =======
 ![Chongqing](https://github.com/AdamYoung71/AdamYoung71.github.io/blob/master/img/in-post/post-chongqing-tour.jpg)
->>>>>>> cc134c89c66b637e8b0550c90e416dcbc8c4f675
 
 <!--This is a test of illustrates-->
 
