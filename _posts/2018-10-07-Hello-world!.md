@@ -43,7 +43,7 @@ $$
 
 This is a test of image
 
-![Summon ing](C:\Users\Adam Young\Documents\Blog\AdamYoung71.github.io\img\in-post\Summon ing.jpg)
+![Chongqing](C:\Users\Adam Young\Documents\Blog\AdamYoung71.github.io\img\in-post\post-chongqing-tour.jpg)
 
 <!--This is a test of illustrates-->
 
