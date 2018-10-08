@@ -43,7 +43,7 @@ $$
 
 This is a test of image
 
-![Chongqing](https://github.com/AdamYoung71/AdamYoung71.github.io/blob/master/img/in-post/post-chongqing-tour.jpg)
+![Chongqing](https://github.com/AdamYoung71/AdamYoung71.github.io/blob/master/img/in-post/post-chongqing-tour.jpg?raw=true)
 
 <!--This is a test of illustrates-->
 
