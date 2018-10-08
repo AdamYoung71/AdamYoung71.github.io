@@ -43,7 +43,11 @@ $$
 
 This is a test of image
 
+<<<<<<< HEAD
 ![Chongqing](https://github.com/AdamYoung71/AdamYoung71.github.io/blob/master/img/in-post/post-chongqing-tour.jpg?raw=true)
+=======
+![Chongqing](https://github.com/AdamYoung71/AdamYoung71.github.io/blob/master/img/in-post/post-chongqing-tour.jpg)
+>>>>>>> cc134c89c66b637e8b0550c90e416dcbc8c4f675
 
 <!--This is a test of illustrates-->
 
