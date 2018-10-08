@@ -43,7 +43,7 @@ $$
 
 This is a test of image
 
-![Chongqing](C:\Users\Adam Young\Documents\Blog\AdamYoung71.github.io\img\in-post\post-chongqing-tour.jpg)
+![Chongqing](https://github.com/AdamYoung71/AdamYoung71.github.io/blob/master/img/in-post/post-chongqing-tour.jpg)
 
 <!--This is a test of illustrates-->
 
