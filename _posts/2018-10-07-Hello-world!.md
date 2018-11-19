@@ -43,10 +43,10 @@ $$
 
 This is a test of image
 
-![Chongqing](https://github.com/AdamYoung71/AdamYoung71.github.io/blob/master/img/in-post/post-chongqing-tour.jpg?raw=true)
+![Chongqing](/img/in-post/post-chongqing-tour.jpg)
 
 <!--This is a test of illustrates-->
 
-[www.baidu.com](百度)
+[https://www.baidu.com](百度)
 
 This is a test of hyperlink
