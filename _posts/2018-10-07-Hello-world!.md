@@ -43,7 +43,7 @@ $$
 
 This is a test of image
 
-![Chongqing](/img/in-post/post-chongqing-tour.jpg)
+![Chongqing](\img\in-post\post-chongqing-tour.jpg)
 
 <!--This is a test of illustrates-->
 
