@@ -31,7 +31,7 @@ In general, any machine learning problem can be assigned to one of two broad cla
 
 #### Supervised Learning
 
-对于给定的数据，已知其正确结果的形态和输入和输出的关系。
+**对于给定的数据，已知其正确结果的形态和输入和输出的关系。**
 
 ##### 分类：
 
@@ -47,7 +47,7 @@ In general, any machine learning problem can be assigned to one of two broad cla
 
 #### Unsupervised Learning
 
-未知结果。可以在不知道中间的各种变量的意义的情况下，根据变量的结构、关系做出推断。
+**未知结果。可以在不知道中间的各种变量的意义的情况下，根据变量的结构、关系做出推断。**
 
 Example：
 
@@ -69,5 +69,5 @@ Non-clustering: The "Cocktail Party Algorithm", allows you to find structure in 
 
 ![1547721315822](\img\in-post\1547721315822.png)
 
-代价方程，又称平方误差方程，是衡量预测方程和真实值之间误差的函数。
+**代价方程，又称平方误差方程，是衡量预测方程和真实值之间误差的函数。**
 
