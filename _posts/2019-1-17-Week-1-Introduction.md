@@ -59,15 +59,15 @@ Non-clustering: The "Cocktail Party Algorithm", allows you to find structure in 
 
 ### Model Representation
 
-1. 数据集表示：![1547720243394](\img\in-post\1547720243394.png)
+1. 数据集表示：![1547720243394](assets\1547720243394.png)
 
 2. 预测结果h(x)：”A good predictor"，Hypothesis
 
-3. 流程：![img](\img\in-post\H6qTdZmYEeaagxL7xdFKxA_2f0f671110e8f7446bb2b5b2f75a8874_Screenshot-2016-10-23-20.14.58.png)
+3. 流程：![img](assets\\H6qTdZmYEeaagxL7xdFKxA_2f0f671110e8f7446bb2b5b2f75a8874_Screenshot-2016-10-23-20.14.58.png)
 
    ### Cost Function
 
-![1547721315822](\img\in-post\1547721315822.png)
+![1547721315822](assets\1547721315822.png)
 
 **代价方程，又称平方误差方程，是衡量预测方程和真实值之间误差的函数。**
 
