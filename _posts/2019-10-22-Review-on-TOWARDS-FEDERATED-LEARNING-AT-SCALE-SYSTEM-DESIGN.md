@@ -18,7 +18,7 @@ tags:
 
 ## 2. Protocol
 
-![Federated Learning Protocol](..\img\in-post\Reviews\Towards-Federated-Learning-at-Scale-System-Design\Federated-Learning-Protocol.png)
+![Federated Learning Protocol](https://adamyoung71.github.io/img/in-post/Reviews/Towards-Federated-Learning-at-Scale-System-Design/Federated-Learning-Protocol.png)
 
 1. **Selection**: The server selects a subset of connected devices based on certain goals like the optimal number of participating devices (typically a few hundred devices participate in each round). If a device is not selected for participation, the server responds with instructions to reconnect at a later point in time.1 for participation, the server responds with instructions to reconnect at a later point in time.
 2. **Configuration**: configure base on selected mechanism. 
