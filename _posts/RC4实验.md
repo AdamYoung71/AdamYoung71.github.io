@@ -1,3 +1,16 @@
+---
+layout:	post
+title:  "RC4实验报告"
+date: 2019-8-14 23:40
+author: "Adam"
+header-img: "img/post-bg-ai.jpg"
+catalog: true
+tags:
+    - 密码学
+---
+
+
+
 # RC4实验
 
 ## 一、实验背景
