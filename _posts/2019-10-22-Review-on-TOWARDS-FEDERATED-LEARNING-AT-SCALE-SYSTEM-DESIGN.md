@@ -26,7 +26,7 @@ tags:
 
 ## 3. Device
 
-![Device Architecture](../img/in-post/Reviews/Towards Federated Learning at Scale System Design/Device Architecture.png)
+![Device Architecture](https://adamyoung71.github.io/img/in-post/Reviews/Towards-Federated-Learning-at Scale-System-Design/Device-Architecture.png)
 
 ## 8. Applications
 
