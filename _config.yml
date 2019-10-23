@@ -2,9 +2,9 @@
 title: Adam's Blog
 SEOTitle: 杨庭屹的博客 | Adam's Blog
 header-img: img/home-bg.jpg
-email: ytyyxy@outlook.com
+email: yangtingyi.me@gmail.com
 description: "This is the place where I try to do enhance myself."
-keyword: "杨庭屹, Adam, Adam Blog, 博客, 个人网站, UESTC, 互联网, C++"
+keyword: "杨庭屹, Adam, Adam Blog, 博客, 个人网站, UESTC, 互联网安全"
 url: "https://adamyoung71.github.io/"              # your host, for absolute URL
 baseurl: ""                             # for example, '/blog' if your blog hosted on 'host/blog'
 
@@ -51,7 +51,7 @@ kramdown:
   input: GFM                            # use Github Flavored Markdown !important
   syntax_highlighter_opts:
     span:
-      line_numbers: false
+      line_numbers: true
     block:
       line_numbers: true
       start_line: 1
@@ -78,13 +78,13 @@ ga_domain: huangxuan.me
 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
-sidebar-about-description: "For the next quantum leap<br>Becoming better"
+sidebar-about-description: "Becoming better"
 sidebar-avatar: /img/yty.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
 
 # Featured Tags
-featured-tags: true                     # whether or not using Feature-Tags
+featured-tags: false                     # whether or not using Feature-Tags
 featured-condition-size: 1              # A tag will be featured if the size of it is more than this condition value
 
 
