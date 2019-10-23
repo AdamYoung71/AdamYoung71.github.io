@@ -35,7 +35,7 @@ tags:
 
 ## 4. Server
 
-![Server-Network-Traffic](https://adamyoung71.github.io/img/in-post/Server-Network-Traffic.png)
+![Server-Network-Traffic](../img/in-post/Server-Network-Traffic.png)
 
 ## 8. Applications
 
