@@ -26,7 +26,16 @@ tags:
 
 ## 3. Device
 
-![Device Architecture](../img/in-post/Reviews/Towards Federated Learning at Scale System Design/Device Architecture.png)
+![Device Architecture](https://adamyoung71.github.io/img/in-post/Reviews/Towards-Federated-Learning-at-Scale-System-Design/Device-Architecture.png)
+
+1. **Programmatic Configuration:** An application configures the FL runtime by providing an FL population name and registering its example stores. (Only run while the device is idle.)
+2. **Job Invocation: **FL runtime contacts the FL server to announce that it is ready to run tasks for the given FL population. The server decides whether any FL tasks are available for the population and will either return an FL plan or a suggested time to check in later. 
+3. **Task Execution:** 
+4. **Reporting: **
+
+## 4. Server
+
+![Server-Network-Traffic](https://adamyoung71.github.io/img/in-post/Server-Network-Traffic.png)
 
 ## 8. Applications
 
