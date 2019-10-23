@@ -164,7 +164,7 @@ $$
 
 Ring-LWE涉及到抽象代数中Ring以及Ideal的概念，稍显复杂。我们这里简单介绍一下LWE问题，Ring-LWE问题和它有点像。LWE问题分为两类，一个叫做Search-LWE，一个叫做Decision-LWE。Search-LWE可以简单地用下图来表示，其中A是一个m*n的矩阵，由Zp中的元素组成；s是一个n维向量；e是一个m维向量；b是一个m维向量：
 
-![Ring-LWE](../img/in-post/Ring-LWE.jpg)
+![Ring-LWE](https://adamyoung71.github.io/img/in-post/post-homo-encryp/Ring-LWE.jpg)
 
 这个问题大致为：选择一个秘密（secret）值s，并选择一个范数很小的扰乱（error）向量e，计算b = As + e mod q。这个问题是：只给定矩阵A和计算的结果b（图中红色部分），不给定s和e（途中蓝色部分），反过来求秘密值s的大小。Decision-LWE问题有点类似：给定A和b，算法需要判断，b是由某个s通过As + e计算得来的呢，还是就是一个随机量呢？这里有几个小问题：
 
