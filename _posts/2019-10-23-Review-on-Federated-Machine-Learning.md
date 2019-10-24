@@ -48,14 +48,14 @@ $|V_{FED}-V{SUM}|<\delta$
 
 #### 2.3 FL的分类
 
-1. **Horizontal Federated Learning:** 两个数据集拥有相同的特征空间和不同的样本。例如两家异地公司业务相似，但却拥有交集很小的客户。![horizontal-federated-learning](../img/in-post/horizontal-federated-learning.png)
-2. **Vertical Federated Learning:** 两个数据集拥有相同的样本ID但特征空间不同。例如两家同地公司业务不同，但用户交集较大。![vertical-federated-learning](../img/in-post/vertical-federated-learning.png)
-3. **Federated Transfer Learning:** 数据集在样本和特征空间上均不同。通常的做法是先在比较有限的overlap上学习然后再应用到单侧特征的预测中。![federated-transfer-learning](../img/in-post/federated-transfer-learning.png)
+1. **Horizontal Federated Learning:** 两个数据集拥有相同的特征空间和不同的样本。例如两家异地公司业务相似，但却拥有交集很小的客户。![horizontal-federated-learning](https://adamyoung71.github.io/img/in-post/Reviews/FL-concepts-and-applications/horizontal-federated-learning.png)
+2. **Vertical Federated Learning:** 两个数据集拥有相同的样本ID但特征空间不同。例如两家同地公司业务不同，但用户交集较大。![vertical-federated-learning](https://adamyoung71.github.io/img/in-post/Reviews/FL-concepts-and-applications/vertical-federated-learning.png)
+3. **Federated Transfer Learning:** 数据集在样本和特征空间上均不同。通常的做法是先在比较有限的overlap上学习然后再应用到单侧特征的预测中。![federated-transfer-learning](https://adamyoung71.github.io/img/in-post/Reviews/FL-concepts-and-applications/federated-transfer-learning.png)
 
 #### 2.4 FL的系统结构
 
 1. **Horizontal Federated Learning：** 
 
-	![architecture-of-horizontal-federated-learning](../img/in-post/architecture-of-horizontal-federated-learning.png)
+	![architecture-of-horizontal-federated-learning](https://adamyoung71.github.io/img/in-post/Reviews/FL-concepts-and-applications/architecture-of-horizontal-federated-learning.png)
 
-2. **Vertical Federated Learning**：![architecture-of-vertical-federated-learning](../img/in-post/architecture-of-vertical-federated-learning.png)
+2. **Vertical Federated Learning**：![architecture-of-vertical-federated-learning](https://adamyoung71.github.io/img/in-post/Reviews/FL-concepts-and-applications/architecture-of-vertical-federated-learning.png)
