@@ -172,19 +172,7 @@ Ring-LWE涉及到抽象代数中Ring以及Ideal的概念，稍显复杂。我们
 2. e的范数要多么小？LWE要求e的取值要满足离散高斯分布（Discrete Gaussian Distribution）。
 3. 怎么想到的这么个问题？实际上，LWE问题是Lattice中的一个问题。Lattice是什么呢？这个展开说就有点累了…
 
-如果知乎er们想了解更多有关Abstract Algebra，Lattice，以及LWE的内容，下面的三个材料是可以阅读的：
 
-- Harvard Extension School的Abstract Algebra课程。这门课可以帮助快速入门Abstract Algebra。当然了，这可是Harvard学生的本科课程哦。[Abstract Algebra](https://link.zhihu.com/?target=http%3A//www.extension.harvard.edu/open-learning-initiative/abstract-algebra)
-
-- 2nd Bar-Ilan Winter School on Cryptography。Bar-llan大学自2011年开始每年都组织一次密码学的Winter School，请的都是大牛啊！2012年的主题是Lattice-Based Cryptography，2013年的主题是Pairing-Based Cryptography。2015年2月，新的一轮Winter School就开始了，知乎上 
-
-	[刘健](http://www.zhihu.com/people/6ca0bd71e48a8988b203d88a5d78b394)
-
-	 同学要去听的哦，羡慕嫉妒恨呢！
-
-	2nd Bar-Ilan Winter School on Cryptography
-
-- Oded Regev的Lecture Notes on Lattice。Regev是谁？是他提出的LWE和Ring-LWE，所以他课程的材料当然有价值一听。[Lattices in Computer Science (Fall 2009)](https://link.zhihu.com/?target=http%3A//www.cims.nyu.edu/~regev/teaching/lattices_fall_2009/index.html)
 
 ### **介绍一下构造FHE的思路？**
 
