@@ -22,6 +22,8 @@ tags:
 
 - **A simple function with homomorphic characteristic:**
 
+  > Modular Operation here: a mod p = a -[a/p] * p where [x] is the closest integer to x, so that the range of a mod p is now {-p/2, p/2}.
+
   $c=Enc(m)=m+pq+2r$
 
   $m=Dec(c)=(c\ mod\ p)mod\ 2$
@@ -34,17 +36,17 @@ tags:
 
 - **Correctness**
 
-  $Dec(c_i+c_j)=Dec((m_i+m_j))+p(q_i+q_j)+2(r_i+r_j))=((m_i+m_j)+2(r_i+r_j))mod(2)=m_i+m_j$
+  $Dec(c_i+c_j)=Dec((m_i+m_j))+p(q_i+q_j)+2(r_i+r_j))=((m_i+m_j)+2(r_i+r_j))mod(2)=m_i+m_j​$
 
   $Dec(c_i*c_j)=(m_i+2r_i)(m_2+2r_2)mod(2)=m_1*m_2​$
 
 ### 2. Noise
 
-As long as the Public Key is $pq$, we can subtract it from the ciphertext and get :
+As long as the Public Key is $pq​$, we can subtract it from the ciphertext and get :
 
 $c-pq=m+2r​$
 
-Because of the interference caused by $2r$, we could not inference the plaintext. So $m+2r$ is recognized as "Noise", and we can know that it augments along with the operation on ciphertext. Note that when $2r$ is bigger than $\frac{p}{2}$ in absolute value，$c\ mod(p)​$ will not produce prospective result, making it only available on low-polynomial-order functions, so named as SWHE. 
+Because of the interference caused by $2r​$, we could not inference the plaintext. So $m+2r​$ is recognized as "Noise", and we can know that it augments along with the operation on ciphertext. Note that when $m+2r​$ is bigger than $\frac{p}{2}​$ in absolute value，$c\ mod(p)​$ will not produce prospective result, making it only available on low-polynomial-order functions, so named as SWHE. 
 
 
 
