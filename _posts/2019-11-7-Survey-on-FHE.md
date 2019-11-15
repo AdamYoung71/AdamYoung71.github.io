@@ -52,15 +52,17 @@ Because of the interference caused by $2r​$, we could not inference the plaint
 
 ### 3. Re-encryption
 
-- Premises: 
+-  A direct way of noise-cancelling is to decrypt the ciphertext, while it is not quite possible to acquire the private key, so what if we encrypt the key? 
 
-  **Evaluate: **the algorithm$\epsilon(pk,f,c_i)$ outputs a ciphertext that encrypts $f(c_i)​$
+- **Premises:** 
 
-  **Permitted Function:** such functions satisfies  Evaluate.
+  ​	- Evaluate: the algorithm$\epsilon(pk,f,c_i)$ outputs a ciphertext that encrypts $f(c_i)$
 
-  **Fresh Ciphertext:** Ciphertext encrypted only once. 
+  ​	- Permitted Function:such functions satisfies  Evaluate.
 
-- Re-encryption: if $Dec$ is also a *permitted Function*, we can calculate: 
+  ​	- Fresh Ciphertext: Ciphertext encrypted only once. 
+
+- **Re-encryption**: if $Dec$ is also a *permitted Function*, we can calculate: 
 
   $\epsilon (pk_2, Dec, s^*,c^*)$
 
@@ -69,5 +71,3 @@ Because of the interference caused by $2r​$, we could not inference the plaint
   Now we did a decryption on the ciphertext, making it another *fresh ciphertext*, thus mitigate the overall noise. This approach is called "Homomorphic Re-Decryption", it works like changing someone's outfit without taking off any of the original clothes. 
 
 
-
-### 4. complexity 
