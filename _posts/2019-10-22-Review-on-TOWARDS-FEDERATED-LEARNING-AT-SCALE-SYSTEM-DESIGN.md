@@ -69,9 +69,9 @@ tags:
 
 5. 错误模型：Aggregator 或Selector失效时，只有其连接的部分设备会丢失；MA失效时本轮会失败但是可以由Coordinator重启。若C失效，Selector会探测到并重新生成。
 
-   ![1583637899681](../../../../AppData/Roaming/Typora/typora-user-images/1583637899681.png)
+   ![actor-model](https://adamyoung71.github.io/img/in-post/Reviews/Towards-Federated-Learning-at-Scale-System-Design/actor-model.png)
 
-![Server-Network-Traffic](https://adamyoung71.github.io/img/in-post/Reviews/Towards-Federated-Learning-at-Scale-System-Design/Server-Network-Traffic.png)
+
 
 ## 6. SecAgg
 
@@ -83,4 +83,4 @@ tags:
 
 - 计算成本随着device数量急剧增加。
 
-![1583640272344](../../../../AppData/Roaming/Typora/typora-user-images/1583640272344.png)
+![algorithm](https://adamyoung71.github.io/img/in-post/Reviews/Towards-Federated-Learning-at-Scale-System-Design/algorithm.png)
