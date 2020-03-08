@@ -39,8 +39,6 @@ tags:
 
 ## 3. Device
 
-## 3. Device
-
 ![Device Architecture](https://adamyoung71.github.io/img/in-post/Reviews/Towards-Federated-Learning-at-Scale-System-Design/Device-Architecture.png)
 
 1. **程序配置（Programmatic Configuration）:** 应用向FL Runtime提供其训练信息和数据集。重要条件是要对设备使用影响较小。当某些条件不满足时（不再充电等），Runtime会放弃本轮训练。
