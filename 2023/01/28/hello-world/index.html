@@ -12,6 +12,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
   <meta name="theme-color" content="#2f4154">
   <meta name="author" content="杨庭屹">
   <meta name="keywords" content="">
@@ -23,9 +25,10 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-01-28T06:00:20.704Z">
-<meta property="article:modified_time" content="2023-01-28T06:00:20.704Z">
+<meta property="article:published_time" content="2023-01-28T09:04:48.168Z">
+<meta property="article:modified_time" content="2023-01-28T09:04:48.168Z">
 <meta property="article:author" content="杨庭屹">
+<meta property="article:tag" content="Test">
 <meta name="twitter:card" content="summary_large_image">
   
   
@@ -94,7 +97,7 @@
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
-      <strong>Fluid</strong>
+      <strong>Adam&#39;s Blog</strong>
     </a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
@@ -207,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-01-28 06:00" pubdate>
-          2023年1月28日 早上
+        <time datetime="2023-01-28 09:04" pubdate>
+          2023年1月28日 上午
         </time>
       </span>
     
@@ -295,6 +298,13 @@
               <div class="post-metas my-3">
   
   
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Test/">#Test</a>
+      
+    </div>
+  
 </div>
 
 
@@ -352,6 +362,12 @@
                   <article class="post-next col-6">
                     
                     
+                      <a href="/2022/02/07/2022-02-01-SQL-Injetction%201%201/" title="SQL 注入攻击">
+                        <span class="hidden-mobile">SQL 注入攻击</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
                   </article>
                 </div>
               
@@ -404,6 +420,12 @@
 
 
   
+
+
+  
+  
+
+
 
 
 
@@ -597,6 +619,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 
