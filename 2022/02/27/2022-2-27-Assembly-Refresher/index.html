@@ -1,0 +1,860 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Adam">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="模板 12345678910111213141516from pwn import *context.log_level&#x3D;&amp;#x27;info&amp;#x27;r &#x3D; process([&quot;&#x2F;challenge&#x2F;embryoasm_level&quot;])shellcode &#x3D; &quot;&quot;&quot;    &quot;&quot;&quot;payload &#x3D; asm(shel">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pwn.college: Assembly Refreasher">
+<meta property="og:url" content="https://adamyoung71.github.io/2022/02/27/2022-2-27-Assembly-Refresher/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="模板 12345678910111213141516from pwn import *context.log_level&#x3D;&amp;#x27;info&amp;#x27;r &#x3D; process([&quot;&#x2F;challenge&#x2F;embryoasm_level&quot;])shellcode &#x3D; &quot;&quot;&quot;    &quot;&quot;&quot;payload &#x3D; asm(shel">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdn.net/20160428232504330">
+<meta property="article:published_time" content="2022-02-27T21:00:00.000Z">
+<meta property="article:modified_time" content="2023-01-28T14:33:32.403Z">
+<meta property="article:author" content="杨庭屹">
+<meta property="article:tag" content="pwn.college">
+<meta property="article:tag" content="Assembly">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20160428232504330">
+  
+  
+  
+  <title>pwn.college: Assembly Refreasher - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"adamyoung71.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Adam&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="pwn.college: Assembly Refreasher"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-02-27 21:00" pubdate>
+          2022年2月27日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          22k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          186 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">pwn.college: Assembly Refreasher</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>模板</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *<br><br>context.log_level=<span class="hljs-string">&#x27;info&#x27;</span><br><br>r = process([<span class="hljs-string">&quot;/challenge/embryoasm_level&quot;</span>])<br><br>shellcode = <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string"></span><br><span class="hljs-string">    </span><br><span class="hljs-string">&quot;&quot;&quot;</span><br><br>payload = asm(shellcode, arch=<span class="hljs-string">&#x27;amd64&#x27;</span>)<br>log.success(<span class="hljs-built_in">str</span>(payload)) <br><br>r.send(payload)<br>r.interactive()<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="Level-6"><a href="#Level-6" class="headerlink" title="Level 6"></a>Level 6</h2><p>Another cool concept in x86 is the independent access to lower register bytes.<br>Each register in x86 is 64 bits in size, in the previous levels we have accessed<br>the full register using rax, rdi or rsi. We can also access the lower bytes of<br>each register using different register names. For example the lower<br>32 bits of rax can be accessed using eax, lower 16 bits using ax,<br>lower 8 bits using al, etc.<br>MSB                                    LSB<br>+—————————————-+<br>|              rax              |<br>+——————–+——————-+<br>                                    |        eax        |<br>                                 +———+———+<br>                                                           |   ax    |<br>                                                     +—-+—-+<br>                                                          | ah | al |<br>                                                       +—-+—-+<br>Lower register bytes access is applicable to all registers_use.</p>
+<p>Using only the following instruction(s):<br>mov<br>Please compute the following:<br>rax &#x3D; rdi modulo 256<br>rbx &#x3D; rsi module 65536<br>mod256 就是低8位设置为0，mod 65535就是低16位设置为0    </p>
+<p><img src="https://img-blog.csdn.net/20160428232504330" srcset="/img/loading.gif" lazyload alt="寄存器比较"></p>
+<h2 id="Level-7"><a href="#Level-7" class="headerlink" title="Level 7"></a>Level 7</h2><p>In this level you will be working with bit logic and operations. This will involve heavy use of directly interacting with bits stored in a register or memory location. You will also likely need to make use of the logic instructions in x86: and, or, not, xor.</p>
+<p>Shifting in assembly is another interesting concept! x86 allows you to ‘shift’<br>bits around in a register. Take for instance, rax. For the sake of this example<br>say rax only can store 8 bits (it normally stores 64). The value in rax is:<br>rax &#x3D; 10001010<br>We if we shift the value once to the left:<br>shl rax, 1<br>The new value is:<br>rax &#x3D; 00010100<br>As you can see, everything shifted to the left and the highest bit fell off and<br>a new 0 was added to the right side. You can use this to do special things to<br>the bits you care about. It also has the nice side affect of doing quick multiplication,<br>division, and possibly modulo.<br>Here are the important instructions:<br>shl reg1, reg2       &lt;&#x3D;&gt;     Shift reg1 left by the amount in reg2<br>shr reg1, reg2       &lt;&#x3D;&gt;     Shift reg1 right by the amount in reg2<br>Note: all ‘regX’ can be replaced by a constant or memory location</p>
+<p>Using only the following instructions:<br>mov, shr, shl<br>Please perform the following:<br>Set rax to the 4th least significant byte of rdi<br>i.e.<br>rdi &#x3D; | B7 | B6 | B5 | B4 | B3 | B2 | B1 | B0 |<br>Set rax to the value of B3</p>
+<h4 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs assembly">shr rdi, 0x18<br>mov rax, 0<br>mov al, dil<br></code></pre></td></tr></table></figure>
+
+<h2 id="Level-8"><a href="#Level-8" class="headerlink" title="Level 8"></a>Level 8</h2><p>In this level you will be working with bit logic and operations. This will involve heavy use of directly interacting with bits stored in a register or memory location. You will also likely need to make use of the logic instructions in x86: and, or, not, xor.</p>
+<p>Bitwise logic in assembly is yet another interesting concept!<br>x86 allows you to perform logic operation bit by bit on registers.<br>For the sake of this example say registers only store 8 bits.<br>The values in rax and rbx are:<br>rax &#x3D; 10101010<br>rbx &#x3D; 00110011<br>If we were to perform a bitwise AND of rax and rbx using the “and rax, rbx” instruction<br>the result would be calculated by ANDing each pair bits 1 by 1 hence why<br>it’s called a bitwise logic. So from left to right:<br>1 AND 0 &#x3D; 0, 0 AND 0 &#x3D; 0, 1 AND 1 &#x3D; 1, 0 AND 1 &#x3D; 0 …<br>Finally we combine the results together to get:<br>rax &#x3D; 00100010<br>Here are some truth tables for reference:<br>    AND          OR           XOR<br> A | B | X    A | B | X    A | B | X<br>—+—+—  —+—+—  —+—+—<br> 0 | 0 | 0    0 | 0 | 0    0 | 0 | 0<br> 0 | 1 | 0    0 | 1 | 1    0 | 1 | 1<br> 1 | 0 | 0    1 | 0 | 1    1 | 0 | 1<br> 1 | 1 | 1    1 | 1 | 1    1 | 1 | 0</p>
+<p>Without using the following instructions:<br>mov, xchg<br>Please perform the following:<br>rax &#x3D; rdi AND rsi<br>i.e. Set rax to the value of (rdi AND rsi)</p>
+<p>AND 指令在两个操作数的对应位之间进行（按位）逻辑与（AND）操作，并将结果存放在目标操作数中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs assembly">and rdi, rsi<br>xor rax, rax    # clear rax<br>or rax, rdi     # set rax = rdi<br></code></pre></td></tr></table></figure>
+
+<h2 id="Level-9"><a href="#Level-9" class="headerlink" title="Level 9"></a>Level 9</h2><p>In this level you will be working with bit logic and operations. This will involve heavy use of directly interacting with bits stored in a register or memory location. You will also likely need to make use of the logic instructions in x86: and, or, not, xor.</p>
+<p>Using only following instructions:<br>and, or, xor<br>Implement the following logic:</p>
+<p>if x is even then<br>  y &#x3D; 1<br>else<br>  y &#x3D; 0<br>where:<br>x &#x3D; rdi<br>y &#x3D; rax</p>
+<h2 id="Level-10"><a href="#Level-10" class="headerlink" title="Level 10"></a>Level 10</h2><p>In this level you will be working with memory. This will require you to read or write<br>to things stored linearly in memory. If you are confused, go look at the linear<br>addressing module in ‘ike. You may also be asked to dereference things, possibly multiple<br>times, to things we dynamically put in memory for you use.</p>
+<p>Up until now you have worked with registers as the only way for storing things, essentially<br>variables like ‘x’ in math. Recall that memory can be addressed. Each address contains something<br>at that location, like real addresses! As an example: the address ‘699 S Mill Ave, Tempe, AZ 85281’<br>maps to the ‘ASU Campus’. We would also say it points to ‘ASU Campus’.  We can represent this like:<br>[‘699 S Mill Ave, Tempe, AZ 85281’] &#x3D; ‘ASU Campus’<br>The address is special because it is unique. But that also does not mean other address cant point to<br>the same thing (as someone can have multiple houses). Memory is exactly the same! For instance,the address in memory that your code is stored (when we take it from you) is 0x400000.<br>In x86 we can access the thing at a memory location, called dereferencing, like so:<br>mov rax, [some_address]        &lt;&#x3D;&gt;     Moves the thing at ‘some_address’ into rax<br>This also works with things in registers:<br>mov rax, [rdi]         &lt;&#x3D;&gt;     Moves the thing stored at the address of what rdi holds to rax<br>This works the same for writing:<br>mov [rax], rdi         &lt;&#x3D;&gt;     Moves rdi to the address of what rax holds.<br>So if rax was 0xdeadbeef, then rdi would get stored at the address 0xdeadbeef:<br>[0xdeadbeef] &#x3D; rdi<br>Note: memory is linear, and in x86, it goes from 0 - 0xffffffffffffffff (yes, huge).</p>
+<p>Please perform the following:</p>
+<ol>
+<li>Place the value stored at 0x404000 into rax</li>
+<li>Increment the value stored at the address 0x404000 by 0x1337<br>Make sure the value in rax is the original value stored at 0x404000 and make sure<br>that [0x404000] now has the incremented value.</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs assembly">mov rax, [0x404000]<br>mov rbx, 0x1337<br>add [0x404000], rbx<br></code></pre></td></tr></table></figure>
+
+<h2 id="Level-11"><a href="#Level-11" class="headerlink" title="Level 11"></a>Level 11</h2><p>In this level you will be working with memory. This will require you to read or write<br>to things stored linearly in memory. If you are confused, go look at the linear<br>addressing module in ‘ike. You may also be asked to dereference things, possibly multiple<br>times, to things we dynamically put in memory for you use.</p>
+<p>Recall that registers in x86_64 are 64 bits wide, meaning they can store 64 bits in them.<br>Similarly, each memory location is 64 bits wide. We refer to something that is 64 bits<br>(8 bytes) as a quad word. Here is the breakdown of the names of memory sizes:</p>
+<ul>
+<li>Quad Word &#x3D; 8 Bytes &#x3D; 64 bits</li>
+<li>Double Word &#x3D; 4 bytes &#x3D; 32 bits</li>
+<li>Word &#x3D; 2 bytes &#x3D; 16 bits</li>
+<li>Byte &#x3D; 1 byte &#x3D; 8 bits<br>In x86_64, you can access each of these sizes when dereferencing an address, just like using<br>bigger or smaller register accesses:<br>mov al, [address]        &lt;&#x3D;&gt;         moves the least significant byte from address to rax<br>mov ax, [address]        &lt;&#x3D;&gt;         moves the least significant word from address to rax<br>mov eax, [address]        &lt;&#x3D;&gt;         moves the least significant double word from address to rax<br>mov rax, [address]        &lt;&#x3D;&gt;         moves the full quad word from address to rax<br>Remember that moving only into al for instance does not fully clear the upper bytes.</li>
+</ul>
+<p>Please perform the following:</p>
+<ol>
+<li>Set rax to the byte at 0x404000</li>
+<li>Set rbx to the word at 0x404000</li>
+<li>Set rcx to the double word at 0x404000</li>
+<li>Set rdx to the quad word at 0x404000</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs assembly">0x400000:	mov   	al, byte ptr [0x404000]<br>0x400007:	mov   	bx, word ptr [0x404000]<br>0x40000f:	mov   	ecx, dword ptr [0x404000]<br>0x400016:	mov   	rdx, qword ptr [0x404000]<br></code></pre></td></tr></table></figure>
+
+<h2 id="Level-12"><a href="#Level-12" class="headerlink" title="Level 12"></a>Level 12</h2><p>In this level you will be working with memory. This will require you to read or write<br>to things stored linearly in memory. If you are confused, go look at the linear<br>addressing module in ‘ike. You may also be asked to dereference things, possibly multiple<br>times, to things we dynamically put in memory for you use.</p>
+<p>It is worth noting, as you may have noticed, that values are stored in reverse order of how we<br>represent them. As an example, say:<br>[0x1330] &#x3D; 0x00000000deadc0de<br>If you examined how it actually looked in memory, you would see:<br>[0x1330] &#x3D; 0xde 0xc0 0xad 0xde 0x00 0x00 0x00 0x00<br>This format of storing things in ‘reverse’ is intentional in x86, and its called Little Endian.</p>
+<p>For this challenge we will give you two addresses created dynamically each run. The first address will be placed in rdi. The second will be placed in rsi.<br>Using the earlier mentioned info, perform the following:</p>
+<ol>
+<li>set [rdi] &#x3D; 0xDEADBEEF00001337</li>
+<li>set [rsi] &#x3D; 0x000000C0FFEE0000<br>Hint: it may require some tricks to assign a big constant to a dereferenced register. Try setting a register to the constant than assigning that register to the derefed register.</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs assembly">0x400000:	movabs	rax, 0xdeadbeef00001337<br>0x40000a:	movabs	rbx, 0xc0ffee0000<br>0x400014:	mov   	qword ptr [rdi], rax<br>0x400017:	mov   	qword ptr [rsi], rbx<br></code></pre></td></tr></table></figure>
+
+<h2 id="Level-13"><a href="#Level-13" class="headerlink" title="Level 13"></a>Level 13</h2><p>In this level you will be working with memory. This will require you to read or write<br>to things stored linearly in memory. If you are confused, go look at the linear<br>addressing module in ‘ike. You may also be asked to dereference things, possibly multiple<br>times, to things we dynamically put in memory for you use.</p>
+<p>Recall that memory is stored linearly. What does that mean? Say we access the quad word at 0x1337:<br>[0x1337] &#x3D; 0x00000000deadbeef The real way memory is layed out is byte by byte, little endian:<br>[0x1337] &#x3D; 0xef<br>[0x1337 + 1] &#x3D; 0xbe<br>[0x1337 + 2] &#x3D; 0xad<br>…<br>[0x1337 + 7] &#x3D; 0x00<br>What does this do for us? Well, it means that we can access things next to each other using offsets,<br>like what was shown above. Say you want the 5th <em>byte</em> from an address, you can access it like:<br>mov al, [address+4]<br>Remember, offsets start at 0.</p>
+<p>Preform the following:</p>
+<ol>
+<li>load two consecutive quad words from the address stored in rdi</li>
+<li>calculate the sum of the previous steps quad words.</li>
+<li>store the sum at the address in rsi</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs assembly">0x400000:	mov   	rax, qword ptr [rdi]<br>0x400003:	mov   	rbx, qword ptr [rdi + 8]<br>0x400007:	add   	rax, rbx<br>0x40000a:	mov   	qword ptr [rsi], rax<br></code></pre></td></tr></table></figure>
+
+<h2 id="Level-14"><a href="#Level-14" class="headerlink" title="Level 14"></a>Level 14</h2><p>In this level you will be working with the Stack, the memory region that dynamically expands and shrinks. You will be required to read and write to the Stack, which may require you to use the pop &amp; push instructions. You may also need to utilize rsp to know where the stack is pointing.</p>
+<p>In these levels we are going to introduce the stack.<br>The stack is a region of memory, that can store values for later.<br>To store a value a on the stack we use the push instruction, and to retrieve a value we use pop.<br>The stack is a last in first out (LIFO) memory structure this means<br>the last value pushed in the first value popped.<br>Imagine unloading plates from the dishwasher let’s say there are 1 red, 1 green, and 1 blue.<br>First we place the red one in the cabinet, then the green on top of the red, then the blue.<br>Out stack of plates would look like:<br>Top —-&gt; Blue<br>          Green<br>Bottom -&gt; Red<br>Now if wanted a plate to make a sandwhich we would retrive the top plate from the stack<br>which would be the blue one that was last into the cabinet, ergo the first one out.</p>
+<p>Subtract rdi from the top value on the stack.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs assembly">0x400000:	sub   	qword ptr [rsp], rdi<br></code></pre></td></tr></table></figure>
+
+<h2 id="Level-15"><a href="#Level-15" class="headerlink" title="Level 15"></a>Level 15</h2><p>In this level you will be working with the Stack, the memory region that dynamically expands and shrinks. You will be required to read and write to the Stack, which may require you to use the pop &amp; push instructions. You may also need to utilize rsp to know where the stack is pointing.</p>
+<p>In this level we are going to explore the last in first out (LIFO) property of the stack.</p>
+<p>Using only following instructions:<br>push, pop<br>Swap values in rdi and rsi.<br>i.e.<br>If to start rdi &#x3D; 2 and rsi &#x3D; 5<br>Then to end rdi &#x3D; 5 and rsi &#x3D; 2</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs assembly">0x400000:	push  	rdi<br>0x400001:	push  	rsi<br>0x400002:	pop   	rdi<br>0x400003:	pop   	rsi<br></code></pre></td></tr></table></figure>
+
+<h2 id="Level-16"><a href="#Level-16" class="headerlink" title="Level 16"></a>Level 16</h2><p>In the previous levels you used push and pop to store and load data from the stack<br>however you can also access the stack directly using the stack pointer.<br>The stack pointer is stored in the special register “rsp”.<br>rsp always stores the memory address to the top of the stack,<br>i.e. the memory address of the last value pushed.<br>Similar to the memory levels we can use [rsp] to access the value at the memory address in rsp.</p>
+<p>Without using pop please calculate the average of 4 consecutive quad words stored on the stack.<br>Store the average on the top of the stack. Hint:<br>RSP+0x?? Quad Word A<br>RSP+0x?? Quad Word B<br>RSP+0x?? Quad Word C<br>RSP      Quad Word D<br>RSP-0x?? Average</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs assembly">0x400000:	mov   	rax, 0<br>0x400007:	add   	rax, qword ptr [rsp]<br>0x40000b:	add   	rax, qword ptr [rsp + 8]<br>0x400010:	add   	rax, qword ptr [rsp + 0x10]<br>0x400015:	add   	rax, qword ptr [rsp + 0x18]<br>0x40001a:	mov   	rbx, 4<br>0x400021:	div   	rbx<br>0x400024:	push  	rax<br></code></pre></td></tr></table></figure>
+
+<h2 id="Level-17"><a href="#Level-17" class="headerlink" title="Level 17"></a>Level 17</h2><p>In this level you will be working with control flow manipulation. This involves using instructions<br>to both indirectly and directly control the special register <code>rip</code>, the instruction pointer.<br>You will use instructions like: jmp, call, cmp, and the like to implement requests behavior.</p>
+<p>Earlier, you learned how to manipulate data in a pseudo-control way, but x86 gives us actual<br>instructions to manipulate control flow directly. There are two major ways to manipulate control<br>flow: 1. through a jump; 2. through a call. In this level, you will work with jumps. There are two types of jumps:</p>
+<ol>
+<li>Unconditional jumps</li>
+<li>Conditional jumps<br> Unconditional jumps always trigger and are not based on the results of earlier instructions.<br> As you know, memory locations can store data and instructions. You code will be stored at 0x40008c (this will change each run).<br> For all jumps, there are three types:</li>
+<li>Relative jumps</li>
+<li>Absolute jumps</li>
+<li>Indirect jumps</li>
+</ol>
+<p>In this level we will ask you to do both a relative jump and an absolute jump. You will do a relative jump first, then an absolute one. You will need to fill space in your code with something to make this relative jump possible. We suggest using the <code>nop</code> instruction. It’s 1 byte and very predictable.<br>Useful instructions for this level is:<br>jmp (reg1 | addr | offset) ; nop<br>Hint: for the relative jump, lookup how to use <code>labels</code> in x86.</p>
+<p>Using the above knowledge, perform the following:<br>Create a two jump trampoline: </p>
+<ol>
+<li>Make the first instruction in your code a jmp</li>
+<li>Make that jmp a relative jump to 0x51 bytes from its current position</li>
+<li>At 0x51 write the following code:</li>
+<li>Place the top value on the stack into register rdi</li>
+<li>jmp to the absolute address 0x403000</li>
+</ol>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.developerastrid.com/assembly/assembly-language-program-transfer-instruction/">https://www.developerastrid.com/assembly/assembly-language-program-transfer-instruction/</a></p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs assembly">_start:<br>    jmp short dest<br>    .rept 0x51<br>    nop<br>    .endr<br>dest:<br>    mov rdi, [rsp]<br>    mov r12, 0x403000<br>    jmp r12<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="Level-18"><a href="#Level-18" class="headerlink" title="Level 18"></a>Level 18</h2><p>We will be testing your code multiple times in this level with dynamic values! This means we will be running your code in a variety of random ways to verify that the logic is robust enough to survive normal use. You can consider this as normal dynamic value se<br>We will now introduce you to conditional jumps–one of the most valuable instructions in x86.<br>In higher level programming languages, an if-else structure exists to do things like:<br>if x is even:<br>   is_even &#x3D; 1<br>else:<br>   is_even &#x3D; 0<br>This should look familiar, since its implementable in only bit-logic. In these structures, we can control the programs control flow based on dynamic values provided to the program. Implementing the above logic with jmps can be done like so:</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs x86asm"><span class="hljs-comment">; assume rdi = x, rax is output</span><br><span class="hljs-comment">; rdx = rdi mod 2</span><br><span class="hljs-keyword">mov</span> <span class="hljs-built_in">rax</span>, <span class="hljs-built_in">rdi</span><br><span class="hljs-keyword">mov</span> <span class="hljs-built_in">rsi</span>, <span class="hljs-number">2</span><br><span class="hljs-keyword">div</span> <span class="hljs-built_in">rsi</span><br><span class="hljs-comment">; remainder is 0 if even</span><br><span class="hljs-keyword">cmp</span> <span class="hljs-built_in">rdx</span>, <span class="hljs-number">0</span><br><span class="hljs-comment">; jump to not_even code is its not 0</span><br><span class="hljs-keyword">jne</span> not_even<br><span class="hljs-comment">; fall through to even code</span><br><span class="hljs-keyword">mov</span> <span class="hljs-built_in">rbx</span>, <span class="hljs-number">1</span><br><span class="hljs-keyword">jmp</span> done<br><span class="hljs-comment">; jump to this only when not_even</span><br><span class="hljs-symbol">not_even:</span><br><span class="hljs-keyword">mov</span> <span class="hljs-built_in">rbx</span>, <span class="hljs-number">0</span><br><span class="hljs-symbol">done:</span><br><span class="hljs-keyword">mov</span> <span class="hljs-built_in">rax</span>, <span class="hljs-built_in">rbx</span><br><span class="hljs-comment">; more instructions here</span><br></code></pre></td></tr></table></figure>
+
+<p>Often though, you want more than just a single ‘if-else’. Sometimes you want two if checks, followed by an else. To do this, you need to make sure that you have control flow that ‘falls-through’ to the next <code>if</code> after it fails. All must jump to the same <code>done</code> after execution to avoid the else.<br>There are many jump types in x86, it will help to learn how they can be used. Nearly all of them rely on something called the ZF, the Zero Flag. The ZF is set to 1 when a cmp is equal. 0 otherwise.</p>
+<p>Using the above knowledge, implement the following:<br>if [x] is 0x7f454c46:<br>   y &#x3D; [x+4] + [x+8] + [x+12]</p>
+<p>else if [x] is 0x00005A4D:<br>   y &#x3D; [x+4] - [x+8] - [x+12]<br>else:<br>   y &#x3D; [x+4] * [x+8] * [x+12]</p>
+<p>where:<br>x &#x3D; rdi, y &#x3D; rax. Assume each dereferenced value is a signed dword. This means the values can start as a negative value at each memory position.<br>A valid solution will use the following at least once:<br>jmp (any variant), cmp</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs assembly">0x400000:    cmp       dword ptr [rdi], 0x7f454c46<br>0x400006:    je        0x400012<br>0x400008:    cmp       dword ptr [rdi], 0x5a4d<br>0x40000e:    je        0x40001d<br>0x400010:    jmp       0x400028<br>0x400012:    mov       eax, dword ptr [rdi + 4]<br>0x400015:    add       eax, dword ptr [rdi + 8]<br>0x400018:    add       eax, dword ptr [rdi + 0xc]<br>0x40001b:    jmp       0x400033<br>0x40001d:    mov       eax, dword ptr [rdi + 4]<br>0x400020:    sub       eax, dword ptr [rdi + 8]<br>0x400023:    sub       eax, dword ptr [rdi + 0xc]<br>0x400026:    jmp       0x400033<br>0x400028:    mov       eax, dword ptr [rdi + 4]<br>0x40002b:    imul      eax, dword ptr [rdi + 8]<br>0x40002f:    imul      eax, dword ptr [rdi + 0xc]<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="Level-19"><a href="#Level-19" class="headerlink" title="Level 19"></a>Level 19</h2><p>We will be testing your code multiple times in this level with dynamic values! This means we will be running your code in a variety of random ways to verify that the logic is robust enough to survive normal use. You can consider this as normal dynamic value se</p>
+<p>The last set of jump types is the indirect jump, which is often used for switch statements in the real world. Switch statements are a special case of if-statements that use only numbers to determine where the control flow will go. Here is an example:<br>switch(number):<br>    0: jmp do_thing_0<br>    1: jmp do_thing_1<br>    2: jmp do_thing_2<br>    default: jmp do_default_thing<br>The switch in this example is working on <code>number</code>, which can either be 0, 1, or 2. In the case that <code>number</code> is not one of those numbers, default triggers. You can consider this a reduced else-if type structure.<br>In x86, you are already used to using numbers, so it should be no suprise that you can make if statements based on something being an exact number. In addition, if you know the range of the numbers, a switch statement works very well. Take for instance the existence of a jump table. A jump table is a contiguous section of memory that holds addresses of places to jump. In the above example, the jump table could look like:<br>[0x1337] &#x3D; address of do_thing_0<br>[0x1337+0x8] &#x3D; address of do_thing_1<br>[0x1337+0x10] &#x3D; address of do_thing_2<br>[0x1337+0x18] &#x3D; address of do_default_thing<br>Using the jump table, we can greatly reduce the amount of cmps we use. Now all we need to check is if <code>number</code> is greater than 2. If it is, always do:<br>jmp [0x1337+0x18]<br>Otherwise:<br>jmp [jump_table_address + number * 8]<br>Using the above knowledge, implement the following logic:<br>if rdi is 0:<br>    jmp 0x403026<br>else if rdi is 1:<br>    jmp 0x403086<br>else if rdi is 2:<br>    jmp 0x4030d8<br>else if rdi is 3:<br>    jmp 0x4030f3<br>else:<br>    jmp 0x403133<br>Please do the above with the following constraints:</p>
+<ul>
+<li>assume rdi will NOT be negative</li>
+<li>use no more than 1 cmp instruction</li>
+<li>use no more than 3 jumps (of any variant)</li>
+<li>we will provide you with the number to ‘switch’ on in rdi.</li>
+<li>we will provide you with a jump table base address in rsi.</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs assembly">    CMP RDI, 4<br>    JL AAA<br>    MOV RDI, 4<br>AAA:<br>    mov rax, rdi<br>    mov rbx, 8<br>    mul rbx<br>    mov ebx, DWORD PTR [rax+rsi]<br>    jmp rbx<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="Level-20"><a href="#Level-20" class="headerlink" title="Level 20"></a>Level 20</h2><p>In  a previous level you computed the average of 4 integer quad words, which<br>was a fixed amount of things to compute, but how do you work with sizes you get when<br>the program is running? In most programming languages a structure exists called the<br>for-loop, which allows you to do a set of instructions for a bounded amount of times.<br>The bounded amount can be either known before or during the programs run, during meaning<br>the value is given to you dynamically. As an example, a for-loop can be used to compute<br>the sum of the numbers 1 to n:<br>sum &#x3D; 0<br>i &#x3D; 1<br>for i &lt;&#x3D; n:<br>    sum +&#x3D; i<br>    i +&#x3D; 1</p>
+<p>Please compute the average of n consecutive quad words, where:<br>rdi &#x3D; memory address of the 1st quad word<br>rsi &#x3D; n (amount to loop for)<br>rax &#x3D; average computed</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs assembly">0x400000:    xor       rax, rax<br>0x400003:    xor       rbx, rbx<br>0x400006:    cmp       rbx, rsi<br>0x400009:    jge       0x400013<br>0x40000b:    add       eax, dword ptr [edi + ebx*4]<br>0x40000f:    inc       ebx<br>0x400011:    jmp       0x400006<br>0x400013:    cdq<br>0x400014:    idiv      esi<br>0x400016:    dec       rax<br></code></pre></td></tr></table></figure>
+
+<h2 id="Level-21"><a href="#Level-21" class="headerlink" title="Level 21"></a>Level 21</h2><p>In previous levels you discovered the for-loop to iterate for a <em>number</em> of times, both dynamically and statically known, but what happens when you want to iterate until you meet a condition? A second loop structure exists called the while-loop to fill this demand. In the while-loop you iterate until a condition is met. As an example, say we had a location in memory with adjacent numbers and we wanted to get the average of all the numbers until we find one bigger or equal to 0xff:<br>average &#x3D; 0<br>i &#x3D; 0<br>while x[i] &lt; 0xff:<br>    average +&#x3D; x[i]<br>    i +&#x3D; 1<br>average &#x2F;&#x3D; i</p>
+<p>Using the above knowledge, please perform the following:<br>Count the consecutive non-zero bytes in a contiguous region of memory, where:<br>rdi &#x3D; memory address of the 1st byte<br>rax &#x3D; number of consecutive non-zero bytes<br>Additionally, if rdi &#x3D; 0, then set rax &#x3D; 0 (we will check)!<br>An example test-case, let:<br>rdi &#x3D; 0x1000<br>[0x1000] &#x3D; 0x41<br>[0x1001] &#x3D; 0x42<br>[0x1002] &#x3D; 0x43<br>[0x1003] &#x3D; 0x00<br>then: rax &#x3D; 3 should be set</p>
+<p>We will now run multiple tests on your code, here is an example run:</p>
+<ul>
+<li>(data) [0x404000] &#x3D; {10 random bytes},</li>
+<li>rdi &#x3D; 0x404000</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs assembly">0x400000:    xor       rax, rax<br>0x400003:    xor       rdx, rdx<br>0x400006:    cmp       rdi, 0<br>0x40000a:    je        0x400017<br>0x40000c:    cmp       byte ptr [rdi + rax], 0<br>0x400010:    je        0x400017<br>0x400012:    inc       rax<br>0x400015:    jmp       0x40000c<br></code></pre></td></tr></table></figure>
+
+<h2 id="Level-22"><a href="#Level-22" class="headerlink" title="Level 22"></a>Level 22</h2><p>In previous levels you implemented a while loop to count the number of consecutive non-zero bytes in a contiguous region of memory. In this level you will be provided with a contiguous region of memory again and will loop over each performing a conditional operation till a zero byte is reached.<br>All of which will be contained in a function!</p>
+<p>A function is a callable segment of code that does not destory control flow.<br>Functions use the instructions “call” and “ret”.</p>
+<p>The “call” instruction pushes the memory address of the next instruction onto<br>the stack and then jumps to the value stored in the first argument.</p>
+<p>Let’s use the following instructions as an example:<br>0x1021 mov rax, 0x400000<br>0x1028 call rax<br>0x102a mov [rsi], rax</p>
+<ol>
+<li>call pushes 0x102a, the address of the next instruction, onto the stack.</li>
+<li>call jumps to 0x400000, the value stored in rax.<br>The “ret” instruction is the opposite of “call”. ret pops the top value off of<br>the stack and jumps to it.<br>Let’s use the following instructions and stack as an example:<br>                     Stack ADDR  VALUE</li>
+</ol>
+<p>0x103f mov rax, rdx         RSP + 0x8   0xdeadbeef<br>0x1042 ret                  RSP + 0x0   0x0000102a<br>ret will jump to 0x102a<br>Please implement the following logic:<br>str_lower(src_addr):<br>    rax &#x3D; 0<br>    if src_addr !&#x3D; 0:<br>        while [src_addr] !&#x3D; 0x0:<br>            if [src_addr] &lt;&#x3D; 90:<br>                [src_addr] &#x3D; foo([src_addr])<br>                rax +&#x3D; 1<br>            src_addr +&#x3D; 1<br>foo is provided at 0x403000. foo takes a single argument as a value</p>
+<p>We will now run multiple tests on your code, here is an example run:</p>
+<ul>
+<li>(data) [0x404000] &#x3D; {10 random bytes},</li>
+<li>rdi &#x3D; 0x404000</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs assembly">0x400000:    xor       rax, rax<br>0x400003:    mov       rdx, rdi<br>0x400006:    mov       r13, 0x403000<br>0x40000d:    cmp       rdx, 0<br>0x400011:    je        0x400038<br>0x400013:    cmp       byte ptr [rdx], 0<br>0x400016:    je        0x400038<br>0x400018:    cmp       byte ptr [rdx], 0x5a<br>0x40001b:    jle       0x400022<br>0x40001d:    inc       rdx<br>0x400020:    jmp       0x400013<br>0x400022:    mov       dil, byte ptr [rdx]<br>0x400025:    mov       r12, rax<br>0x400028:    call      r13<br>0x40002b:    mov       byte ptr [rdx], al<br>0x40002d:    mov       rax, r12<br>0x400030:    inc       rax<br>0x400033:    inc       rdx<br>0x400036:    jmp       0x400013<br>0x400038:    nop<br>0x400039:    ret<br></code></pre></td></tr></table></figure>
+
+<h2 id="Level-23"><a href="#Level-23" class="headerlink" title="Level 23"></a>Level 23</h2><p>In the previous level, you learned how to make your first function and how to call other functions. Now we will work with functions that have a function stack frame. A function stack frame is a set of pointers and values pushed onto the stack to save things for later use and allocate space on the stack for function variables.<br>First, let’s talk about the special register rbp, the Stack Base Pointer. The rbp register is used to tell where our stack frame first started. As an example, say we want to construct some list (a contiguous space of memory) that is only used in our function. The list is 5 elements long, each element is a dword.<br>A list of 5 elements would already take 5 registers, so instead, we can make pace on the stack! The assembly would look like:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs assembly">; setup the base of the stack as the current top<br>mov rbp, rsp<br>; move the stack 0x14 bytes (5 * 4) down<br>; acts as an allocation<br>sub rsp, 0x14<br>; assign list[2] = 1337<br>mov eax, 1337<br>mov [rbp-0x8], eax<br>; do more operations on the list ...<br>; restore the allocated space<br>mov rsp, rbp<br>ret<br></code></pre></td></tr></table></figure>
+<p>Notice how rbp is always used to restore the stack to where it originally was. If we don’t restore the stack after use, we will eventually run out TM. In addition, notice how we subtracted from rsp since the stack grows down. To make it have more space, we subtract the space we need. The ret and call still works the same. It is assumed that you will never pass a stack address across functions, since, as you can see from the above use, the stack can be overwritten by anyone at any time.<br>Once, again, please make function(s) that implements the following:<br>most_common_byte(src_addr, size):<br>    b &#x3D; 0<br>    i &#x3D; 0<br>    for i &lt;&#x3D; size-1:<br>        curr_byte &#x3D; [src_addr + i]<br>        [stack_base - curr_byte] +&#x3D; 1<br>    b &#x3D; 0</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs assembly">max_freq = 0<br>max_freq_byte = 0<br>for b &lt;= 0xff:<br>    if [stack_base - b] &gt; max_freq:<br>        max_freq = [stack_base - b]<br>        max_freq_byte = b<br><br>return max_freq_byte<br></code></pre></td></tr></table></figure>
+<p>Assumptions:</p>
+<ul>
+<li>There will never be more than 0xffff of any byte</li>
+<li>The size will never be longer than 0xffff</li>
+<li>The list will have at least one element</li>
+</ul>
+<p>Constraints:</p>
+<ul>
+<li>You must put the “counting list” on the stack</li>
+<li>You must restore the stack like in a normal function</li>
+<li>You cannot modify the data at src_addr</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs assembly">0x400000:    push      rbp<br>0x400001:    mov       rbp, rsp<br>0x400004:    sub       rsp, 0xffff<br>0x40000b:    mov       rbx, -1<br>0x400012:    add       rbx, 1<br>0x400016:    cmp       rbx, rsi<br>0x400019:    je        0x400024<br>0x40001b:    mov       cl, byte ptr [rdi + rbx]<br>0x40001e:    add       byte ptr [rsp + rcx], 1<br>0x400022:    jmp       0x400012<br>0x400024:    mov       rbx, -1<br>0x40002b:    xor       rcx, rcx<br>0x40002e:    xor       rdx, rdx<br>0x400031:    add       rbx, 1<br>0x400035:    cmp       rbx, 0xffff<br>0x40003c:    je        0x40004b<br>0x40003e:    cmp       byte ptr [rsp + rbx], cl<br>0x400041:    jle       0x400031<br>0x400043:    mov       cl, byte ptr [rsp + rbx]<br>0x400046:    mov       rdx, rbx<br>0x400049:    jmp       0x400031<br>0x40004b:    mov       rax, rdx<br>0x40004e:    mov       rsp, rbp<br>0x400051:    pop       rbp<br>0x400052:    ret<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/pwn-college/">#pwn.college</a>
+      
+        <a href="/tags/Assembly/">#Assembly</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>pwn.college: Assembly Refreasher</div>
+      <div>https://adamyoung71.github.io/2022/02/27/2022-2-27-Assembly-Refresher/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Adam</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年2月27日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/03/07/2022-3-7-Shellcode-Injection/" title="pwn.college: Shellcode Injection">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">pwn.college: Shellcode Injection</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/21/2022-2-21-XSS-Attacks/" title="XSS Attacks">
+                        <span class="hidden-mobile">XSS Attacks</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

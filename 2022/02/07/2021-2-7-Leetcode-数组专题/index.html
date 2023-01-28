@@ -1,0 +1,812 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Adam">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1. 二分查找704.二分查找给定一个 n 个元素有序的（升序）整型数组 nums 和一个目标值 target  ，写一个函数搜索 nums 中的 target，如果目标值存在返回下标，否则返回 -1。提示：必须以log(n)时间复杂度完成。 条件：  所有num都是唯一的。 Nums 升序排列  思路：先考虑边界，如果第一个元素比target大，或最后一个元素比target小，直接返回-1。使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Leetcode数组专题">
+<meta property="og:url" content="https://adamyoung71.github.io/2022/02/07/2021-2-7-Leetcode-%E6%95%B0%E7%BB%84%E4%B8%93%E9%A2%98/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1. 二分查找704.二分查找给定一个 n 个元素有序的（升序）整型数组 nums 和一个目标值 target  ，写一个函数搜索 nums 中的 target，如果目标值存在返回下标，否则返回 -1。提示：必须以log(n)时间复杂度完成。 条件：  所有num都是唯一的。 Nums 升序排列  思路：先考虑边界，如果第一个元素比target大，或最后一个元素比target小，直接返回-1。使用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gz55dwxoh8j30r005ydge.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gz5fc5ldp8j30ra06o0tb.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gz5gervovzj30rg06yq3g.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gz5o6i6xxzj30ry05q3z1.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gz5pf6xgsuj30ty05umxo.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gz6vdldovwj30rk05omxp.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gz6wj30eqhj30se05ujrz.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gz6xjgfufzj30s205eq3h.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gz7v4bt6wfj30qy068jrw.jpg">
+<meta property="og:image" content="https://adamyoung71.github.io/Users/tingyi/Library/Application%20Support/typora-user-images/image-20220218205853415.png">
+<meta property="article:published_time" content="2022-02-07T10:00:00.000Z">
+<meta property="article:modified_time" content="2023-01-28T14:33:32.403Z">
+<meta property="article:author" content="杨庭屹">
+<meta property="article:tag" content="Leetcode">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gz55dwxoh8j30r005ydge.jpg">
+  
+  
+  
+  <title>Leetcode数组专题 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"adamyoung71.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Adam&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Leetcode数组专题"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-02-07 10:00" pubdate>
+          2022年2月7日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          9.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          79 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Leetcode数组专题</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h3 id="1-二分查找"><a href="#1-二分查找" class="headerlink" title="1. 二分查找"></a>1. 二分查找</h3><h4 id="704-二分查找"><a href="#704-二分查找" class="headerlink" title="704.二分查找"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/binary-search/">704.二分查找</a></h4><p>给定一个 n 个元素有序的（升序）整型数组 nums 和一个目标值 target  ，写一个函数搜索 nums 中的 target，如果目标值存在返回下标，否则返回 -1。提示：必须以<code>log(n)</code>时间复杂度完成。</p>
+<p>条件：</p>
+<ul>
+<li>所有num都是唯一的。</li>
+<li>Nums 升序排列</li>
+</ul>
+<p>思路：先考虑边界，如果第一个元素比target大，或最后一个元素比target小，直接返回-1。使用二分法，先初始化le ft和right为列表左右边界，找到中间值mid与target比大小，如果mid&gt;target则说明target在左区间，right更新为mid左边第一个。如果mid&lt;target说明其在右区间，left更新为mid右边第一个。循环条件为left小于等于right，等于时left，right，mid都是最终结果，代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">search</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> target)</span> </span>&#123;<br>        <span class="hljs-type">int</span> left = <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span> right = nums.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>;<br>        <span class="hljs-type">int</span> mid = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">if</span>(target&gt;nums[right] || target &lt; nums[<span class="hljs-number">0</span>]) <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>        <span class="hljs-keyword">while</span> (left&lt;=right)<br>        &#123;<br>            mid = left + (right - left) / <span class="hljs-number">2</span>; <span class="hljs-comment">//或 &gt;&gt; 1循环右移</span><br>            <span class="hljs-keyword">if</span>(nums[mid]&gt;target) &#123;<br>                right = mid - <span class="hljs-number">1</span>;<br>            &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(nums[mid]&lt;target)<br>            &#123;<br>                left = mid + <span class="hljs-number">1</span>;<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                <span class="hljs-keyword">return</span> mid;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<p>结果：<img src="https://tva1.sinaimg.cn/large/008i3skNgy1gz55dwxoh8j30r005ydge.jpg" srcset="/img/loading.gif" lazyload alt="image-20220207105826044"></p>
+<h4 id="35-查找插入位置"><a href="#35-查找插入位置" class="headerlink" title="35. 查找插入位置"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/search-insert-position/description/">35. 查找插入位置</a></h4><p>给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。</p>
+<p>请必须使用时间复杂度为 <code>O(log n)</code> 的算法。</p>
+<ul>
+<li>nums是无重复元素的升序数组。</li>
+</ul>
+<p>思路：在元素存在的情况下与上一题相同，所以只需要再考虑元素不存在的情况。考虑上一题的程序，最后的<code>else</code>就不能用了，不然会返回答案两边。最后的<code>return -1</code>也需要修改，最终运行到<code>left=right</code>时，如果目标值存在，左右都是目标，如果目标不存在，<code>mid=left=right</code>如果目标大于<code>nums[left]</code>则<code>left=left+1=right+1</code>就是<code>left</code>右侧第一个，这时<code>left&gt;right</code>推出循环，返回<code>left</code>；如果目标小于<code>nums[left]</code>则<code>right=right-1=left-1</code>就是left左边一个，此时插入位置仍为<code>left</code>所以同样返回<code>left</code>。代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">searchInsert</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> target)</span> </span>&#123;<br>       <span class="hljs-type">short</span> n = nums.<span class="hljs-built_in">size</span>();<br>       <span class="hljs-type">short</span> l=<span class="hljs-number">0</span>,r=n<span class="hljs-number">-1</span>;<br>       <span class="hljs-keyword">while</span>(l&lt;=r)&#123;<br>           <span class="hljs-type">short</span> mid=l+(r-l)/<span class="hljs-number">2</span>;<br>           <span class="hljs-keyword">if</span>(nums[mid]&lt;target)<br>               l=mid+<span class="hljs-number">1</span>;<br>           <span class="hljs-keyword">else</span> r=mid<span class="hljs-number">-1</span>;<br>       &#125;<br>       <span class="hljs-keyword">return</span> l;<br>   &#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p>结果：时间复杂度：<code>O(logn)</code>，空间复杂度：<code>O(1)</code><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gz5fc5ldp8j30ra06o0tb.jpg" srcset="/img/loading.gif" lazyload alt="image-20220207164239519"></p>
+<h4 id="34-在排序数组中查找元素的第一个和最后一个位置"><a href="#34-在排序数组中查找元素的第一个和最后一个位置" class="headerlink" title="34. 在排序数组中查找元素的第一个和最后一个位置"></a>34. <a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/">在排序数组中查找元素的第一个和最后一个位置</a></h4><p>给定一个按照升序排列的整数数组 nums，和一个目标值 target。找出给定目标值在数组中的开始位置和结束位置。</p>
+<p>如果数组中不存在目标值 target，返回 [-1, -1]。</p>
+<p>进阶：</p>
+<p>你可以设计并实现时间复杂度为 O(log n) 的算法解决此问题吗？</p>
+<p>思路一：遍历法，找到后开始计数。时间复杂度<code>O(n)</code>，最坏情况为都是target。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">searchRange</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> target)</span> </span>&#123;<br>        <span class="hljs-type">int</span> first, last;<br>        <span class="hljs-keyword">if</span>(nums.<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span> &#123;<span class="hljs-number">-1</span>, <span class="hljs-number">-1</span>&#125;;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> iter = <span class="hljs-number">0</span>;iter&lt;nums.<span class="hljs-built_in">size</span>();iter++) &#123;<br>            <span class="hljs-keyword">if</span>(nums[iter]==target) &#123;<span class="hljs-comment">//找到target</span><br>                first = iter;<br>                last = iter;<br>                <span class="hljs-keyword">while</span>((last+<span class="hljs-number">1</span>&lt;=nums.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>) &amp;&amp; (nums[last+<span class="hljs-number">1</span>] == nums[first])) &#123;<br>                    last++; <span class="hljs-comment">//这里要注意条件不要使得数组越界</span><br>                &#125;<br>                <span class="hljs-keyword">return</span> &#123;first, last&#125;;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> &#123;<span class="hljs-number">-1</span>, <span class="hljs-number">-1</span>&#125;; <span class="hljs-comment">//没找到</span><br>    &#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p>结果：竟然还不错<img src="https://tva1.sinaimg.cn/large/008i3skNgy1gz5gervovzj30rg06yq3g.jpg" srcset="/img/loading.gif" lazyload alt="image-20220207171954179"></p>
+<p>思路二：二分查找，想法是二分的<code>left</code>和<code>right</code>分别定位到target出现的第一个和最后一个的位置，可以在每次产生新的<code>mid</code>后，分别在其左右再进行二分查找，最终找到最边上的两个target，即为<code>left, right</code>。</p>
+<h4 id="69-x-的平方根"><a href="#69-x-的平方根" class="headerlink" title="69.x 的平方根"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/sqrtx/">69.x 的平方根</a></h4><p>给你一个非负整数 x ，计算并返回 x 的 算术平方根 。</p>
+<p>由于返回类型是整数，结果只保留整数部分 ，小数部分将被舍去 。</p>
+<p>注意：不允许使用任何内置指数函数和算符，例如 pow(x, 0.5) 或者 x ** 0.5 。</p>
+<p>简单思路：循环。时间复杂度：<code>O(n)</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">mySqrt</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span>(x == <span class="hljs-number">0</span>) &#123;<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;&#125;<br>        <span class="hljs-keyword">if</span>(x == <span class="hljs-number">1</span>) &#123;<span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;&#125;<br>        <span class="hljs-type">int</span> num = <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">while</span>(x / num &gt;= num)&#123;<br>            <span class="hljs-keyword">if</span>(x/(num+<span class="hljs-number">1</span>) &lt; (num+<span class="hljs-number">1</span>))<br>            &#123;<span class="hljs-keyword">return</span> num;&#125;<br>            num++;<br>        &#125;<br>        <span class="hljs-keyword">return</span> num;<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<p>二分法：。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">mySqrt</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span>(x == <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">if</span>(x == <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;	<span class="hljs-comment">//单独处理，否则会出现除数为0</span><br>        <span class="hljs-type">int</span> left = <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span> right = x ;<br>        <span class="hljs-keyword">while</span> (left&lt;=right) <br>        &#123;<br>             <span class="hljs-type">int</span> mid = left + ((right - left) / <span class="hljs-number">2</span>);<br>             <span class="hljs-keyword">if</span>(x/mid &gt; mid) &#123; <span class="hljs-comment">//避免溢出</span><br>                 left = mid + <span class="hljs-number">1</span>;<br>             &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(x/mid &lt; mid) &#123;<br>                 right = mid - <span class="hljs-number">1</span>;<br>             &#125; <span class="hljs-keyword">else</span> &#123;<br>                 <span class="hljs-keyword">return</span> mid; <span class="hljs-comment">//正好是mid的平方</span><br>             &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> left - <span class="hljs-number">1</span>; <span class="hljs-comment">//left是找到的第一个大于的sqrt（x）的值，所以要返回left-1</span><br>        <br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<p>结果：时间复杂度：<code>O(logn)</code>，空间复杂度：<code>O(1)</code><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gz5o6i6xxzj30ry05q3z1.jpg" srcset="/img/loading.gif" lazyload alt="image-20220207214842960"></p>
+<h4 id="367-有效的完全平方数"><a href="#367-有效的完全平方数" class="headerlink" title="367. 有效的完全平方数"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/valid-perfect-square/">367. 有效的完全平方数</a></h4><p>给定一个 正整数 num ，编写一个函数，如果 num 是一个完全平方数，则返回 true ，否则返回 false 。</p>
+<p>进阶：不要 使用任何内置的库函数，如  sqrt 。</p>
+<p>这一题和上一题基本一样，只需要根据题意做一些小小的修改即可。需要注意的点是，由于为了避免溢出判断时候使用除法而非乘法，就导致可能会出现5&#x2F;2&#x3D;2这种情况，所以需要多判断一下。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isPerfectSquare</span><span class="hljs-params">(<span class="hljs-type">int</span> num)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span>(num == <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>        <span class="hljs-keyword">if</span>(num == <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;	<span class="hljs-comment">//单独处理，否则会出现除数为0</span><br>        <span class="hljs-type">int</span> left = <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span> right = num ;<br>        <span class="hljs-keyword">while</span> (left&lt;=right) <br>        &#123;<br>             <span class="hljs-type">int</span> mid = left + ((right - left) / <span class="hljs-number">2</span>);<br>             <span class="hljs-keyword">if</span>(num/mid &gt; mid) &#123; <span class="hljs-comment">//避免溢出</span><br>                 left = mid + <span class="hljs-number">1</span>;<br>             &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(num/mid &lt; mid) &#123;<br>                 right = mid - <span class="hljs-number">1</span>;<br>             &#125; <span class="hljs-keyword">else</span> &#123;<br>                 <span class="hljs-keyword">if</span>(num/mid != (num<span class="hljs-number">-1</span>)/mid) &#123;	<span class="hljs-comment">//这里要注意，由于整数除法向下取整，不判断会有问题</span><br>                    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>; <span class="hljs-comment">//正好是mid的平方</span><br>                 &#125;<br>                 <br>                 <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>             &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<p>结果：时间复杂度：<code>O(logn)</code>，空间复杂度：<code>O(1)</code></p>
+<p><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gz5pf6xgsuj30ty05umxo.jpg" srcset="/img/loading.gif" lazyload alt="image-20220207223140439"></p>
+<h3 id="2-移除元素"><a href="#2-移除元素" class="headerlink" title="2. 移除元素"></a>2. 移除元素</h3><h4 id="27-移除元素"><a href="#27-移除元素" class="headerlink" title="27. 移除元素"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/remove-element/">27. 移除元素</a></h4><p>给你一个数组 nums 和一个值 val，你需要 原地 移除所有数值等于 val 的元素，并返回移除后数组的新长度。</p>
+<p>不要使用额外的数组空间，你必须仅使用 O(1) 额外空间并 原地 修改输入数组。</p>
+<p>元素的顺序可以改变。你不需要考虑数组中超出新长度后面的元素。</p>
+<p>思路：实际上不用改变数组的长度，只需要把要移除的元素放到最后即可。</p>
+<p>方法一：暴力算法，双循环，循环数组，找到target后循环将其之后的数都往前移一位。<code>O(n^2)</code></p>
+<p>方法二：快慢指针，是常用的一种用一个循环就可以完成双循环工作的思路。快指针完整遍历数组，慢指针为最终剩余元素数。开始时，快慢指针都指向数组头，在没有遇到目标时，快慢指针同时增加；当遇到目标时，快指针继续向前，慢指针不动，并将自己所指元素指向快指针所指元素。继续向后，如果没有遇到目标，快慢指针同时增加，且若快慢指针不想等，就将慢指针值改为快指针。若遇到目标，慢指针不动，快指针增加，以此类推，当快指针遍历数组后，慢指针指向元素即为新的数组边界。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">removeElement</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> val)</span> </span>&#123;<br>        <span class="hljs-type">int</span> slowIndex = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> fastIndex = <span class="hljs-number">0</span>; fastIndex&lt;nums.<span class="hljs-built_in">size</span>(); fastIndex++) &#123;<br>            <span class="hljs-keyword">if</span>(val != nums[fastIndex]) &#123;	<span class="hljs-comment">//只有快指针指向的不是目标时慢指针增加。</span><br>                nums[slowIndex] = nums[fastIndex];<br>                slowIndex++;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> slowIndex;<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<p>结果：时间复杂度：O(n)，空间复杂度：O(1)</p>
+<p><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gz6vdldovwj30rk05omxp.jpg" srcset="/img/loading.gif" lazyload alt="image-20220208224316153"></p>
+<h4 id="26-删除排序数组中的重复项"><a href="#26-删除排序数组中的重复项" class="headerlink" title="26.删除排序数组中的重复项"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/description/">26.删除排序数组中的重复项</a></h4><p>给你一个有序数组 nums ，请你 原地 删除重复出现的元素，使每个元素 只出现一次 ，返回删除后数组的新长度。</p>
+<p>不要使用额外的数组空间，你必须在 原地 修改输入数组 并在使用 <code>O(1)</code> 额外空间的条件下完成。</p>
+<ul>
+<li>nums升序排列</li>
+</ul>
+<p>思路：重点就是nums按升序排列，不然一定会需要<code>O(n)</code>的空间来存放每一个出现过的元素。利用上一题的快慢指针法，初始状态：快指针指向第二个元素，慢指针指向第一个元素。如果快指针的值等于慢指针，快指针右移，慢指针不动。若不等，慢指针右移，所指等于快指针，快指针右移。缺点：需要单独处理数组长度为0和1。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">removeDuplicates</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>        <span class="hljs-type">int</span> slowIndex = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">if</span>(nums.<span class="hljs-built_in">size</span>() == <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">if</span>(nums.<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> fastIndex = <span class="hljs-number">1</span>;fastIndex&lt;nums.<span class="hljs-built_in">size</span>();fastIndex++) &#123;<br>            <span class="hljs-keyword">if</span>(nums[slowIndex] != nums[fastIndex]) &#123;<br>                slowIndex++;<br>                nums[slowIndex] = nums[fastIndex];<br>            &#125; <br>        &#125;<br>        <span class="hljs-keyword">return</span> slowIndex + <span class="hljs-number">1</span>;<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<p>结果：时间复杂度<code>O(n)</code>，空间复杂度<code>O(1)</code>。</p>
+<p><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gz6wj30eqhj30se05ujrz.jpg" srcset="/img/loading.gif" lazyload alt="image-20220208232309980"></p>
+<h4 id="283-移动零"><a href="#283-移动零" class="headerlink" title="283.移动零"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/move-zeroes/">283.移动零</a></h4><p>给定一个数组 <code>nums</code>，编写一个函数将所有 <code>0</code> 移动到数组的末尾，同时保持非零元素的相对顺序。</p>
+<p><strong>请注意</strong> ，必须在不复制数组的情况下原地对数组进行操作。</p>
+<p>思路：由于要把0移动到最后，一个想法是使用两个指针，一个从前遍历数组，一个在后面做置换。当左指针指向0时，如果右指针不为零则可以直接交换，如果不为0则右指针向左移一位，直到左指针等于右指针时整个数组都被遍历且0都被转移到最右侧。但是结果需要保持顺序所以此想法不成立，那就继续用快慢指针。由于需要移动0，所以将非0数移到左边后，只需要把剩下的元素赋值为0即可。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">moveZeroes</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>        <span class="hljs-type">int</span> slow = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> fast=<span class="hljs-number">0</span>;fast&lt;nums.<span class="hljs-built_in">size</span>();fast++) &#123;<br>            <span class="hljs-keyword">if</span>(nums[fast] != <span class="hljs-number">0</span>) &#123;<br>                nums[slow] = nums[fast];<br>                slow++;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> iter = slow;iter &lt;nums.<span class="hljs-built_in">size</span>();iter++) &#123;<br>            nums[iter] =<span class="hljs-number">0</span>;<br>        &#125;<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<p>结果：复杂度：<code>O(n)</code>,<code>O(1)</code></p>
+<p><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gz6xjgfufzj30s205eq3h.jpg" srcset="/img/loading.gif" lazyload alt="image-20220208235807303"></p>
+<h4 id="844-比较含退格的字符串"><a href="#844-比较含退格的字符串" class="headerlink" title="844.比较含退格的字符串"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/backspace-string-compare/description/">844.比较含退格的字符串</a></h4><p>给定 s 和 t 两个字符串，当它们分别被输入到空白的文本编辑器后，请你判断二者是否相等。# 代表退格字符。</p>
+<p>如果相等，返回 true ；否则，返回 false 。</p>
+<p>注意：如果对空文本输入退格字符，文本继续为空。</p>
+<p>思路：这一题看起来很新颖，仔细想一下其实就是上面题的变型，思路也很简单，仍然使用快慢指针法，快指针遍历字符串，慢指针遇到#就回退（注意越界）。最终得到manzhizhen</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">string <span class="hljs-title">procString</span><span class="hljs-params">(string s)</span> </span>&#123;<br>        <span class="hljs-type">int</span> left = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> right=<span class="hljs-number">0</span>;right&lt;s.<span class="hljs-built_in">size</span>();right++) &#123;<br>           <span class="hljs-keyword">if</span>(s[right] == <span class="hljs-string">&#x27;#&#x27;</span>) &#123;<br>               s.<span class="hljs-built_in">erase</span>(right,<span class="hljs-number">1</span>);<br>               <span class="hljs-keyword">if</span>(right == <span class="hljs-number">0</span>) right--;<br>               <span class="hljs-keyword">if</span>(right<span class="hljs-number">-1</span>&gt;=<span class="hljs-number">0</span>) &#123;<br>                   s.<span class="hljs-built_in">erase</span>(right<span class="hljs-number">-1</span>,<span class="hljs-number">1</span>);<br>                   right = right  - <span class="hljs-number">2</span>;<br>               &#125;<br>           &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> s;<br>&#125;<br><br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">backspaceCompare</span><span class="hljs-params">(string s, string t)</span> </span>&#123;<br>        s = <span class="hljs-built_in">procString</span>(s);<br>        t = <span class="hljs-built_in">procString</span>(t);<br>        <span class="hljs-keyword">return</span> s==t;<br><br>        &#125;<br></code></pre></td></tr></table></figure>
+
+<p>结果：复杂度：<code>O(n),O(1)</code></p>
+<p><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gz7v4bt6wfj30qy068jrw.jpg" srcset="/img/loading.gif" lazyload alt="image-20220209191953891"></p>
+<h3 id="4-有序数组的平方"><a href="#4-有序数组的平方" class="headerlink" title="4. 有序数组的平方"></a>4. 有序数组的平方</h3><h4 id="977-有序数组的平方-Easy"><a href="#977-有序数组的平方-Easy" class="headerlink" title="977.有序数组的平方 Easy"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/squares-of-a-sorted-array/description/">977.有序数组的平方 Easy</a></h4><p>给你一个按 <strong>非递减顺序</strong> 排序的整数数组 <code>nums</code>，返回 <strong>每个数字的平方</strong> 组成的新数组，要求也按 <strong>非递减顺序</strong> 排序。</p>
+<p>思路：最简单的想法就是先每个数平方，然后排序。这样的复杂度大约是<code>O(n+nlogn)</code>（如果用快排）。由于nums是有序的，所以最大值只能出现在数组的两边，利用这个信息我们就可以使用双指针法来解决。如果左右的任意一边的平方大于另一边，则大的那边往中间移动，小的那边不动，将大的那边的平方放入新数组右侧。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">sortedSquares</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>        <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">sorted</span><span class="hljs-params">(nums.size())</span></span>;<br>        <span class="hljs-type">int</span> n = nums.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>;<br>        <span class="hljs-type">int</span> left = <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span> right = nums.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">while</span>(left&lt;=right) &#123;<span class="hljs-comment">//相等也需要考虑，相等时为最后一个数</span><br>            <span class="hljs-type">int</span> leftSquare = nums[left]*nums[left];<br>            <span class="hljs-type">int</span> rightSquare = nums[right]*nums[right];<br>            <span class="hljs-keyword">if</span>(leftSquare&gt;rightSquare) &#123;<br>                sorted[n] = leftSquare;<br>                left++;<br>                n--;<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                sorted[n] = rightSquare;<br>                right--;<br>                n--;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> sorted;<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<p>结果：复杂度：<code>O(n),O(n)</code></p>
+<h3 id="5-长度最小的数组"><a href="#5-长度最小的数组" class="headerlink" title="5. 长度最小的数组"></a>5. 长度最小的数组</h3><h4 id="209-长度最小的子数组-Medium"><a href="#209-长度最小的子数组-Medium" class="headerlink" title="209.长度最小的子数组 Medium"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/minimum-size-subarray-sum/">209.长度最小的子数组 Medium</a></h4><p>给定一个含有 n 个正整数的数组和一个正整数 target 。</p>
+<p>找出该数组中满足其和 ≥ target 的长度最小的 连续子数组 [numsl, numsl+1, …, numsr-1, numsr] ，并返回其长度。如果不存在符合条件的子数组，返回 0 。</p>
+<p>思路：这一题又是一个重要思路：滑动窗口法，看起来很像双指针，<strong>就是不断的调节子序列的起始位置和终止位置，从而得出我们要想的结果</strong>。当窗口满足要求时，记录子串长度和</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">minSubArrayLen</span><span class="hljs-params">(<span class="hljs-type">int</span> target, vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>        <span class="hljs-type">int</span> result = __INT32_MAX__;<br>        <span class="hljs-type">int</span> i=<span class="hljs-number">0</span>; <span class="hljs-comment">//窗口左侧</span><br>        <span class="hljs-type">int</span> subSum = <span class="hljs-number">0</span>; <span class="hljs-comment">//子串和</span><br>        <span class="hljs-type">int</span> subLen = <span class="hljs-number">0</span>; <span class="hljs-comment">//子串长度</span><br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">0</span>;j&lt;nums.<span class="hljs-built_in">size</span>();j++) &#123;<br>            subSum += nums[j];<br>            <span class="hljs-keyword">while</span>(subSum &gt;= target) &#123;<br>                subLen = (j - i + <span class="hljs-number">1</span>); <span class="hljs-comment">//获取当前子串长度</span><br>                result = result &lt; subLen ? result : subLen;<br>                subSum -= nums[i]; <span class="hljs-comment">//去掉窗口左侧元素</span><br>                i++; <span class="hljs-comment">//左侧右移</span><br>                <span class="hljs-comment">//可以写成一句：subSum -= nums[i++];</span><br>            &#125;<br>        &#125;<br>        <span class="hljs-comment">//如果result没有被改变则返回0</span><br>        <span class="hljs-keyword">return</span> result == __INT32_MAX__ ? <span class="hljs-number">0</span> : result;<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<p>本题收获：</p>
+<ul>
+<li>滑动窗口思想。</li>
+<li>使用MAX赋值进行最后的输出判断。</li>
+<li>命令组合（其实也没必要，可读性更重要）</li>
+</ul>
+<h4 id="904-水果成篮"><a href="#904-水果成篮" class="headerlink" title="904. 水果成篮"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/fruit-into-baskets/">904. 水果成篮</a></h4><p>你正在探访一家农场，农场从左到右种植了一排果树。这些树用一个整数数组 fruits 表示，其中 fruits[i] 是第 i 棵树上的水果 种类 。</p>
+<p>你想要尽可能多地收集水果。然而，农场的主人设定了一些严格的规矩，你必须按照要求采摘水果：</p>
+<p>你只有 两个 篮子，并且每个篮子只能装 单一类型 的水果。每个篮子能够装的水果总量没有限制。<br>你可以选择任意一棵树开始采摘，你必须从 每棵 树（包括开始采摘的树）上 恰好摘一个水果 。采摘的水果应当符合篮子中的水果类型。每采摘一次，你将会向右移动到下一棵树，并继续采摘。<br>一旦你走到某棵树前，但水果不符合篮子的水果类型，那么就必须停止采摘。<br>给你一个整数数组 fruits ，返回你可以收集的水果的 最大 数目。</p>
+<p>思路：这题描述地花里胡哨，但看完例子仔细想一下就可以发现这一题就是上一题的变体，目标是要找出fruits中最长的只含有两种元素的子串长度。依然使用滑动窗口，如果窗口右侧元素不是两个篮子之一，则更新长度，将两个篮子分别改为右侧-1和右侧。</p>
+<ul>
+<li>考虑右边一颗不在篮子里</li>
+<li>如果当前只用了一个篮子（前面的都为一种），则左侧不变，第二个篮子为右侧。</li>
+<li>如果两个篮子都用了，第二个篮子变为窗口右侧，第一个篮子变为第二个篮子，窗口左侧移动到原第二个篮子第一次出现的位置</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">totalFruit</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; tree)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (tree.<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span> n = tree.<span class="hljs-built_in">size</span>();<br>        <span class="hljs-type">int</span> head&#123;<span class="hljs-number">0</span>&#125;,tail&#123;<span class="hljs-number">0</span>&#125;;<br>        unordered_map&lt;<span class="hljs-type">int</span>,<span class="hljs-type">int</span>&gt;table;<br>        <span class="hljs-type">int</span> ans&#123;<span class="hljs-number">0</span>&#125;;<br>        <span class="hljs-keyword">while</span> (tail&lt;n)&#123;<br>            table[tree[tail++]]++;<br>            <span class="hljs-keyword">while</span> (table.<span class="hljs-built_in">size</span>()&gt;<span class="hljs-number">2</span>)&#123;<br>                <span class="hljs-keyword">if</span> (table[tree[head]]==<span class="hljs-number">1</span>)&#123;<br>                    table.<span class="hljs-built_in">erase</span>(tree[head]);<br>                &#125;<span class="hljs-keyword">else</span>&#123;<br>                    table[tree[head]]--;<br>                &#125;<br>                head++;<br>            &#125;<br>            ans = <span class="hljs-built_in">max</span>(ans,tail-head);<br>        &#125;<br>        <span class="hljs-keyword">return</span> ans;<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="76-最小覆盖子串"><a href="#76-最小覆盖子串" class="headerlink" title="76.最小覆盖子串"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/minimum-window-substring/">76.最小覆盖子串</a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/minimum-window-substring/"></a></h4><p>给你一个字符串 s 、一个字符串 t 。返回 s 中涵盖 t 所有字符的最小子串。如果 s 中不存在涵盖 t 所有字符的子串，则返回空字符串 “” 。</p>
+<p>注意：</p>
+<pre><code class="hljs">对于 t 中重复字符，我们寻找的子字符串中该字符数量必须不少于 t 中该字符数量。
+如果 s 中存在这样的子串，我们保证它是唯一的答案。
+</code></pre>
+<p>思路：</p>
+<h3 id="6-螺旋矩阵（出现率较高）"><a href="#6-螺旋矩阵（出现率较高）" class="headerlink" title="6. 螺旋矩阵（出现率较高）"></a>6. 螺旋矩阵（出现率较高）</h3><h4 id="59-螺旋矩阵"><a href="#59-螺旋矩阵" class="headerlink" title="59.螺旋矩阵"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/spiral-matrix-ii/">59.螺旋矩阵</a></h4><p>给你一个正整数 <code>n</code> ，生成一个包含 <code>1</code> 到 <code>n2</code> 所有元素，且元素按顺时针顺序螺旋排列的 <code>n x n</code> 正方形矩阵 <code>matrix</code> 。</p>
+<img src="/Users/tingyi/Library/Application Support/typora-user-images/image-20220218205853415.png" srcset="/img/loading.gif" lazyload alt="image-20220218205853415" style="zoom:50%;" />
+
+<p>思路：这种类型的题目不涉及什么算法，只要能正确描述流程即可。难点在于正确分析边界</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs c++">vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; <span class="hljs-built_in">res</span>(n, <span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;(n, <span class="hljs-number">0</span>)); <span class="hljs-comment">// 使用vector定义一个二维数组</span><br>       <span class="hljs-type">int</span> startx = <span class="hljs-number">0</span>, starty = <span class="hljs-number">0</span>; <span class="hljs-comment">// 定义每循环一个圈的起始位置</span><br>       <span class="hljs-type">int</span> loop = n / <span class="hljs-number">2</span>; <span class="hljs-comment">// 每个圈循环几次，例如n为奇数3，那么loop = 1 只是循环一圈，矩阵中间的值需要单独处理</span><br>       <span class="hljs-type">int</span> mid = n / <span class="hljs-number">2</span>; <span class="hljs-comment">// 矩阵中间的位置，例如：n为3， 中间的位置就是(1，1)，n为5，中间位置为(2, 2)</span><br>       <span class="hljs-type">int</span> count = <span class="hljs-number">1</span>; <span class="hljs-comment">// 用来给矩阵中每一个空格赋值</span><br>       <span class="hljs-type">int</span> offset = <span class="hljs-number">1</span>; <span class="hljs-comment">// 每一圈循环，需要控制每一条边遍历的长度</span><br>       <span class="hljs-type">int</span> i,j;<br>       <span class="hljs-keyword">while</span> (loop --) &#123;<br>           i = startx;<br>           j = starty;<br><br>           <span class="hljs-comment">// 下面开始的四个for就是模拟转了一圈</span><br>           <span class="hljs-comment">// 模拟填充上行从左到右(左闭右开)</span><br>           <span class="hljs-keyword">for</span> (j = starty; j &lt; starty + n - offset; j++) &#123;<br>               res[startx][j] = count++;<br>           &#125;<br>           <span class="hljs-comment">// 模拟填充右列从上到下(左闭右开)</span><br>           <span class="hljs-keyword">for</span> (i = startx; i &lt; startx + n - offset; i++) &#123;<br>               res[i][j] = count++;<br>           &#125;<br>           <span class="hljs-comment">// 模拟填充下行从右到左(左闭右开)</span><br>           <span class="hljs-keyword">for</span> (; j &gt; starty; j--) &#123;<br>               res[i][j] = count++;<br>           &#125;<br>           <span class="hljs-comment">// 模拟填充左列从下到上(左闭右开)</span><br>           <span class="hljs-keyword">for</span> (; i &gt; startx; i--) &#123;<br>               res[i][j] = count++;<br>           &#125;<br><br>           <span class="hljs-comment">// 第二圈开始的时候，起始位置要各自加1， 例如：第一圈起始位置是(0, 0)，第二圈起始位置是(1, 1)</span><br>           startx++;<br>           starty++;<br><br>           <span class="hljs-comment">// offset 控制每一圈里每一条边遍历的长度</span><br>           offset += <span class="hljs-number">2</span>;<br>       &#125;<br><br>       <span class="hljs-comment">// 如果n为奇数的话，需要单独给矩阵最中间的位置赋值</span><br>       <span class="hljs-keyword">if</span> (n % <span class="hljs-number">2</span>) &#123;<br>           res[mid][mid] = count;<br>       &#125;<br>       <span class="hljs-keyword">return</span> res;<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Leetcode/">#Leetcode</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Leetcode数组专题</div>
+      <div>https://adamyoung71.github.io/2022/02/07/2021-2-7-Leetcode-数组专题/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Adam</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年2月7日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/02/07/2022-02-01-SQL-Injetction/" title="SQL Injection Attacks">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">SQL Injection Attacks</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/04/2022-2-4-Wargame-Bandit/" title="Wargame Bandit">
+                        <span class="hidden-mobile">Wargame Bandit</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

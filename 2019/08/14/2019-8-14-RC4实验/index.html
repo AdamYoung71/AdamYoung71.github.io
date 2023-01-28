@@ -1,0 +1,712 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Adam">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="RC4实验一、实验背景1. 对称加密算法​	对称加密，也叫私钥加密，指的是加密密钥和解密密钥相同的密码算法。它要求发送方和接收方在进行加密通信之前共同商定一个密钥，算法的安全性也依赖于这个密钥，泄露密钥就意味着任何人都可以对加密的消息进行解密，所以保管密钥对于对称加密算法的通信十分关键。相比于公钥加密算法，对称加密算法具有计算量小、加密速度快、加密效率高等优点，但也存在多人通信时密钥数量太多所导致">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RC4实验报告">
+<meta property="og:url" content="https://adamyoung71.github.io/2019/08/14/2019-8-14-RC4%E5%AE%9E%E9%AA%8C/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="RC4实验一、实验背景1. 对称加密算法​	对称加密，也叫私钥加密，指的是加密密钥和解密密钥相同的密码算法。它要求发送方和接收方在进行加密通信之前共同商定一个密钥，算法的安全性也依赖于这个密钥，泄露密钥就意味着任何人都可以对加密的消息进行解密，所以保管密钥对于对称加密算法的通信十分关键。相比于公钥加密算法，对称加密算法具有计算量小、加密速度快、加密效率高等优点，但也存在多人通信时密钥数量太多所导致">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://adamyoung71.github.io/img/in-post/post-rc4-exp/fig-1.png">
+<meta property="og:image" content="https://adamyoung71.github.io/img/in-post/post-rc4-exp/fig-2.png">
+<meta property="og:image" content="https://adamyoung71.github.io//img/in-post/post-rc4-exp/fig-3.png">
+<meta property="article:published_time" content="2019-08-14T23:40:00.000Z">
+<meta property="article:modified_time" content="2023-01-28T14:33:32.403Z">
+<meta property="article:author" content="杨庭屹">
+<meta property="article:tag" content="Cryptography">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://adamyoung71.github.io/img/in-post/post-rc4-exp/fig-1.png">
+  
+  
+  
+  <title>RC4实验报告 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"adamyoung71.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Adam&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="RC4实验报告"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-08-14 23:40" pubdate>
+          2019年8月14日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          28 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">RC4实验报告</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="RC4实验"><a href="#RC4实验" class="headerlink" title="RC4实验"></a>RC4实验</h1><h2 id="一、实验背景"><a href="#一、实验背景" class="headerlink" title="一、实验背景"></a>一、实验背景</h2><h4 id="1-对称加密算法"><a href="#1-对称加密算法" class="headerlink" title="1. 对称加密算法"></a>1. 对称加密算法</h4><p>​	对称加密，也叫私钥加密，指的是加密密钥和解密密钥相同的密码算法。它要求发送方和接收方在进行加密通信之前共同商定一个密钥，算法的安全性也依赖于这个密钥，泄露密钥就意味着任何人都可以对加密的消息进行解密，所以保管密钥对于对称加密算法的通信十分关键。相比于公钥加密算法，对称加密算法具有计算量小、加密速度快、加密效率高等优点，但也存在多人通信时密钥数量太多所导致的密钥分发和管理难度大的缺点使得其使用成本较高，而且对称密钥无法提供签名功能。常用的对称加密算法有：DES，RC４，IDEA算法等。</p>
+<h4 id="２．流密码"><a href="#２．流密码" class="headerlink" title="２．流密码"></a>２．流密码</h4><p>​	流密码，又叫序列密码，是对称加密算法的一种，加密和解密双方使用相同的伪随机加密数据流(pseudo-randomstream)作为密钥，明文数据每次与密钥数据流顺次对应加密，得到密文数据流。这种密码体制只有混淆而没有扩散，与分组密码的最主要区别就是有记忆。流密码根据加密器中的记忆原件的状态$\sigma_i$是否依赖于输入的明文字符，可进一步分为同步和自同步两种。</p>
+<p>​	流密码最初主要用于政府、军方等重要部门，因此不像分组密码一样有公开的国际标准，大多的设计和成果都是保密的。但随着其需求的增大，更多公开的流密码技术也渐渐出现，如FISH，Helix，RC4，A5等。</p>
+<h4 id="3-RC4加密算法"><a href="#3-RC4加密算法" class="headerlink" title="3. RC4加密算法"></a>3. RC4加密算法</h4><p>​	RC4（Rivest Cipher 4），是一种密钥长度可变的流加密算法。其原理主要包括了初始化算法（KSA）：基于输入对称密钥K，置换状态数组；和伪随机子密码生成算法（PRNG）：扩充状态数组，加密明文数据两个部分。初始化的作用是将S盒打乱，确保每个元素都会被随机处理。而伪随机子密码生成算法则是产生伪随机流，与明文进行异或后产生密文。由于使用异或运算进行加密，RC4算法存在密钥序列重复从而导致的被破解的风险，在2015年，比利时鲁汶大学的研究人员也在75小时内获得了有RC4加密的明文。</p>
+<p>​	</p>
+<h2 id="二、实现原理"><a href="#二、实现原理" class="headerlink" title="二、实现原理"></a>二、实现原理</h2><h4 id="1-KSA算法"><a href="#1-KSA算法" class="headerlink" title="1. KSA算法"></a>1. KSA算法</h4><p>​	KSA算法的目标是基于输入的密钥K产生状态数组的一个置换，主要步骤为先初始化一个单位数组S，再根据密码的位数对S进行基于密钥K的置换得到本次加密的状态数组。以下为具体代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> *S <span class="hljs-title">RC4_KSA</span><span class="hljs-params">(<span class="hljs-type">int</span> K[])</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-comment">//RC4 KSA</span><br>    <span class="hljs-type">int</span> S[<span class="hljs-number">256</span>]=&#123;<span class="hljs-number">0</span>&#125;;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">255</span>;i++)<br>    &#123;<br>        S[i]=i; <span class="hljs-comment">//初始化单位数组</span><br>    &#125;<br>    <span class="hljs-type">int</span> j=<span class="hljs-number">0</span>, temp;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">255</span>;i++)  <span class="hljs-comment">//256轮置换</span><br>    &#123;<br>        j=(j+s[i]+K[i%(<span class="hljs-built_in">length</span>(K))])% <span class="hljs-number">256</span>;<br>        temp=S[i];<br>        S[i]=S[j];<br>        S[j]=temp;<br>    &#125;<br>    <span class="hljs-keyword">return</span> S;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-PRNG算法"><a href="#2-PRNG算法" class="headerlink" title="2. PRNG算法"></a>2. PRNG算法</h4><p>​	此算法的目的是使用上一步的置换数组来产生伪随机序列，与明文异或产生密文。原理和代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> *C <span class="hljs-title">RC4</span><span class="hljs-params">(<span class="hljs-type">int</span> S[], <span class="hljs-type">int</span> M[])</span> <span class="hljs-comment">//输入S和明文数组</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-type">int</span> i=<span class="hljs-number">0</span>, j=<span class="hljs-number">0</span>,temp T[<span class="hljs-number">256</span>]=&#123;<span class="hljs-number">0</span>&#125;;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> k=<span class="hljs-number">0</span>;k&lt;(<span class="hljs-built_in">length</span>(M)))<br>    &#123;<br>        i=(i+<span class="hljs-number">1</span>) % <span class="hljs-number">256</span>;<br>        j=(j+S[i]) % <span class="hljs-number">256</span>;<br>        temp=S[i]; S[i]=S[j]; S[j]=temp;<br>        T[k] = S[(S[i]+S[j]) % <span class="hljs-number">256</span>];<span class="hljs-comment">//产生伪随机序列</span><br>        C[k] = T[k] ^ M[k];<span class="hljs-comment">//明文与伪随机序列异或产生密文</span><br>    &#125;<br>    <span class="hljs-keyword">return</span> C;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="三、验证和测试"><a href="#三、验证和测试" class="headerlink" title="三、验证和测试"></a>三、验证和测试</h2><h4 id="1-使用openssl进行测试"><a href="#1-使用openssl进行测试" class="headerlink" title="1. 使用openssl进行测试"></a>1. 使用openssl进行测试</h4><p>经查阅文档，在openssl中使用RC4的相关函数为：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;openssl/rc4.h&gt;</span></span><br><br> <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">RC4_set_key</span><span class="hljs-params">(RC4_KEY *key, <span class="hljs-type">int</span> len, <span class="hljs-type">const</span> <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *data)</span></span>;<br><br> <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">RC4</span><span class="hljs-params">(RC4_KEY *key, <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> len, <span class="hljs-type">const</span> <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *indata,</span></span><br><span class="hljs-params"><span class="hljs-function">          <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *outdata)</span></span>;<br></code></pre></td></tr></table></figure>
+
+<p>使用Linux下C++编程的完整程序为：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;string&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;openssl/rc4.h&gt;</span><span class="hljs-comment">//添加RC4的库</span></span><br><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    RC4_KEY rc4_key; <span class="hljs-comment">//生成密钥</span><br>    string p = <span class="hljs-string">&quot;This is the plain text.&quot;</span>; <span class="hljs-comment">//设置明文</span><br>    string key = <span class="hljs-string">&quot;12345ABCDE&quot;</span>;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> * cipherText = <span class="hljs-keyword">new</span> <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> [p.<span class="hljs-built_in">length</span>()];<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> * plainText = (<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *)p.<span class="hljs-built_in">c_str</span>();<br>	<br>	cout&lt;&lt;<span class="hljs-string">&quot;初始明文为：&quot;</span>;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>;i&lt;p.<span class="hljs-built_in">length</span>();i++)<br>	&#123;<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%0x&quot;</span>,plainText[i]);		<br>	&#125;<br>	cout&lt;&lt;endl;<br>    <br>    <span class="hljs-built_in">RC4_set_key</span>(&amp;rc4_key, key.<span class="hljs-built_in">length</span>(), plainText);<span class="hljs-comment">//设置密钥</span><br>    <span class="hljs-built_in">RC4</span>(&amp;rc4_key, p.<span class="hljs-built_in">length</span>(), plainText, cipherText);<span class="hljs-comment">//进行加密</span><br><br>	string cipher = (<span class="hljs-type">char</span> *)cipherText;<br>	cout&lt;&lt;<span class="hljs-string">&quot;密文为：&quot;</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>;i&lt;p.<span class="hljs-built_in">length</span>();i++)<br>	&#123;<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%0x&quot;</span>,cipherText[i]);		<br>	&#125;<br>	cout&lt;&lt;endl;<br>	<br>	<span class="hljs-built_in">RC4_set_key</span>(&amp;rc4_key, key.<span class="hljs-built_in">length</span>(), plainText);<span class="hljs-comment">//再次设置密钥（不设置无法解密）</span><br>	<span class="hljs-built_in">RC4</span>(&amp;rc4_key, p.<span class="hljs-built_in">length</span>(), cipherText, plainText);<span class="hljs-comment">//使用相同密钥解密，获得明文</span><br>	cout&lt;&lt;<span class="hljs-string">&quot;解密后得到的明文为：&quot;</span>;<br>	<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>;i&lt;p.<span class="hljs-built_in">length</span>();i++)<br>	&#123;<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%0x&quot;</span>,plainText[i]);		<br>	&#125;<br>	cout&lt;&lt;endl;<br>	<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>可见，当前程序的确可以使用openssl中的RC4相关函数进行可逆的加解密运算，也就证明了算法的正确性。</p>
+<h4 id="2-时间开销"><a href="#2-时间开销" class="headerlink" title="2. 时间开销"></a>2. 时间开销</h4><p>openssl中自带了可以测试各种算法性能的函数<strong>speed</strong>指令，本次将RC4与DES，RSA相比，观察其时间开销和性能。</p>
+<p>在Linux命令行输入openssl进入其命令界面后，分别输入：</p>
+<figure class="highlight gml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs gml"><span class="hljs-variable language_">speed</span> rc4<br><span class="hljs-variable language_">speed</span> des<br><span class="hljs-variable language_">speed</span> rsa<br></code></pre></td></tr></table></figure>
+
+<p>结果分别为：</p>
+<p><img src="https://adamyoung71.github.io/img/in-post/post-rc4-exp/fig-1.png" srcset="/img/loading.gif" lazyload alt="fig-1"></p>
+<p><img src="https://adamyoung71.github.io/img/in-post/post-rc4-exp/fig-2.png" srcset="/img/loading.gif" lazyload alt="fig-2"></p>
+<p><img src="https://adamyoung71.github.io//img/in-post/post-rc4-exp/fig-3.png" srcset="/img/loading.gif" lazyload alt="fig-3"></p>
+<p>​	综合上面三张图，不难看出，在明文大小相同的情况下RC4的运算速度最快，DES次之，RSA最慢，这也很好地符合了我们的预期。就拿1024bit数据加密来说，RC4在3秒内可以进行超过百万次加密，DES在cbc模式下为3秒进行近二十万次加密，而RSA在10秒内只能进行8万余次的私钥计算和13万余次的公钥加密计算。从这里我们也可以看出RC4在加密效率上有着很高的优越性。</p>
+<h2 id="四、实验结论"><a href="#四、实验结论" class="headerlink" title="四、实验结论"></a>四、实验结论</h2><p>​	本次实验，通过深入了解RC4算法的起源，发展和特点，我更加透彻地了解了流密码的算法原理，安全性等。而通过亲自编写程序简易地实现该算法也让我能体会到流密码与分组密码、公钥密码的不同之处。总的来说，RC4是一种安全性很高，密钥长度非常灵活的加密算法，值得我们进行深入的学习。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Cryptography/">#Cryptography</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>RC4实验报告</div>
+      <div>https://adamyoung71.github.io/2019/08/14/2019-8-14-RC4实验/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Adam</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年8月14日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/10/01/2019-10-01-%E7%AC%AC%E4%BA%8C%E6%AC%A1%E4%BD%9C%E4%B8%9A/" title="基于N-H协议的安全通信协议设计">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">基于N-H协议的安全通信协议设计</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/07/30/2019-7-30-%E7%94%9F%E4%BA%A7%E5%AE%9E%E4%B9%A0%E6%8A%A5%E5%91%8A/" title="东伦敦大学夏令营">
+                        <span class="hidden-mobile">东伦敦大学夏令营</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

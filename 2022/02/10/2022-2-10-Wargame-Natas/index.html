@@ -1,0 +1,739 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Adam">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="今天开始学习第二个wargame Natas。 Natas teaches the basics of serverside web-security. Each level of natas consists of its own website located at http:&#x2F;&#x2F;natasX.natas.labs.overthewire.org, where X is the level n">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Wargame Natas">
+<meta property="og:url" content="https://adamyoung71.github.io/2022/02/10/2022-2-10-Wargame-Natas/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="今天开始学习第二个wargame Natas。 Natas teaches the basics of serverside web-security. Each level of natas consists of its own website located at http:&#x2F;&#x2F;natasX.natas.labs.overthewire.org, where X is the level n">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gz8wzsh0zcj312u0fggmj.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gz8x1h6q7lj30t005swf6.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gz8x6374ijj30p007amxg.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gz8x6zl9y2j30tg06mdgn.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gz8xe2kz3pj30qi0ceta8.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gz8yh7qvv1j30mc0g6q5n.jpg">
+<meta property="article:published_time" content="2022-02-10T17:00:00.000Z">
+<meta property="article:modified_time" content="2023-01-28T14:33:32.403Z">
+<meta property="article:author" content="杨庭屹">
+<meta property="article:tag" content="Security learning">
+<meta property="article:tag" content="Wargame">
+<meta property="article:tag" content="OverTheWire">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gz8wzsh0zcj312u0fggmj.jpg">
+  
+  
+  
+  <title>Wargame Natas - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"adamyoung71.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Adam&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Wargame Natas"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-02-10 17:00" pubdate>
+          2022年2月10日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          29 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Wargame Natas</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>今天开始学习第二个wargame Natas。</p>
+<p>Natas teaches the basics of serverside web-security.</p>
+<p>Each level of natas consists of its own website located at <strong><a target="_blank" rel="noopener" href="http://natasx.natas.labs.overthewire.org/">http://natasX.natas.labs.overthewire.org</a></strong>, where X is the level number. There is <strong>no SSH login</strong>. To access a level, enter the username for that level (e.g. natas0 for level 0) and its password.</p>
+<p>Each level has access to the password of the next level. Your job is to somehow obtain that next password and level up. <strong>All passwords are also stored in &#x2F;etc&#x2F;natas_webpass&#x2F;</strong>. E.g. the password for natas5 is stored in the file &#x2F;etc&#x2F;natas_webpass&#x2F;natas5 and only readable by natas4 and natas5.</p>
+<p>Start here:</p>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs avrasm"><span class="hljs-symbol">Username:</span> natas0<br><span class="hljs-symbol">Password:</span> natas0<br><span class="hljs-symbol">URL:</span>      http://natas0.natas.labs.overthewire<span class="hljs-meta">.org</span><br></code></pre></td></tr></table></figure>
+
+<p>这个游戏不再是ssh连接远程服务器来进行了，而是在网页上进行。打开网页看看是什么样先。</p>
+<h4 id="Level-0-gt-1"><a href="#Level-0-gt-1" class="headerlink" title="Level 0 &gt; 1"></a>Level 0 &gt; 1</h4><p><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gz8wzsh0zcj312u0fggmj.jpg" srcset="/img/loading.gif" lazyload alt="image-20220210171019481"></p>
+<p>打开后是一个很简单的网站，写着密码就在这一页。习惯性用DevTool看一下，找到了在注释中的key：gtVrDuiDfck831PqWsLEZy5gyDz1clto</p>
+<p><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gz8x1h6q7lj30t005swf6.jpg" srcset="/img/loading.gif" lazyload alt="image-20220210171200170"></p>
+<h4 id="Level-1-gt-2"><a href="#Level-1-gt-2" class="headerlink" title="Level 1 &gt; 2"></a>Level 1 &gt; 2</h4><p>这一关的提示为右键已经被禁止。点一下右键会出现以下提示：</p>
+<p><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gz8x6374ijj30p007amxg.jpg" srcset="/img/loading.gif" lazyload alt="image-20220210171625511"></p>
+<p>这可难不倒我们，直接一个F12就可以轻松找到key：ZluruAthQk7Q2MqmDeTiUij2ZvWy2mBi</p>
+<p><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gz8x6zl9y2j30tg06mdgn.jpg" srcset="/img/loading.gif" lazyload alt="image-20220210171717153"></p>
+<h4 id="Level-2-gt-3"><a href="#Level-2-gt-3" class="headerlink" title="Level 2 &gt; 3"></a>Level 2 &gt; 3</h4><p>这一关的说明为：这个页面上什么都没有。查看html代码后发现key确实不在网页中了。但是可以看到在说明旁边有一个图片，只不过渲染大小为1*1像素，所以正常情况下看不到。</p>
+<p><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gz8xe2kz3pj30qi0ceta8.jpg" srcset="/img/loading.gif" lazyload alt="image-20220210172405681"></p>
+<p>观察此图片的来源，可以看到此网站还有files网页，尝试进入后找到一个<code>users.txt</code>，内容如下。</p>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs avrasm"><span class="hljs-meta"># username:password</span><br><span class="hljs-symbol">alice:</span>BYNdCesZqW<br><span class="hljs-symbol">bob:</span>jw2ueICLvT<br><span class="hljs-symbol">charlie:</span>G5vCxkVV3m<br><span class="hljs-symbol">natas3:</span>sJIJNW6ucpu6HPZ1ZAchaDtwd7oGrD14<br><span class="hljs-symbol">eve:</span>zo4mJWyNj2<br><span class="hljs-symbol">mallory:</span><span class="hljs-number">9</span>urtcpzBmH<br></code></pre></td></tr></table></figure>
+
+<p>Key: sJIJNW6ucpu6HPZ1ZAchaDtwd7oGrD14</p>
+<h4 id="Level-3-gt-4"><a href="#Level-3-gt-4" class="headerlink" title="Level 3 &gt; 4"></a>Level 3 &gt; 4</h4><p>这一题的提示仍然是网页上什么都没有，但是有一个提示。</p>
+<p><code>&lt;!-- No more information leaks!! Not even Google will find it this time... --&gt;</code></p>
+<p>不能用Google搜索到其实是一个附加信息。现在的网站大多有相关是否允许爬虫的设置，通常存放在robots.txt中，所以我们找一下有没有这个文件。输入后得到以下信息。</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs arcade">User-agent: *<br>Disallow: <span class="hljs-regexp">/s3cr3t/</span><br></code></pre></td></tr></table></figure>
+
+<p>查阅<a target="_blank" rel="noopener" href="https://robot-txt.com/sem-glossary/a-guide-to-robot-txt-files/?gclid=Cj0KCQiAjJOQBhCkARIsAEKMtO2POL91mPRQJiY7pzygDjt58ul4z7XaLzXk4yN2L83-LlisgdRg-GsaAgsrEALw_wcB">相关文档</a>，上面两行的意思是屏蔽除了第二行子文件夹之外的爬虫，所以我们打开此文件夹。</p>
+<p><code>http://natas3.natas.labs.overthewire.org//s3cr3t/</code></p>
+<p>得到user.txt，同时得到key：Z9tkRkWmpt9Qr7XrR5jWRkgOU901swEZ</p>
+<h4 id="Level-4-gt-5"><a href="#Level-4-gt-5" class="headerlink" title="Level 4 &gt; 5"></a>Level 4 &gt; 5</h4><p>这一题是说只有从指定网站的访问才可以，页面上有一个刷新的按钮，按一下就会检测是从哪里访问的，突破口应该就在这里。使用Burp截取请求即可发现有一个Referer表名从哪里来的请求，将其改为要求的网址即可。</p>
+<img src="https://tva1.sinaimg.cn/large/008i3skNgy1gz8yh7qvv1j30mc0g6q5n.jpg" srcset="/img/loading.gif" lazyload alt="image-20220210180141294" style="zoom:50%;" />
+
+<p>得到key：iX6IOfmpN7AYOQGPwtn3fXpbaJVJcHfq</p>
+<h4 id="Level-5-gt-6"><a href="#Level-5-gt-6" class="headerlink" title="Level 5 &gt; 6"></a>Level 5 &gt; 6</h4><p>打开网页后提示拒绝访问，未登录。既然是登录问题，就可以抓请求看一下cookie设置。用Burp看到</p>
+<p><code>Cookie: loggedin=0</code></p>
+<p>将其值设置为1后发送，即可得到key：aGoY4q2Dc6MgDq4oL4YtoKtyAg9PeHa1</p>
+<h4 id="Level-6-gt-7"><a href="#Level-6-gt-7" class="headerlink" title="Level 6 &gt; 7"></a>Level 6 &gt; 7</h4><p>这一题需要我们输入一个秘密来获得key。旁边还有一个链接查看源码，点开看一下发现是网页源码，其中就包括了判断秘密的逻辑。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">include</span> <span class="hljs-string">&quot;includes/secret.inc&quot;</span>;<br><br>    <span class="hljs-keyword">if</span>(<span class="hljs-title function_ invoke__">array_key_exists</span>(<span class="hljs-string">&quot;submit&quot;</span>, <span class="hljs-variable">$_POST</span>)) &#123;<br>        <span class="hljs-keyword">if</span>(<span class="hljs-variable">$secret</span> == <span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;secret&#x27;</span>]) &#123;<br>        <span class="hljs-keyword">print</span> <span class="hljs-string">&quot;Access granted. The password for natas7 is &lt;censored&gt;&quot;</span>;<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-keyword">print</span> <span class="hljs-string">&quot;Wrong secret&quot;</span>;<br>    &#125;<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<p>可以看到这里include了一个文件，里面应该就是秘密的内容，访问这个文件得到<code>$secret = &quot;FOEIUWGHFEEUHOFUOIU&quot;;</code>，输入即可得到key：7z3hEENjQtflzgnT29q7wAvMNfZdh0i9</p>
+<h4 id="Level-7-gt-8"><a href="#Level-7-gt-8" class="headerlink" title="Level 7 &gt; 8"></a>Level 7 &gt; 8</h4><p>进入网页后可以看到源码中有一条提示：hint: password for webuser natas8 is in &#x2F;etc&#x2F;natas_webpass&#x2F;natas8。网站上有两个链接，分别是主页和关于页，其url为?page&#x3D;home，利用此形式打开key文件。直接将home替换为上面的地址后输出了错误信息：</p>
+<p><strong>Warning</strong>: include(&#x2F;etc&#x2F;natas_pass&#x2F;natas8): failed to open stream: Permission denied in <strong>&#x2F;var&#x2F;www&#x2F;natas&#x2F;natas7&#x2F;index.php</strong> on line <strong>21</strong></p>
+<p>说明需要先回到根目录才行。在地址前增加5个..&#x2F;后，得到key：DBfUBfqQG69KvJvJ1iAbMoIpwSNQ9bWe</p>
+<h4 id="Level-8-gt-9"><a href="#Level-8-gt-9" class="headerlink" title="Level 8 &gt; 9"></a>Level 8 &gt; 9</h4><p>这一题又是需要输入秘密来获得key，同样也有查看源代码的选项。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?</span><br><br><span class="hljs-variable">$encodedSecret</span> = <span class="hljs-string">&quot;3d3d516343746d4d6d6c315669563362&quot;</span>;<br><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">encodeSecret</span>(<span class="hljs-params"><span class="hljs-variable">$secret</span></span>) </span>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-title function_ invoke__">bin2hex</span>(<span class="hljs-title function_ invoke__">strrev</span>(<span class="hljs-title function_ invoke__">base64_encode</span>(<span class="hljs-variable">$secret</span>)));<br>&#125;<br><br><span class="hljs-keyword">if</span>(<span class="hljs-title function_ invoke__">array_key_exists</span>(<span class="hljs-string">&quot;submit&quot;</span>, <span class="hljs-variable">$_POST</span>)) &#123;<br>    <span class="hljs-keyword">if</span>(<span class="hljs-title function_ invoke__">encodeSecret</span>(<span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;secret&#x27;</span>]) == <span class="hljs-variable">$encodedSecret</span>) &#123;<br>    <span class="hljs-keyword">print</span> <span class="hljs-string">&quot;Access granted. The password for natas9 is &lt;censored&gt;&quot;</span>;<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>    <span class="hljs-keyword">print</span> <span class="hljs-string">&quot;Wrong secret&quot;</span>;<br>    &#125;<br>&#125;<br><span class="hljs-meta">?&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>这一段代码是说，编码后的秘密已经给出，我们的输入会先base64加密后反向最后转为16进制。我们只需要逆序执行这些操作即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> base64<br><br>secret = <span class="hljs-string">&quot;3d3d516343746d4d6d6c315669563362&quot;</span><br>secret = <span class="hljs-built_in">bytes</span>.fromhex(secret)<br>secret = secret[::-<span class="hljs-number">1</span>]<br>secret = base64.decodebytes(secret)<br><br><span class="hljs-built_in">print</span>(secret)<br><br><span class="hljs-comment"># Result = oubWYf2kBq</span><br></code></pre></td></tr></table></figure>
+
+<p>最终获得key：W0mMhUcRRnG8dcghE4qvk3JA9lGt8nDl</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Security-learning/">#Security learning</a>
+      
+        <a href="/tags/Wargame/">#Wargame</a>
+      
+        <a href="/tags/OverTheWire/">#OverTheWire</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Wargame Natas</div>
+      <div>https://adamyoung71.github.io/2022/02/10/2022-2-10-Wargame-Natas/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Adam</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年2月10日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/02/18/2022-2-18-Leetcode%E9%93%BE%E8%A1%A8%E4%B8%93%E9%A2%98/" title="Leetcode链表专题">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Leetcode链表专题</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/07/2022-02-01-SQL-Injetction%201%201/" title="SQL 注入攻击">
+                        <span class="hidden-mobile">SQL 注入攻击</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

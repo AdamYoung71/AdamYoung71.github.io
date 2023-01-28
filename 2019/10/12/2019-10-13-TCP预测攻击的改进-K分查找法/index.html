@@ -1,0 +1,784 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Adam">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="TCP序列号预测攻击的改进-N分查找法一、问题的重述​	传输控制协议 (TCP )作为一种重要的传输协议，在其安全性方面主要使用随机的初始序列号 (ISN) 来防止旁道攻击者冒充注入数据或进行重置攻击 (reset attack) 。为此，主流防火墙提供商如$Cisco^{[1]}$，$Juniper^{[2]}$等以节约资源与增强安全性为目的，在自己的产品中增加了在防火墙中进行序列号检查的功能。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Improvement on TCP Sequence Number Inference Attack">
+<meta property="og:url" content="https://adamyoung71.github.io/2019/10/12/2019-10-13-TCP%E9%A2%84%E6%B5%8B%E6%94%BB%E5%87%BB%E7%9A%84%E6%94%B9%E8%BF%9B-K%E5%88%86%E6%9F%A5%E6%89%BE%E6%B3%95/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="TCP序列号预测攻击的改进-N分查找法一、问题的重述​	传输控制协议 (TCP )作为一种重要的传输协议，在其安全性方面主要使用随机的初始序列号 (ISN) 来防止旁道攻击者冒充注入数据或进行重置攻击 (reset attack) 。为此，主流防火墙提供商如$Cisco^{[1]}$，$Juniper^{[2]}$等以节约资源与增强安全性为目的，在自己的产品中增加了在防火墙中进行序列号检查的功能。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://adamyoung71.github.io/img/in-post/post-tcp-inference/%E7%90%86%E6%83%B3%E6%83%85%E5%86%B5%E6%97%B6%E9%97%B4%E5%9B%BE.jpg">
+<meta property="og:image" content="http://adamyoung71.github.io/img/in-post/post-tcp-inference/%E6%94%B9%E8%BF%9B.jpg">
+<meta property="og:image" content="http://adamyoung71.github.io/img/in-post/post-tcp-inference/attack-model.png">
+<meta property="article:published_time" content="2019-10-12T17:30:00.000Z">
+<meta property="article:modified_time" content="2023-01-28T14:33:32.403Z">
+<meta property="article:author" content="杨庭屹">
+<meta property="article:tag" content="Computer Network">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://adamyoung71.github.io/img/in-post/post-tcp-inference/%E7%90%86%E6%83%B3%E6%83%85%E5%86%B5%E6%97%B6%E9%97%B4%E5%9B%BE.jpg">
+  
+  
+  
+  <title>Improvement on TCP Sequence Number Inference Attack - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"adamyoung71.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Adam&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Improvement on TCP Sequence Number Inference Attack"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-10-12 17:30" pubdate>
+          2019年10月12日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          47 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Improvement on TCP Sequence Number Inference Attack</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="TCP序列号预测攻击的改进-N分查找法"><a href="#TCP序列号预测攻击的改进-N分查找法" class="headerlink" title="TCP序列号预测攻击的改进-N分查找法"></a>TCP序列号预测攻击的改进-N分查找法</h1><h2 id="一、问题的重述"><a href="#一、问题的重述" class="headerlink" title="一、问题的重述"></a>一、问题的重述</h2><p>​	传输控制协议 (TCP )作为一种重要的传输协议，在其安全性方面主要使用随机的初始序列号 (ISN) 来防止旁道攻击者冒充注入数据或进行重置攻击 (reset attack) 。为此，主流防火墙提供商如$Cisco^{[1]}$，$Juniper^{[2]}$等以节约资源与增强安全性为目的，在自己的产品中增加了在防火墙中进行序列号检查的功能。但讽刺的是，防火墙的这种特性也给了攻击者通过旁道攻击获取反馈，来判断测试的序列号是否合法的机会，所以将这种攻击手段命名为“TCP序列号预测攻击”。</p>
+<p>​	在Off-Path TCP Sequence Number Inference Attack - How Firewall Middleboxes Reduce Security (Qian, Zhiyun , and Mao. Z. M. 2012) 一文中作者在32bit的序列号空间中使用类二分法(Binary-search-like)进行序列号预测在最理想情况下最长需要$log_2^{32}&#x3D;32$次迭代，这在非常时间敏感的序列号预测攻击中虽然比暴力破解所需的时间短得多，但是我们仍然可以进一步通过改进算法缩短预测时间，防止引起被攻击者警觉从而提高攻击的成功率。</p>
+<p>​	因此，在本文的研究中，重点就是要进行算法层面的改进，并综合考虑实际情况和各种影响因素（如时延、丢包等）对最终序列号预测时间的影响。</p>
+<h2 id="二、模型假设"><a href="#二、模型假设" class="headerlink" title="二、模型假设"></a>二、模型假设</h2><p>为了使得问题更加易于理解和判断，本文作出以下合理假设：</p>
+<ul>
+<li>假设本文涉及的防火墙设备具有TCP序列号检查功能，且默认操作为：接受在窗口内的数据包，静默丢弃不在窗口内的数据包。</li>
+<li>假设防火墙所设窗口大小为64K，且窗口移动方式为<em>window advancing</em>。</li>
+<li>假设攻击者从受害者处获得反馈的方式为预先植入受害者设备的恶意软件，该软件可以检测到设备特定包计数器的值并且在受害者不知情的情况下将此信息发送给攻击者。</li>
+</ul>
+<p>		</p>
+<h2 id="三、变量说明"><a href="#三、变量说明" class="headerlink" title="三、变量说明"></a>三、变量说明</h2><p>​	本文建立模型的过程中主要涉及了以下变量，说明如下：</p>
+<center>表 1 变量于说明</center>
+
+<table>
+<thead>
+<tr>
+<th align="center">变量</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">$RTT$</td>
+<td align="center">往返时延</td>
+</tr>
+<tr>
+<td align="center">$N$</td>
+<td align="center">将调查区间分为N份</td>
+</tr>
+<tr>
+<td align="center">$L_i$</td>
+<td align="center">第i次调查的区间长度</td>
+</tr>
+<tr>
+<td align="center">$WIN$</td>
+<td align="center">TCP窗口长度</td>
+</tr>
+<tr>
+<td align="center">$B$</td>
+<td align="center">网络带宽</td>
+</tr>
+<tr>
+<td align="center">$T_{trans}$</td>
+<td align="center">传输时延</td>
+</tr>
+<tr>
+<td align="center">$T_{prop}$</td>
+<td align="center">传播时延</td>
+</tr>
+<tr>
+<td align="center">$T_{proc}$</td>
+<td align="center">处理时延</td>
+</tr>
+<tr>
+<td align="center">$T_{total}$</td>
+<td align="center">总时间</td>
+</tr>
+<tr>
+<td align="center">$p$</td>
+<td align="center">数据包数</td>
+</tr>
+<tr>
+<td align="center">$MTU$</td>
+<td align="center">最大传输单元</td>
+</tr>
+</tbody></table>
+<h2 id="四、模型的建立与求解"><a href="#四、模型的建立与求解" class="headerlink" title="四、模型的建立与求解"></a>四、模型的建立与求解</h2><h3 id="4-1-模型建立"><a href="#4-1-模型建立" class="headerlink" title="4.1 模型建立"></a>4.1 模型建立</h3><p>​	由于TCP序列号预测攻击对于往返时间的要求远超于对于带宽的要求，尽可能减少往返次数才能有效降低预测时间。所以改进的主要思路为依靠改进算法减少预测时的测试次数。在二分法中可以每次排除当前调查区间的一半，是因为每次发送的探测包只有一或零个可以进入防火墙内，因此存下非此即彼的特性：若为一，则一定在当前区间；反之一定在另一区间。</p>
+<p>​	不由想到：如果一次调查可以排除更大范围的区间，便可以更快速地缩小查找范围，进而预测到正确的序列号。具体方法为类二分法的推广——类N分法：将调查区间分为N个小区间进行测试，在每个小区间中依然按照原方法：在长度为$\frac{L_i}{N}​$的区间仍每间隔$2WIN​$发送报文，每个小区间共发送$\frac{L_i}{N*2WIN}​$个，其中仍然只有一个包通过。但这样做会带来一个问题：当$N&gt;2​$时区间之间就不是非此即彼的关系，收到一个反馈也无法确定哪个小区间的包通过了防火墙。针对此问题的解决方法为使用发送不同数量包的方法<strong>标记</strong>各个小区间：具体为：第$1, 2, … ,N​$个小区间内的每个报文重复发送$1, 2, …, N​$个，从而在获得反馈时也会得到对应数字，进而每次排除$\frac{N-1}{N}​$个小区间。</p>
+<p>​	使用本方法可以将序列号预测的轮数缩减到$log_N2^{32}$轮，$N$的取值越大则轮数越少，需要的时间也就越少。但在实际情况中$N$的取值不能无限增加，这一点将在下一节内容中展开讨论。</p>
+<h3 id="4-2-模型求解"><a href="#4-2-模型求解" class="headerlink" title="4.2 模型求解"></a>4.2 模型求解</h3><p>​	在序列号预测攻击的过程中，时间开销主要包括以下方面：传输时延：数据包在攻击者的设备上产生到发送到网络上的时间；传播时延：由攻击者发送的数据包在网络上进行传输直到被受害者收到的时间；处理时延：受害者接收到数据包后对其进行处理所需的时间；反馈时延：预先植入受害者设备的恶意软件向攻击者发送反馈所需的时间（此时延也包括传输、传播、处理时延三部分，但由于其较为稳定，故可以简化整合讨论）。接下来本文将由理想条件出发，逐步达到接近真实情况下所需的总时间，并尝试求解出$N$的最佳取值。</p>
+<h4 id="4-2-1-理想条件下的模型"><a href="#4-2-1-理想条件下的模型" class="headerlink" title="4.2.1 理想条件下的模型"></a>4.2.1 理想条件下的模型</h4><p>​	在此情况下，我们假设只存在传播时延且恒定，包括攻击者发送数据包和从受害者处接受反馈两个过程，传输时延和处理时延不计。此时我们将传播时延记为：<br>$$<br>T_0 &#x3D; RTT<br>$$<br>​	其次，我们假设网络带宽为无限大，即在同一时间可以发送任意数量的数据包，总的数据包量在这种情况下为无关变量，不加考虑。则完成一次序列号预测的理论最长时间为：<br>$$<br>T_{total}&#x3D;log_N2^{32}*RTT<br>$$<br>​	可以明显看出此时预测的总时间只与$N$负相关，$N$的值越大则总时间越短。从下图中也可以看出：预测所需要的总时间在$N$的值增大的同时不断减少，且总时间在$N&#x3D;2到N&#x3D;10$之间迅速从$32RTT$下降到$10RTT$左右，之后则平稳下降。最极限的情况为当$N&#x3D;2^{32}$时只需一个$RTT​$便可完成。</p>
+<p><img src="http://adamyoung71.github.io/img/in-post/post-tcp-inference/%E7%90%86%E6%83%B3%E6%83%85%E5%86%B5%E6%97%B6%E9%97%B4%E5%9B%BE.jpg" srcset="/img/loading.gif" lazyload alt="理想情况时间图"></p>
+<h4 id="4-2-2-进一步增加限制条件的模型求解"><a href="#4-2-2-进一步增加限制条件的模型求解" class="headerlink" title="4.2.2 进一步增加限制条件的模型求解"></a>4.2.2 进一步增加限制条件的模型求解</h4><p>​	在现实情况中，网络带宽不可能为无限大，所以在攻击者发送更多数据包的同时也会相应地增加发送所需的时间。此处，我们假设使用4G网路进行通信，以中国联通平均带宽$B&#x3D;3\ MB&#x2F;s$为基准，假设上传和下载带宽相同。而对于攻击者所发送的数据包和接收到的反馈包来说，其包内数据部分不需要过多的内容，故假设每一个$TCP$数据包的最大传输单元（$Maximum Transmission Unit-MTU$）为除首部20字节外再加10字节的数据共计30字节；方程如下。</p>
+<p>$$<br>T_{prop}&#x3D;log_N^{4G}t_{prop}<br>$$</p>
+<p>$$<br>T_{trans}&#x3D;\frac{MTU*p}{B}<br>$$</p>
+<p>$$<br>T_{total}&#x3D;T_{prop}+T_{trans}<br>$$</p>
+<p>$$<br>p&#x3D;\sum_{i&#x3D;1}^{log_N^{4G}}\frac{L_i}{2WIN}\sum_{j&#x3D;1}^{N}j<br>$$</p>
+<p>$$<br>L_i&#x3D;\frac{4G}{N^{i}}<br>$$</p>
+<p>​	联立上述式子，可以得出最终需要的时间为：<br>$$<br>T_{total} &#x3D; log_N^{4G}t_{prop}+\frac{G\ MTU\ N(N^{log_N^{4G}}-1)(N-1)}{B\ N^{log_N^{4G}}WIN(N-1)}<br>$$<br>​	而对于往返时延，此情形下，传输时延不应与传播时延、处理时延合并为固定的$RTT$，而应该单独考虑。此处设为$t_{prop}$，其中包括为了避免失序而增加的填充。通过文章中的数据可计算出此值和$\frac{MTU}{B}$的大致值分别为：$0.1775$和$0.000044$。</p>
+<p>​	既然已经得到时间总函数，接下来就是对其进行分析。可以看出：此式第一部分为总的往返时延，而第二部分则是发送全部数据包所用的总时间。按照经验判断，当$N$较小时发送的总数据包数量也较小，所以左边是主导因素；而当$N$达到某一数值后，发送数据包所用的时间将与总往返时延达到同一量级。接下来将带宽与MTU的值代入，此时总时间就成为了$N$的单变量函数。在MATLAB中用不同的N值进行测试结果如下：</p>
+<p><img src="http://adamyoung71.github.io/img/in-post/post-tcp-inference/%E6%94%B9%E8%BF%9B.jpg" srcset="/img/loading.gif" lazyload alt="改进"></p>
+<p>​	可以看出，序列号预测所用的总时间从$N&#x3D;2$的10秒左右随着$N$的增大先缩短，到$N&#x3D;4$时达到最小值约7.65秒，随后因为发送的数据包数的增多时间又逐步延长。这一结果很好地符合了预测，得出$N&#x3D;4$为当前情况的最优解。</p>
+<h4 id="4-2-3进一步优化模型"><a href="#4-2-3进一步优化模型" class="headerlink" title="4.2.3进一步优化模型"></a>4.2.3进一步优化模型</h4><p>​	在上一节的论述中，我们假定每一次序列号预测时$N$的值都不发生变化，而容易想到的是在探测空间缩小的时候所发送的数据包数量也会急剧缩小，所以引出此处的对模型的进一步优化：动态设置$N$的值使之根据轮数的不同而变化，例如在开始的几轮为了避免发送过多的探测数据包而使用较小的$N$，再在之后的轮次中为了缩短总时间而使用较大的$N$值。设前一过程进行$m$轮，后一过程进行$n$轮。此时的方程为：</p>
+<p>$$<br>T_{total}&#x3D;T_{prop}+T_{trans}<br>$$</p>
+<p>$$<br>T_{prop}&#x3D;(m+n)t_{prop}<br>$$</p>
+<p>$$<br>T_{trans}&#x3D;\frac{MTU*p}{B}<br>$$</p>
+<p>$$<br>L_i&#x3D;\begin{cases}<br>\frac{4G}{N_1^i} &amp; i&#x3D;m\<br>\frac{4G}{N_1^mN_2^i} &amp; i&#x3D;n\<br>\end{cases}<br>$$</p>
+<p>$$<br>p&#x3D;\sum_{i&#x3D;1}^m\frac{N_1(N_1+1)G}{N_1^i\ WIN}+\sum_{i&#x3D;1}^n\frac{N_2(N_2+1)G}{N_1^mN_2^i\ WIN}<br>$$</p>
+<p>联立得到总时间：</p>
+<p>$$<br>T_{total}&#x3D;(m+n)t_{prop}+\frac{MTU}{B}(\frac{GN_1(N_1^m-1)(N_1+1)}{N_1^m\ WIN(N_1-1)}+\frac{GN_2(N_2^n-1)(N_2+1)}{N_1^mN_2^n\ WIN(N_2-1)})<br>$$<br>​	</p>
+<p>此时参数共有$N_1, N_2,m$三个，$n$可以由$m$推出：$n&#x3D;log_{N2}\frac{4G}{N_1^m}$。所以构造数组对其进行检验得到结果为当$N_1&#x3D;2,N_2&#x3D;4,m&#x3D;8$时的最短时间可以达到3.5秒左右，相比于原方案有一倍左右的提升，非常可观。</p>
+<h4 id="4-2-3-攻击模型"><a href="#4-2-3-攻击模型" class="headerlink" title="4.2.3 攻击模型"></a>4.2.3 攻击模型</h4><p><img src="http://adamyoung71.github.io/img/in-post/post-tcp-inference/attack-model.png" srcset="/img/loading.gif" lazyload alt="attack-model"></p>
+<p>​	本模型应用在攻击模型中的流程大致为：首先，当受害者向合法服务器发送TCP连接请求时，其设备上预先植入的恶意软件会向攻击者报告这一信息；而在服务器对受害者进行回应后，攻击者会伪造大量的RST包使得服务器重置此连接，使得受害者不能正常完成三次握手从而建立TCP连接。接下来就是利用本文的模型进行序列号预测，并在预测成功后假冒合法服务器向受害者发送信息。</p>
+<h2 id="五、模型的评价"><a href="#五、模型的评价" class="headerlink" title="五、模型的评价"></a>五、模型的评价</h2><p>​	本文从“类二分法”的TCP序列号预测的算法出发，提出了“类N分法”预测序列号的改进算法，该算法可以有效减少探测序列号所需的轮数从而减少所需的时间，可以有效地提升预测的成功率。而之后对其的进一步改进又通过减少预测前期发送大量数据包的开支从而减少最终时间。</p>
+<p>​	本模型当前还是理论模型，一些参数是从日常经验或论文中得到，由于水平限制并不能提供实际的实验情景并通过测量得出更加客观的参数，所以还会继续进行完善。</p>
+<h2 id="六、参考文献"><a href="#六、参考文献" class="headerlink" title="六、参考文献"></a>六、参考文献</h2><p>[1] Cisco. Cisco ASA 5500 Series Configuration Guide using the CLI, 8.2.</p>
+<p>[2]  Juniper. Stateful Inspection Firewalls.</p>
+<p>[3] Qian, Zhiyun , and Z. M. Mao . “ [IEEE 2012 IEEE Symposium on Security and Privacy (SP) Conference dates subject to change - San Francisco, CA, USA (2012.05.20-2012.05.23)] 2012 IEEE Symposium on Security and Privacy - Off-path TCP Sequence Number Inference Attack - How Firewall Middleboxes Reduce Security.” 2012:347-361.</p>
+<h2 id="七、附录"><a href="#七、附录" class="headerlink" title="七、附录"></a>七、附录</h2><ol>
+<li><p>MATLAB代码：</p>
+ <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs matlab"><span class="hljs-comment">%理想情况</span><br>syms L_i N i_ WIN G;<br>L_i = G/power(N, i_);<br>L=L_i/(<span class="hljs-number">2</span>*WIN);<br>p1 = symsum(i_,<span class="hljs-number">1</span>,L);<br>p2 = symsum(p1, i_, <span class="hljs-number">1</span>, <span class="hljs-built_in">log</span>(G)/<span class="hljs-built_in">log</span>(N))<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>优化算法代码：</p>
+ <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs matlab"><span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">[T_total]</span>=<span class="hljs-title">A2</span><span class="hljs-params">(n1, n2, M)</span></span><br>syms T_total T_trans T_prop j_ k_ i_ G WIN N1 N2 m n MTU B;<span class="hljs-comment">%创建变量</span><br>p1=N1.*(N1+<span class="hljs-number">1</span>).*G./(power(N1,i_).*WIN);<br>p2=N2.*(N2+<span class="hljs-number">1</span>).*G./(power(N1,m).*power(N2,i_).*WIN);<br>p=symsum(p1,i_,<span class="hljs-number">1</span>,m)+symsum(p2,i_,<span class="hljs-number">1</span>,n);<span class="hljs-comment">%数据包总数量</span><br>T_total=<span class="hljs-number">0.000044</span>.*p+(m+n).*<span class="hljs-number">0.1775</span>;<span class="hljs-comment">%总时间</span><br>T_total=subs(T_total,N1,n1);<br>T_total=subs(T_total, N2, n2);<br>T_total=subs(T_total, G, power(<span class="hljs-number">2</span>,<span class="hljs-number">30</span>));<br>T_total=subs(T_total, m, M);<br>T_total=subs(T_total, WIN, power(<span class="hljs-number">2</span>,<span class="hljs-number">16</span>));<br>T_total=subs(T_total, n, <span class="hljs-built_in">log</span>(power(<span class="hljs-number">2</span>,<span class="hljs-number">32</span>)./power(n1,M))./<span class="hljs-built_in">log</span>(n2));<br>T_total=vpa(T_total);<br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Computer-Network/">#Computer Network</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Improvement on TCP Sequence Number Inference Attack</div>
+      <div>https://adamyoung71.github.io/2019/10/12/2019-10-13-TCP预测攻击的改进-K分查找法/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Adam</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年10月12日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/10/22/2019-10-23-Homomorphic-Encryption/" title="Homomorphic Encryption: principle and application">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Homomorphic Encryption: principle and application</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/10/01/2019-10-01-%E7%AC%AC%E4%BA%8C%E6%AC%A1%E4%BD%9C%E4%B8%9A/" title="基于N-H协议的安全通信协议设计">
+                        <span class="hidden-mobile">基于N-H协议的安全通信协议设计</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,1011 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Adam">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="第一章 计算机系统安全概述安全服务 	提供数据处理和数据传输安全性的方法。  认证 访问控制 数据保密 数据完整性 非否认。  安全机制         保护信息与信息系统安全措施的总称。  加密。 数字签名机制。 访问控制机制。 数据完整性机制。 认证交换机制。 业务填充机制：通过发送额外的数据来掩盖正常通信流量特征，从而达到保护业务流机密性的目的。 路由控制。 公正机制：利用可信第三方。  安">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络与系统安全笔记">
+<meta property="og:url" content="https://adamyoung71.github.io/2019/11/07/2019-11-7-Computer-Network-and-System-Security/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="第一章 计算机系统安全概述安全服务 	提供数据处理和数据传输安全性的方法。  认证 访问控制 数据保密 数据完整性 非否认。  安全机制         保护信息与信息系统安全措施的总称。  加密。 数字签名机制。 访问控制机制。 数据完整性机制。 认证交换机制。 业务填充机制：通过发送额外的数据来掩盖正常通信流量特征，从而达到保护业务流机密性的目的。 路由控制。 公正机制：利用可信第三方。  安">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1574140934940.png">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1574141174663.png">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1574141193663.png">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1574142768121.png">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1574142812082.png">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1574142840564.png">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1574142871404.png">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1574142895686.png">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1574143793171.png">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1574143815811.png">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1574146155799.png">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1574146556962.png">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1574147370211.png">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1574147597738.png">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1574147978258.png">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1574148613867.png">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1574148955512.png">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1574149053112.png">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1574149128550.png">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1574150646687.png">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1574154100329.png">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1574154120011.png">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1574153991927.png">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1574158591656.png">
+<meta property="article:published_time" content="2019-11-07T12:40:00.000Z">
+<meta property="article:modified_time" content="2023-01-28T14:33:32.403Z">
+<meta property="article:author" content="杨庭屹">
+<meta property="article:tag" content="Notes">
+<meta property="article:tag" content="Web">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1574140934940.png">
+  
+  
+  
+  <title>计算机网络与系统安全笔记 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"adamyoung71.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Adam&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="计算机网络与系统安全笔记"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-11-07 12:40" pubdate>
+          2019年11月7日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          35 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">计算机网络与系统安全笔记</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="第一章-计算机系统安全概述"><a href="#第一章-计算机系统安全概述" class="headerlink" title="第一章 计算机系统安全概述"></a>第一章 计算机系统安全概述</h2><p><strong>安全服务</strong> 	提供数据处理和数据传输安全性的方法。</p>
+<ol>
+<li>认证</li>
+<li>访问控制</li>
+<li>数据保密</li>
+<li>数据完整性</li>
+<li>非否认。</li>
+</ol>
+<p><strong>安全机制</strong>         保护信息与信息系统安全措施的总称。</p>
+<ol>
+<li>加密。</li>
+<li>数字签名机制。</li>
+<li>访问控制机制。</li>
+<li>数据完整性机制。</li>
+<li>认证交换机制。</li>
+<li>业务填充机制：通过发送额外的数据来掩盖正常通信流量特征，从而达到保护业务流机密性的目的。</li>
+<li>路由控制。</li>
+<li>公正机制：利用可信第三方。</li>
+</ol>
+<p><strong>安全服务与安全机制的关系（重点）</strong>  安全服务由安全机制实现；一种安全机制可以实现一种或多种安全服务；一种安全服务可以由一种或多种安全机制实现。</p>
+<p><strong>网络安全攻击与威胁</strong></p>
+<ol>
+<li><p>被动攻击：在未经用户同意和认可的情况下将信息或数据文件泄露给系统攻击者，但不对数据信息做任何修改。</p>
+<p>•常见手段：搭线监听、无线截获和其它截获 </p>
+</li>
+<li><p>主动攻击。涉及某些数据流的篡改或虚假流的产生。</p>
+<p>•常见手段：重放、篡改消息和拒绝服务 </p>
+</li>
+<li><p>物理访问攻击。</p>
+</li>
+<li><p>内部人员攻击。</p>
+</li>
+<li><p>软硬件配装攻击。</p>
+</li>
+</ol>
+<h2 id="第二章-TCP-x2F-IP协议族及其安全隐患"><a href="#第二章-TCP-x2F-IP协议族及其安全隐患" class="headerlink" title="第二章 TCP&#x2F;IP协议族及其安全隐患"></a>第二章 TCP&#x2F;IP协议族及其安全隐患</h2><h4 id="TCP-x2F-IP协议"><a href="#TCP-x2F-IP协议" class="headerlink" title="TCP&#x2F;IP协议"></a>TCP&#x2F;IP协议</h4><p><strong>协议栈</strong></p>
+<p><img src="/../../../../AppData/Roaming/Typora/typora-user-images/1574140934940.png" srcset="/img/loading.gif" lazyload alt="1574140934940"></p>
+<p><strong>网络层的安全威胁</strong></p>
+<ol>
+<li>集线器网络容易被窃听。</li>
+</ol>
+<p><strong>TCP连接</strong></p>
+<ol>
+<li>建立过程：<img src="/../../../../AppData/Roaming/Typora/typora-user-images/1574141174663.png" srcset="/img/loading.gif" lazyload alt="1574141174663"></li>
+<li>释放过程：<img src="/../../../../AppData/Roaming/Typora/typora-user-images/1574141193663.png" srcset="/img/loading.gif" lazyload alt="1574141193663"></li>
+<li>特点：全双工；面向连接；可靠性（自动分片，自动过滤）；面向字节流。</li>
+<li>安全威胁：<ol>
+<li>SYN Flood：建立半连接，不回复。</li>
+<li>ACK Flood：已建立的连接发送大量ACK，使对方主机不断查表，占用资源。</li>
+<li>序列号预测攻击。</li>
+</ol>
+</li>
+</ol>
+<p><strong>UDP协议</strong></p>
+<ol>
+<li>特点：无连接；不可靠；不保序。</li>
+<li>安全威胁：<ol>
+<li>UDP假冒。</li>
+<li>UDP劫持。</li>
+</ol>
+</li>
+</ol>
+<p><strong>DNS协议</strong></p>
+<ol>
+<li>安全威胁：<ol>
+<li>DNS劫持（缓存毒化）</li>
+<li>DNS ID欺骗</li>
+<li>基于DNS的DDoS攻击。</li>
+</ol>
+</li>
+</ol>
+<p><strong>HTTP协议的安全威胁</strong></p>
+<p>１.　XSS：持久性，非持久性，DOM。</p>
+<h2 id="第三章-网络安全隔离技术"><a href="#第三章-网络安全隔离技术" class="headerlink" title="第三章　网络安全隔离技术"></a>第三章　网络安全隔离技术</h2><h4 id="网络隔离"><a href="#网络隔离" class="headerlink" title="网络隔离"></a>网络隔离</h4><p><strong>同轴电缆</strong>：物理层；</p>
+<p><strong>集线器</strong>：物理层。</p>
+<p><strong>交换机：</strong>链路层。</p>
+<p><strong>虚拟子网VLAN：</strong>在交换机上实现划分。基于端口、MAC、网络层、IP组播。</p>
+<p><strong>路由器：</strong>比交换机、集线器更高层次的安全功能。常用作屏蔽设备。</p>
+<h4 id="防火墙"><a href="#防火墙" class="headerlink" title="防火墙"></a>防火墙</h4><blockquote>
+<p>用一个或一组网络设备，在两个或多个网络间加强网络控制，以保护一个网络不受其他网络攻击的安全技术。</p>
+</blockquote>
+<p><strong>分类</strong></p>
+<ol>
+<li>分组过滤防火墙（网络层）：也称包过滤，根据包头信息对网络流量进行处理。</li>
+<li>应用代理防火墙（应用层）：防火墙代理客户端进行连接，但客户端认为是自身连接。</li>
+<li>状态检测防火墙（传输层）：<img src="/../../../../AppData/Roaming/Typora/typora-user-images/1574142768121.png" srcset="/img/loading.gif" lazyload alt="1574142768121"></li>
+</ol>
+<p><strong>防火墙的典型体系结构</strong></p>
+<ol>
+<li>包过滤路由器模型：<img src="/../../../../AppData/Roaming/Typora/typora-user-images/1574142812082.png" srcset="/img/loading.gif" lazyload alt="1574142812082"></li>
+<li>单宿主堡垒主机模型：<img src="/../../../../AppData/Roaming/Typora/typora-user-images/1574142840564.png" srcset="/img/loading.gif" lazyload alt="1574142840564"></li>
+<li>双宿主堡垒主机模型：<img src="/../../../../AppData/Roaming/Typora/typora-user-images/1574142871404.png" srcset="/img/loading.gif" lazyload alt="1574142871404"></li>
+<li>子网屏蔽模型：<img src="/../../../../AppData/Roaming/Typora/typora-user-images/1574142895686.png" srcset="/img/loading.gif" lazyload alt="1574142895686"></li>
+</ol>
+<p><strong>防火墙的作用</strong></p>
+<ol>
+<li>通过过滤不安全的服务而降低风险，提高内部网络安全性</li>
+<li>保护网络免受基于路由的攻击</li>
+<li>强化网络安全策略</li>
+<li>对网络存取和访问进行监控审计</li>
+<li>利用防火墙对内部网络的划分，实现内部网重点或敏感网段的隔离</li>
+</ol>
+<p><strong>网络地址转换</strong></p>
+<ol>
+<li>概念：将每个局域网节点的地址转换成一个IP地址，反之亦然。</li>
+<li>客户端在同一个NAT之后：<img src="/../../../../AppData/Roaming/Typora/typora-user-images/1574143793171.png" srcset="/img/loading.gif" lazyload alt="1574143793171"></li>
+<li>客户端在不同NAT之后：<img src="/../../../../AppData/Roaming/Typora/typora-user-images/1574143815811.png" srcset="/img/loading.gif" lazyload alt="1574143815811"></li>
+</ol>
+<h2 id="第四章-网络安全技术"><a href="#第四章-网络安全技术" class="headerlink" title="第四章 网络安全技术"></a>第四章 网络安全技术</h2><h4 id="网络安全模型"><a href="#网络安全模型" class="headerlink" title="网络安全模型"></a>网络安全模型</h4><p><strong>PDR</strong>：Protection, Detection, Response.</p>
+<p><strong>P2DR</strong>: <strong>Police</strong>, protection, detection, response.</p>
+<p>**PDRR: **Protection, detection, response, restoration</p>
+<p><strong>APPDRR</strong>: Assessment, Policy, Protection, detection, reaction, restoration. </p>
+<p><strong>PADIMEE</strong>: Police, Assessment, Design, Implementation, Management&#x2F;Monitor, Emergency Response, Education. </p>
+<p><strong>安全预警技术</strong></p>
+<ol>
+<li>概念：通过监控有敏感数据需要保护的网络，对分布于不同网段的入侵检测传感器所采集的信息数据进行有效、合理的分析，发现潜在的安全威胁和入侵倾向，并预测潜在的攻击目标或攻击发展方向的技术。</li>
+<li>模型：<ol>
+<li>基于入侵事件的预警模型。</li>
+<li>基于攻击过程的预警模型。</li>
+<li>基于流量监控的预警模型。</li>
+</ol>
+</li>
+</ol>
+<p><strong>入侵检测</strong></p>
+<ol>
+<li>概念：对入侵行为(任何企图破坏资源的完整性、保密性和有效性的行为)的发觉。</li>
+<li>分类：<ol>
+<li>根据入侵检测的数据源：基于主机、网络、混合型。</li>
+<li>按照检测方法：异常检测、误用检测。</li>
+<li>按时间：实时、定时（事后）。</li>
+<li>按照系统体系结构：集中式IDS，分布式IDS。</li>
+</ol>
+</li>
+</ol>
+<p><strong>漏洞检测</strong></p>
+<ol>
+<li>安全扫描技术。</li>
+<li>源代码扫描技术。</li>
+<li>反汇编扫描技术。</li>
+<li>环境错误注入技术。</li>
+<li>工具：ISS，Nessus，X-Scan。</li>
+</ol>
+<h2 id="第五章-协议安全技术"><a href="#第五章-协议安全技术" class="headerlink" title="第五章 协议安全技术"></a>第五章 协议安全技术</h2><p><strong>安全协议</strong></p>
+<ol>
+<li>概念：在消息处理过程中采用了若干密码算法的协议。</li>
+<li>分类：秘钥交换、认证、认证和密钥交换、电子商户协议。</li>
+</ol>
+<p><strong>协议攻击方法</strong></p>
+<ol>
+<li>消息重放攻击：由于新鲜性不能保证。例：Needham-Schroeder协议（对策：挑战-应答，时间戳，序列号）<img src="/../../../../AppData/Roaming/Typora/typora-user-images/1574146155799.png" srcset="/img/loading.gif" lazyload alt="1574146155799"></li>
+<li>中间人攻击：<ol>
+<li>例：Diffie-Hellman密钥协商协议：<img src="/../../../../AppData/Roaming/Typora/typora-user-images/1574146556962.png" srcset="/img/loading.gif" lazyload alt="1574146556962"></li>
+<li>例：一次性口令协议S&#x2F;Key：<img src="/../../../../AppData/Roaming/Typora/typora-user-images/1574147370211.png" srcset="/img/loading.gif" lazyload alt="1574147370211"></li>
+</ol>
+</li>
+<li>预言机：主题无意地为攻击者执行了一个密码运算。可能被攻击者诱导执行一些步骤，从而帮助攻击者得到某些原来不能得到的信息。<ol>
+<li><img src="/../../../../AppData/Roaming/Typora/typora-user-images/1574147597738.png" srcset="/img/loading.gif" lazyload alt="1574147597738"></li>
+</ol>
+</li>
+<li>交错攻击：将某个协议的两个或多个实例交错运行。<ol>
+<li>Wiener攻击：<img src="/../../../../AppData/Roaming/Typora/typora-user-images/1574147978258.png" srcset="/img/loading.gif" lazyload alt="1574147978258"></li>
+</ol>
+</li>
+<li>平行回话攻击：在攻击者的安排下一个协议的两个或多个运行并发执行。从一个运行中得到另一个运行中困难性问题的答案。<ol>
+<li>例：Woo-Lam单向认证协议：<img src="/../../../../AppData/Roaming/Typora/typora-user-images/1574148613867.png" srcset="/img/loading.gif" lazyload alt="1574148613867"></li>
+</ol>
+</li>
+<li>反射攻击：将消息反射给发送方（不一定原封不动）。欺骗消息发送者提供预言服务。<ol>
+<li>Woo-Lam改进的单向认证协议：<img src="/../../../../AppData/Roaming/Typora/typora-user-images/1574148955512.png" srcset="/img/loading.gif" lazyload alt="1574148955512"></li>
+</ol>
+</li>
+<li>归因于类型缺陷的攻击：由于协议中消息部分的类型信息不明确，使得攻击者将其他信息嵌入秘钥。<ol>
+<li>Neuman-Stubblebine协议：<img src="/../../../../AppData/Roaming/Typora/typora-user-images/1574149053112.png" srcset="/img/loading.gif" lazyload alt="1574149053112"></li>
+<li>Otway-Rees密钥交换协议：<img src="/../../../../AppData/Roaming/Typora/typora-user-images/1574149128550.png" srcset="/img/loading.gif" lazyload alt="1574149128550"></li>
+<li>密码服务滥用攻击：利用之前保存的密码和认证时没有身份信息进行攻击。</li>
+</ol>
+</li>
+</ol>
+<h4 id="认证协议"><a href="#认证协议" class="headerlink" title="认证协议"></a>认证协议</h4><p><strong>身份认证</strong></p>
+<ol>
+<li>定义：声称者向验证者证明自己身份，验证者证实其身份。</li>
+<li>目的：是获得系统服务的第一道关卡。</li>
+<li>分类：本地，远程；单向，双向。</li>
+</ol>
+<p><strong>Kerberos认证协议</strong></p>
+<ul>
+<li><p>MIT开发，身份鉴别服务。集中式的认证服务器结构，功能是实现用户与其访问的服务器间的互相鉴别。采用对称密钥加密。</p>
+</li>
+<li><p>目标：</p>
+<ul>
+<li>安全性：有效防止攻击者假冒合法用户。</li>
+<li>可靠性：分布式服务器体系结构，提供相互备份。</li>
+<li>对用户透明</li>
+<li>可伸缩：能够支持大数量的客户和服务器。</li>
+</ul>
+</li>
+<li><p>设计思路：<img src="/../../../../AppData/Roaming/Typora/typora-user-images/1574150646687.png" srcset="/img/loading.gif" lazyload alt="1574150646687"></p>
+</li>
+<li><p>V4协议描述：</p>
+<ol>
+<li>设计思路：<img src="/../../../../AppData/Roaming/Typora/typora-user-images/1574154100329.png" srcset="/img/loading.gif" lazyload alt="1574154100329"></li>
+<li>协议交互过程：<img src="/../../../../AppData/Roaming/Typora/typora-user-images/1574154120011.png" srcset="/img/loading.gif" lazyload alt="1574154120011"></li>
+</ol>
+</li>
+<li><p>协议的缺陷：</p>
+<ul>
+<li>依赖性：对加密系统（DES）、IP协议、时间的依赖性。</li>
+<li>字节顺序：没有遵循标准。</li>
+<li>票据有效期：最小5分钟，最大21小时，往往不能满足要求。</li>
+<li>认证转发能力：不允许签发给一个用户的鉴别证书转发给其他工作站或用户使用。</li>
+<li>领域之间鉴别困难。</li>
+<li>加密操作缺陷：非标准形式的DES（传播密码分组链接PCBC），易受攻击。</li>
+<li>会话密钥：存在重放攻击可能性。</li>
+<li>口令攻击：未对口令提供额外的保护。</li>
+</ul>
+</li>
+<li><p>V5的改进：</p>
+<ul>
+<li>加密系统：支持任意加密系统。</li>
+<li>通信协议：除了IP外还支持其他协议。</li>
+<li>报文字节顺讯：采用抽象语法表示和基本编码规则。</li>
+<li>票据有效期：允许任意大小。</li>
+<li>鉴别转发能力。</li>
+<li>口令攻击：提供预鉴别机制，使得口令攻击更加困难。</li>
+<li>远程服务访问的认证过程：<img src="/../../../../AppData/Roaming/Typora/typora-user-images/1574153991927.png" srcset="/img/loading.gif" lazyload alt="1574153991927"></li>
+</ul>
+</li>
+</ul>
+<h4 id="SSL-x2F-TLS"><a href="#SSL-x2F-TLS" class="headerlink" title="SSL&#x2F;TLS"></a>SSL&#x2F;TLS</h4><p><strong>SSL</strong></p>
+<ul>
+<li>概念：Secure Sockets Layer Protocol 安全套接层协议。是在应用层与传输层之间的安全协议，为不安全网络提供加密通信。</li>
+<li>目标：<ul>
+<li>加密：使用TCP提供一个可靠的端到端安全服务。为通信实体之间提供保密性，完整性，验证和密钥交换服务。</li>
+<li>可扩展性：新的密钥算法可以容易的加入。</li>
+<li>高效性：减少CPU的使用。</li>
+<li>透明性：对应用层透明。</li>
+</ul>
+</li>
+<li>密码学特征：对称加密数据，公钥加密验证身份，摘要保证完整性。</li>
+</ul>
+<p><strong>SSL的结构</strong></p>
+<ul>
+<li>握手层协议：（SSL HandShake Protocol）、SSL密码参数修改协议（SSL Change Cipher Spec Protocol）、应用数据协议（Application Data Protocol）和SSL告警协议（SSL Alert Protocol）。握手层的这些协议用于SSL管理信息的交换，允许应用协议传送数据之间相互验证，协商加密算法和生成密钥等。SSL握手协议的作用是协调客户和服务器的状态，使双方能够达到状态的同步。</li>
+<li>记录层协议：用来安全传输数据。</li>
+<li>Key Terms<ul>
+<li>SSL会话：是客户和服务器之间的一个关联。通过握手协议创建；定义了一套加密参数；<strong>可以被多个SSL连接共享</strong></li>
+<li>SSL连接：是一种通信实体具有对等关系的通信连接；<strong>与一个SSL回话关联</strong>；连接是瞬时的，用后消失。</li>
+<li>连接与会话的关系：<ul>
+<li>会话用来协商安全参数如算法。</li>
+<li>连接用来安全传输数据。</li>
+<li>通信双方可能有多个安全连接。</li>
+<li>每个连接只和一个回话相关。</li>
+</ul>
+</li>
+<li>SSL会话状态：表示一个具体的SSL会话的信息。</li>
+<li>SSL连接与连接状态：</li>
+</ul>
+</li>
+<li>记录层协议：<ul>
+<li>建立在TCP上。</li>
+<li>使用对称加密提供保密性，HMAC提供完整性。</li>
+<li>步骤：压缩，加密，MAC计算及相反。</li>
+<li>用来封装高层协议：握手层。</li>
+</ul>
+</li>
+</ul>
+<p><strong>SSL工作流程</strong></p>
+<ol>
+<li>发送方：<ol>
+<li>分片</li>
+<li>压缩</li>
+<li>MAC计算</li>
+<li>加密</li>
+<li>封装发送。</li>
+</ol>
+</li>
+<li>握手协议：允许客户端和服务器相互认证、协商加密和MAC算法，保护数据使用的密钥通过SSL记录传递。<strong>在传递应用数据之前使用。</strong><ol>
+<li>功能：客户和服务器相互鉴别，协商密钥交换算法，协商加密算法和密钥，协商压缩算法，生成密钥，完成密钥交换。</li>
+<li>三个协议：Handshake：核心协议；Change Cipher Spec：改变参数时使用；Alert：出现错误时使用。</li>
+<li>Handshake协议：建立或恢复一个会话；每次握手都生成新的密钥等。连接一定是新的，但会话可能是存在的。<ol>
+<li>本质：密钥交换协议。</li>
+<li>过程：<ol>
+<li>建立安全能力</li>
+<li>服务器认证和密钥交换。</li>
+<li>客户端认证和密钥交换。</li>
+<li>完成。</li>
+</ol>
+</li>
+<li>2,3步因为SSL在同一个连接的两个方向采用不同密钥。</li>
+<li>报文总结：<img src="/../../../../AppData/Roaming/Typora/typora-user-images/1574158591656.png" srcset="/img/loading.gif" lazyload alt="1574158591656"></li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<p><strong>TLS</strong></p>
+<ul>
+<li>概念：安全传输层协议用于在两个同心应用程序之间提供保密性和数据完成性。</li>
+<li>组成：TLS握手协议。TLS记录协议。</li>
+</ul>
+<h4 id="公钥证书链"><a href="#公钥证书链" class="headerlink" title="公钥证书链"></a>公钥证书链</h4><ul>
+<li>如三级证书：root-intermediates-end user。</li>
+<li>root：根CA对自己签发。</li>
+<li>intermediates：根CA生成一对公钥、私钥，并用私钥将中间 CA 的信息和公钥进行“加密”生成签名，并封装得到 intermediates 证书。上一级 CA 也是按照这个逻辑给下一级 CA 进行签发证书。</li>
+<li>end-user 证书：最后的 CA 生成公钥私钥，并私钥将用户信息、公钥进行“加密”得到 end-user 证书</li>
+<li>为何需要：根CA需要与数不清的其他安全层次分开，。可以保证中间CA公开的公钥安全。中间CA私钥泄露也不影响根CA。</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Notes/">#Notes</a>
+      
+        <a href="/tags/Web/">#Web</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>计算机网络与系统安全笔记</div>
+      <div>https://adamyoung71.github.io/2019/11/07/2019-11-7-Computer-Network-and-System-Security/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Adam</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年11月7日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/04/27/2021-4-21-Music-Appriciation-Notes/" title="音乐鉴赏笔记">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">音乐鉴赏笔记</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/11/07/2019-11-7-Survey-on-FHE/" title="Survey On FHE">
+                        <span class="hidden-mobile">Survey On FHE</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

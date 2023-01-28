@@ -1,0 +1,1169 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Adam">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="第二章 信息收集 步骤：踩点，扫描，查点。 Whois查询：DNS注册信息，IP。 DNS查询工具：nslookup&#x2F;dig  网络扫描主机扫描 Ping扫描：ping, Nmap(危害不大) Ping扫射：同时扫描大量IP地址；软件：Nmap, fping, hping2, Superscan 监测：网络入侵检测系统Snort，主机扫描检测工具Scanlogd 防御：考虑ICMP通信的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络攻击基础">
+<meta property="og:url" content="https://adamyoung71.github.io/2019/04/27/2019-4-27-Network-attacking-fundamentals/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="第二章 信息收集 步骤：踩点，扫描，查点。 Whois查询：DNS注册信息，IP。 DNS查询工具：nslookup&#x2F;dig  网络扫描主机扫描 Ping扫描：ping, Nmap(危害不大) Ping扫射：同时扫描大量IP地址；软件：Nmap, fping, hping2, Superscan 监测：网络入侵检测系统Snort，主机扫描检测工具Scanlogd 防御：考虑ICMP通信的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1573966156941.png">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1573826880407.png">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1573828155197.png">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1573969256371.png">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1573970108538.png">
+<meta property="article:published_time" content="2019-04-27T21:00:00.000Z">
+<meta property="article:modified_time" content="2023-01-28T14:33:32.403Z">
+<meta property="article:author" content="杨庭屹">
+<meta property="article:tag" content="Notes">
+<meta property="article:tag" content="Web">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1573966156941.png">
+  
+  
+  
+  <title>网络攻击基础 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"adamyoung71.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Adam&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="网络攻击基础"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-04-27 21:00" pubdate>
+          2019年4月27日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          57 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">网络攻击基础</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="第二章-信息收集"><a href="#第二章-信息收集" class="headerlink" title="第二章 信息收集"></a>第二章 信息收集</h2><ul>
+<li>步骤：踩点，扫描，查点。</li>
+<li>Whois查询：DNS注册信息，IP。</li>
+<li>DNS查询工具：nslookup&#x2F;dig</li>
+</ul>
+<h3 id="网络扫描"><a href="#网络扫描" class="headerlink" title="网络扫描"></a>网络扫描</h3><h4 id="主机扫描"><a href="#主机扫描" class="headerlink" title="主机扫描"></a>主机扫描</h4><ul>
+<li>Ping扫描：ping, Nmap(危害不大)</li>
+<li>Ping扫射：同时扫描大量IP地址；软件：Nmap, fping, hping2, Superscan</li>
+<li>监测：网络入侵检测系统Snort，主机扫描检测工具Scanlogd</li>
+<li>防御：考虑ICMP通信的过滤策略</li>
+</ul>
+<h4 id="端口扫描"><a href="#端口扫描" class="headerlink" title="端口扫描"></a>端口扫描</h4><ul>
+<li>连接目标主机的TCP和UDP端口，确定哪些服务正在运行即处于监听状态的过程。</li>
+<li>工具：udp_scan, nmap, WUPS, ScanLine</li>
+<li>FIN扫描：可以绕过某些防火墙；会被记录到日志； 使用RAW IP编程，较为复杂。</li>
+<li>一般扫描：TCP connect，TCP SYN，TCP FIN，IP段</li>
+<li>高级扫描：TCP反向ｉｄｅｎｔ扫描。通过未公开的函数，系统漏洞或非正常的调用产生特殊信息</li>
+</ul>
+<h4 id="系统类型探查"><a href="#系统类型探查" class="headerlink" title="系统类型探查"></a>系统类型探查</h4><ul>
+<li>探查活跃主机的系统及开放网络服务的类型。PADS</li>
+</ul>
+<h4 id="漏洞扫描"><a href="#漏洞扫描" class="headerlink" title="漏洞扫描"></a>漏洞扫描</h4><ul>
+<li>检查系统是否存在已公布的安全漏洞。</li>
+<li>漏洞扫描软件：ISS，SATAN&#x2F;SAINT，Nessus，OpenVAS，Xscan</li>
+</ul>
+<h3 id="网络查点"><a href="#网络查点" class="headerlink" title="网络查点"></a>网络查点</h3><ul>
+<li>针对已知的弱点，对识别出来的服务进行更加充分更具针对性的探查，来寻找真正可以攻击的入口，以及攻击过程中可能需要的关键数据。</li>
+<li>与踩点的区别：攻击者的入侵程度。</li>
+<li>与扫描的区别：攻击者的针对性与信息收集的目标性。</li>
+<li>net view &#x2F; domain; nbtstat</li>
+<li>预防方法：关闭不必要的服务；关闭打印与共享服务（SMB）；关闭盘符默认共享；禁止SMB匿名空会话</li>
+</ul>
+<h3 id="网络嗅探与协议分析"><a href="#网络嗅探与协议分析" class="headerlink" title="网络嗅探与协议分析"></a>网络嗅探与协议分析</h3><ul>
+<li>嗅探工具：wireshark</li>
+<li>网络嗅探：利用计算机网络接口截获目的地为其他计算机的数据报文，监听网络流中所包含的用户账户密码或私密信息等。</li>
+<li>共享式网络：通过集线器连接，所有数据包发往每一个主机</li>
+<li>交换式网络：通过交换机连接，发包只能到特定端口。</li>
+<li>嗅探攻击：MAC地址洪范；MAC欺骗；ARP欺骗；</li>
+<li>工具：BPF，Libpcap，Tcpdump，SnifferPro</li>
+<li>防范：采用交换式网络，静态ARP，避免使用明文传输口令和敏感信息的网络协议。</li>
+<li>ICMP探测<ul>
+<li>优点：如ping命令，返回TTL可以判断主机操作系统的类型和经过的路由器数量。进而查找主机IP</li>
+<li>缺点：很容易被防火墙限制。</li>
+</ul>
+</li>
+</ul>
+<h2 id="第三章-拒绝服务攻击"><a href="#第三章-拒绝服务攻击" class="headerlink" title="第三章 拒绝服务攻击"></a>第三章 拒绝服务攻击</h2><ol>
+<li><strong>概念：DoS攻击是指利用网络协议漏洞或其他系统以及应用软件的漏洞耗尽被攻击目标资源，使得被攻击的计算机或网络无法正常提供服务，直至系统停止响应甚至崩溃的攻击方式。即攻击者通过某种手段，导致目标机器或网络停止向合法用户提供正常的服务或资源访问。</strong></li>
+<li>基本模式<ol>
+<li>资源耗尽型：消耗网络带宽、磁盘空间、内存资源</li>
+<li>配置修改型：修改或删除系统文件或配置文件使得系统服务停止或性能降低。</li>
+<li>基于系统缺陷型</li>
+<li>物理实体破坏型</li>
+</ol>
+</li>
+<li>基本形式<ol>
+<li>服务过载：计算机忙碌地处理不断到来的服务请求，以至于无法处理常规的任务。同时，许多新到来的请求被丢弃。</li>
+<li>消息流：消息流发生于用户向一台网络上的目标主机发送大量的数据报，来延缓目标主机的处理速度，阻止它处理正常任务。</li>
+<li>信号接地：物理方法</li>
+<li>粘住 攻击：TCP半连接耗尽资源。</li>
+</ol>
+</li>
+<li>分类<ol>
+<li>SYN Flood：半连接；对Windows NT有效，IP欺骗技术。（在防火墙上过滤同一主机的后续连接）。</li>
+<li>死Ping：当发送ping请求的数据包声称自己的尺寸超过ICMP上限，也就是加载的尺寸超过64K上限时，就会使ping请求接收方出现内存分配错误，导致TCP&#x2F;IP堆栈崩溃致使接受方当机。</li>
+<li>泪滴（Teardrop）：发送不正确的IP分片在某些情况下会破环整个IP协议栈，需要重启。</li>
+<li>Land攻击：特制一个SYN包，源地址与目的地址都为某一服务器，自己创建于自己的空连接。</li>
+<li>Smurf攻击：通过将回复地址设置成受害网络的广播地址的ICMP应答请求数据报来淹没受害主机的方式进行。最终导致该网络的所有主机都对此ICMP应答请求作出答复，导致网络阻塞。</li>
+<li>Fraggle攻击：与Smurf类似，但使用的是UDP Echo。</li>
+<li>炸弹攻击：利用工具软件，集中在一段时间内，向目标机发送大量垃圾信息，或是发送超出系统接收范围的信息，使对方出现负载过重、网络堵塞等状况，从而造成目标的系统崩溃及拒绝服务</li>
+</ol>
+</li>
+<li>DDos<ol>
+<li>主控端：接受攻击者命令并发送到代理主机上。</li>
+<li>代理段：运行攻击程序，接受命令并发起攻击。</li>
+<li>发送的报文：UDP</li>
+</ol>
+</li>
+<li>僵尸网络<ol>
+<li>通过IRC控制bot</li>
+<li>检测：IDS方法；行为监测法；蜜罐捕捉法。</li>
+</ol>
+</li>
+</ol>
+<h2 id="第四章-缓冲区溢出攻击"><a href="#第四章-缓冲区溢出攻击" class="headerlink" title="第四章 缓冲区溢出攻击"></a>第四章 缓冲区溢出攻击</h2><ol>
+<li>缓冲区：应用程序用来保存用户输入数据、程序临时数据的内存空间。位置：栈、堆、数据段</li>
+<li>命令：strcpy(buffer，input); </li>
+<li>手段：通过制造缓冲区溢出使程序运行一个用户shell，再通过shell执行其他命令。如果该程序属于root且有suid权限的话，攻击者就获得了一个有root权限的shell，便可以对系统进行任意操作。</li>
+<li><strong>危害：应用程序异常、系统不稳定甚至崩溃、程序跳转到恶意代码。</strong></li>
+<li>![1573213229376](C:\Users\Adam Young\AppData\Roaming\Typora\typora-user-images\1573213229376.png)</li>
+<li>栈<ol>
+<li>连续的内存空间。</li>
+<li>先入后出，生长方向：高地址向低地址。</li>
+<li>每一个线程有自己的栈。</li>
+<li>ESP：栈顶；EBP：栈底。</li>
+<li>内容：函数参数，返回地址，EBP，通用寄存器值，函数局部变量。</li>
+</ol>
+</li>
+<li>重要寄存器：<ol>
+<li>ESP：栈顶。</li>
+<li>EBP：基地址，相对稳定的位置。</li>
+<li>EIP：指令寄存器，函数调用返回后下一个执行语句的地址。</li>
+</ol>
+</li>
+</ol>
+<ul>
+<li>strncpy_s()函数为安全函数，不会被利用。</li>
+<li>全局变量和静态变量在同一块内存。</li>
+<li>常量存储区存放常量，不能修改。</li>
+</ul>
+<p><strong>函数调用过程</strong></p>
+<ol>
+<li>把参数压入栈。</li>
+<li>保存EIP内容作为返回地址。</li>
+<li>放入堆栈当前基址寄存器。</li>
+<li>把当前ESP拷贝到基址寄存器，作为新的基地址。</li>
+<li>为本地变量留出一定空间，把ESP减去适当数值。</li>
+<li>调用后恢复EBP，EIP，局部变量不处理。</li>
+</ol>
+<p><strong>溢出种类及利用</strong></p>
+<ol>
+<li>栈溢出<ol>
+<li>特点：缓冲区在栈中分配，拷贝数据过长，覆盖了返回地址或其他重要数据结构。</li>
+</ol>
+</li>
+</ol>
+<p><strong>C语言中的内存分配</strong></p>
+<ol>
+<li>函数体中定义的变量通常在栈上，若是显式分配（malloc）则在堆上。</li>
+<li>静态变量在全局区。</li>
+<li>字符串存放在常量区。</li>
+</ol>
+<p><strong>C++中内存分配</strong></p>
+<ol>
+<li>分区：<ol>
+<li>栈：编译器自动分配回收。局部变量、函数参数。</li>
+<li>堆：用new分配。</li>
+<li>自由存储区：用malloc分配。</li>
+<li>全局&#x2F;静态存储区：不分初始化和未初始化。</li>
+<li>常量储存区：不能修改。</li>
+</ol>
+</li>
+</ol>
+<p><strong>堆栈的关系和区别</strong></p>
+<ol>
+<li>栈是系统提供的功能，特点是快速高效，缺点是有限制，数据不灵活；而堆是函数库提供的功能，特点是灵活方便，数据适应面广泛，但是效率有一定降低。</li>
+<li>§栈是系统数据结构，对于进程&#x2F;线程是唯一的；堆是函数库内部数据结构，不一定唯一。不同堆分配的内存无法互相操作。</li>
+</ol>
+<p><strong>堆溢出</strong></p>
+<ol>
+<li>特点：缓冲区在堆中分配，复制内容覆盖了管理结构。</li>
+</ol>
+<p><strong>整形溢出</strong></p>
+<ol>
+<li>概念：试图保存一个比它可以表示的最大值还大的数时，就会发生整数溢出。结果不可预料。</li>
+<li>危害：发生前无法预料。</li>
+<li>现象：取模。</li>
+<li>分类<ol>
+<li>宽度溢出：普通。</li>
+<li>运算溢出：运算后结果太大。</li>
+<li>符号溢出：无符号被看作有符号，或相反。</li>
+</ol>
+</li>
+</ol>
+<p><strong>ShellCode</strong></p>
+<ol>
+<li>功能：添加管理员用户，远程可用shell，下载程序。穿透防火墙等。</li>
+</ol>
+<p><strong>溢出保护技术</strong></p>
+<ol>
+<li>程序员：安全编程，软件质量控制，源码级纠错工具。</li>
+<li>编译器：数组边界检查，编译时加入条件如canary保护。</li>
+<li>语言：使用类型安全语言：C#，JAVA</li>
+<li>Runtime保护：二进制地址重写，Hook危险函数技术。</li>
+<li>操作系统：非执行缓冲区。堆栈不可执行，数据段不可执行</li>
+</ol>
+<p><strong>安全编程技术</strong></p>
+<ol>
+<li>设计安全的系统</li>
+<li>代码规范和风格。</li>
+</ol>
+<h2 id="第五章-Web应用程序"><a href="#第五章-Web应用程序" class="headerlink" title="第五章 Web应用程序"></a>第五章 Web应用程序</h2><p><strong>Web应用的分层模型</strong></p>
+<ol>
+<li>表示层：接收客户端输入并显示结果。</li>
+<li>业务逻辑层：动态脚本。</li>
+<li>数据层：数据库，本地文件。</li>
+</ol>
+<p><strong>传输协议</strong></p>
+<ol>
+<li>HTTP：无状态，明文传输，请求&#x2F;响应模式——&gt;易受攻击。</li>
+<li>HTTPS：基于SSL&#x2F;TLS提供对传输层认证和加密。</li>
+</ol>
+<p><strong>Web应用的信息收集</strong></p>
+<ol>
+<li>服务器域名、IP等</li>
+<li>Web端口、开放服务等</li>
+<li>站点类型与脚本，应用程序类型与版本</li>
+<li>Web服务器&#x2F;应用程序中的安全漏洞。<ol>
+<li>手工审查应用结构与源代码</li>
+<li>自动下载与镜像Web站点页面。</li>
+<li>使用Google Hacking技术审查与探测Web应用程序。（工具：Site Digger）</li>
+</ol>
+</li>
+</ol>
+<p><strong>攻击Web服务器软件</strong></p>
+<ul>
+<li>IIS，MS SQL ASP </li>
+<li>远程渗透：IIS，SQL，红色代码，尼姆达，SQL Slammer。</li>
+</ul>
+<p><strong>Web服务器的漏洞</strong></p>
+<ol>
+<li>数据驱动的远程代码执行。</li>
+<li>服务器功能扩展模块</li>
+<li>样本文件。</li>
+<li>源代码泄露。</li>
+<li>资源解析攻击。</li>
+</ol>
+<h3 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a><strong>SQL注入</strong></h3><ol>
+<li>定义：利用Web应用程序数据层存在的输入验证不完善型安全扣动实施的一类代码注入攻击。</li>
+<li>漏洞机制：用户输入没有被正确地过滤：转义字符。</li>
+<li>没有进行严格的类型检查。</li>
+</ol>
+<p><strong>攻击步骤</strong></p>
+<ol>
+<li>发现SQL注入点。</li>
+<li>判断后台数据库类型。</li>
+<li>利用SQL注入进行后台口令拆解。</li>
+<li>上传ASP后门，得到默认账户权限。</li>
+<li>本地特权提升与利用数据库扩展存储过程。</li>
+</ol>
+<p><strong>注入工具</strong></p>
+<ol>
+<li>漏洞发现：Wposion，mieliekoek.pl</li>
+<li>注入测试：SPIKE Proxy；SPI Toolkit</li>
+<li>黑客工具：NBSI，HDSI，啊D，CSC，WED，Pangolin</li>
+</ol>
+<p><strong>防范措施</strong></p>
+<ol>
+<li>使用类型安全的参数编码机制。</li>
+<li>用户输入要进行完备检查。</li>
+<li>将动态SQL语句替换为存储过程，预编译SQL或ADO命令对象。</li>
+<li>加强SQL数据库服务器的配置与连接。</li>
+</ol>
+<p><strong>危害</strong>（考点）</p>
+<ol>
+<li>数据库信息泄露。</li>
+<li>网页篡改。</li>
+<li>网站挂马。</li>
+<li>私自添加系统账户。</li>
+<li>读写文件获取webshell</li>
+</ol>
+<p><strong>暴库</strong></p>
+<p>通过一些技术手段或者程序漏洞得到数据库的地址，并将数据非法下载到本地。</p>
+<h4 id="XSS跨站脚本攻击"><a href="#XSS跨站脚本攻击" class="headerlink" title="XSS跨站脚本攻击"></a>XSS跨站脚本攻击</h4><ol>
+<li>跨站脚本：跨站脚本是一种通常存在于Web应用程序中的安全漏洞，使得攻击者可以将恶意的代码注入到网页中，从而危害其他Web访问者。</li>
+<li>与代码注入的比较：<ol>
+<li>相似点：Web应用程序没有对非预期输入作出全面的检查与净化。</li>
+<li>不同点：代码注入的目标：Web站点；XSS：访问Web应用程序的其他用户。</li>
+</ol>
+</li>
+</ol>
+<p><strong>典型攻击</strong></p>
+<ul>
+<li>查看终端会话Cookie。</li>
+<li>窃取Cookie。</li>
+<li>网页挂马。</li>
+</ul>
+<p><strong>攻击类型（考点）</strong></p>
+<ul>
+<li><strong>持久性XSS：通过利用跨站漏洞构建恶意脚本（留言本，论坛，博客）。</strong></li>
+<li><strong>非持久性XSS：用户输入产生XSS反馈给该用户，需要结合社会工程学进行攻击。</strong></li>
+<li><strong>DOM-based：本地XSS，如JS本地生成HTML页面中存在。</strong></li>
+</ul>
+<p><strong>防范措施</strong></p>
+<ul>
+<li>服务器端：限制，拒绝，净化。输入验证，输入净化，消除危险输入点。</li>
+<li>客户端：提高浏览器访问非受信网站时的安全等级。</li>
+<li>关闭Cookie或设置为只读。</li>
+<li>安全意识和浏览习惯。</li>
+</ul>
+<h4 id="Web浏览器的技术发展与安全威胁"><a href="#Web浏览器的技术发展与安全威胁" class="headerlink" title="Web浏览器的技术发展与安全威胁"></a>Web浏览器的技术发展与安全威胁</h4><p><strong>安全威胁类型、</strong></p>
+<ol>
+<li>网络钓鱼<ol>
+<li>目标：获取个人敏感信息</li>
+<li>欺骗技术：DNS中毒，网络流量重定向，欺骗性垃圾邮件。</li>
+<li>欺骗策略：使用IP代替域名；注册相似的DNS域名；对URL进行编码和混淆，修改地址映射HOSTS文件。</li>
+<li>防范措施：了解威胁与技巧；增强安全意识，提高警惕性；安装安全软件。</li>
+</ol>
+</li>
+<li>恶意木马与流氓软件下载：捆绑安装；软件：Site Advisor</li>
+<li>网页木马-浏览器渗透攻击<ol>
+<li>木马：<img src="/../../../../AppData/Roaming/Typora/typora-user-images/1573966156941.png" srcset="/img/loading.gif" lazyload alt="1573966156941"></li>
+<li>典型网页木马：MS06-014，ANI</li>
+<li>网络访问流量重定向：内嵌HTML标签，恶意脚本，内嵌对象</li>
+<li><strong>木马的定义：计算机木马病毒是指隐藏在正常程序中的一段具有特殊功能的恶意代码，是具备破坏和删除文件、发送密码、记录键盘和攻击Dos等特殊功能的后门程序。</strong></li>
+<li><strong>特点：</strong><ol>
+<li><strong>隐蔽性：伪装成合法程序。首要特征。</strong></li>
+<li><strong>欺骗性：使用合法后缀名，使用容易混淆的字母命名。</strong></li>
+<li><strong>顽固性：有多个备份，而且会关联执行。</strong></li>
+<li><strong>危害性：可以盗取用户的重要信息。</strong></li>
+</ol>
+</li>
+</ol>
+</li>
+<li>不良信息内容</li>
+</ol>
+<p><strong>网站挂马威胁防范</strong></p>
+<ol>
+<li>补丁：系统补丁，软件升级。</li>
+<li>杀毒软件。</li>
+<li>提高安全意识。</li>
+</ol>
+<p><strong>病毒</strong></p>
+<ol>
+<li>概念：编制者在计算机程序中插入的破坏计算机功能或者数据的代码，能影响计算机使用，能自我复制的一组<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E8%AE%A1%E7%AE%97%E6%9C%BA">计算机</a>指令或者程序<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E4%BB%A3%E7%A0%81/86048">代码</a>。。</li>
+<li>特征：传播性，感染性，潜伏性，隐蔽性，破坏性。</li>
+<li>传播途径：<ol>
+<li>存储设备：U盘，CD等</li>
+<li>网络：网页，电子邮件</li>
+<li>利用计算机系统和软件弱点传播。</li>
+</ol>
+</li>
+</ol>
+<h2 id="第七章-口令攻击"><a href="#第七章-口令攻击" class="headerlink" title="第七章 口令攻击"></a>第七章 口令攻击</h2><p><strong>本章要求</strong></p>
+<ol>
+<li>了解口令攻击的方法与类别。</li>
+<li>掌握Windows系统口令验证机制的工作流程（LM，NTLM，Kerberos）</li>
+<li>熟悉常用口令破解工具和常用口令攻击方法。</li>
+<li>掌握Windows系统口令的防护方法。</li>
+</ol>
+<p><strong>主动口令攻击</strong></p>
+<ul>
+<li>字典攻击：由很多条可能口令的文本文件导入破解程序。</li>
+<li>强力攻击：尝试所有字符的组合方式。</li>
+</ul>
+<p><strong>被动截获</strong></p>
+<ul>
+<li>欺骗攻击：通过贡献的网站服务器、端口重定向、伪装网站钓鱼。</li>
+<li>嗅探攻击：如在FTP信道上的窃听。</li>
+</ul>
+<p><strong>Windows下的口令攻击</strong></p>
+<ul>
+<li>LAN Manager处理过程：口令变成大写，补全为14个字符，分成两个7字符，DES加密得到一个64位密文，服务器存储共128位密文。<ul>
+<li>验证：</li>
+</ul>
+</li>
+<li>NTLM口令处理过程：将口令变成Unicode编码，使用MD４散列算法，保存得到的１２８位散列值。</li>
+<li><img src="/../../../../AppData/Roaming/Typora/typora-user-images/1573826880407.png" srcset="/img/loading.gif" lazyload alt="1573826880407"></li>
+</ul>
+<p><strong>口令存储</strong></p>
+<ul>
+<li>SAM数据库：Windows NT&#x2F;2000使用的安全账号管理器机制来管理用户账号</li>
+</ul>
+<p><strong>常用口令攻击方法</strong></p>
+<ul>
+<li>本地获取</li>
+<li>远程猜解</li>
+<li>嗅探</li>
+</ul>
+<p><strong>常用破解工具</strong></p>
+<ul>
+<li>L0phtcrack、NTSweep、NTCrack、PDWump。。。</li>
+</ul>
+<p><strong>彩虹表破解</strong></p>
+<ul>
+<li>彩虹表：特定字符的各种组合以及这些组合经过MD5或LM或NTLM等加密后的对照表。</li>
+<li>软件Rainbow Crack，ophcrack，Free Rainbow Tables</li>
+</ul>
+<p><strong>口令的防护</strong></p>
+<ul>
+<li>选择安全密码：足够长，混合口令。</li>
+<li>防止口令猜测攻击：硬盘分区采用NTFS格式、正确设置和管理账户、禁止不需要的服务、关闭不用的接口、禁止建立空连接。</li>
+<li>设置安全策略：强密码历史，密码最长使用期限，密码最短使用期限、密码长度最小值。</li>
+</ul>
+<h2 id="第八章-假消息攻击"><a href="#第八章-假消息攻击" class="headerlink" title="第八章 假消息攻击"></a>第八章 假消息攻击</h2><p><strong>网络安全属性</strong></p>
+<ul>
+<li>机密性、完整性、可用性、真实性、不可抵赖性。</li>
+</ul>
+<p><strong>网络攻击基本模式</strong></p>
+<p>​	截获、篡改、中断、伪造</p>
+<p><img src="/../../../../AppData/Roaming/Typora/typora-user-images/1573828155197.png" srcset="/img/loading.gif" lazyload alt="1573828155197"></p>
+<p><strong>工具</strong>：Sniffer，Netwox&#x2F;Netwag</p>
+<p><strong>IP源地址欺骗</strong></p>
+<ul>
+<li>伪造具有虚假源地址IP数据包进行发送。</li>
+<li>目的：隐藏攻击者身份、假冒其他计算机通过身份认证。</li>
+<li>原理：路由转发只是用目标IP地址，不对源IP做验证</li>
+<li>场景：On-path&#x2F;Off-path</li>
+<li>防范措施：<ul>
+<li>使用随机化的初始序列号</li>
+<li>使用网络层安全传输协议如IPsec</li>
+<li>避免采用基于IP地址的信任策略。</li>
+<li>在路由器和网关上实施包检查和过滤。</li>
+<li>真实源IP地址验证。</li>
+</ul>
+</li>
+</ul>
+<p><strong>依赖于IP源欺骗的其他网络协议攻击</strong></p>
+<ol>
+<li>ICMP Smurf放大攻击：Smurf攻击向路由器发送大量的ICMP协议报文。这会触发每个连接的设备向欺骗地址做出响应。（DDoS)</li>
+<li>DNS放大攻击。</li>
+<li>ICMP路由重定向</li>
+<li>TCP RST</li>
+<li>DNS Spoofing</li>
+<li>DDoS：SYN&#x2F;UDP Flooding。</li>
+</ol>
+<h4 id="ARP欺骗"><a href="#ARP欺骗" class="headerlink" title="ARP欺骗"></a><strong>ARP欺骗</strong></h4><ol>
+<li>ARP：将IP地址映射为物理地址MAC。</li>
+<li>ARP欺骗：发送伪造的APR消息，对特定IP所对应的MAC地址进行假冒。</li>
+</ol>
+<p><strong>应用场景</strong></p>
+<ol>
+<li>利用ARP欺骗进行交换网络中的嗅探</li>
+<li>构造中间人攻击，从而实施TCP会话劫持。</li>
+<li>ARP病毒传播。</li>
+<li>ARP欺骗挂马。</li>
+</ol>
+<p><strong>防范措施</strong></p>
+<ol>
+<li>静态绑定关键主机的IP与MAC映射。</li>
+<li>使用VLAN虚拟子网细分网络拓扑。</li>
+<li>加密传输数据。</li>
+<li>使用ARP防火墙。</li>
+</ol>
+<h4 id="ICMP-路由重定向攻击"><a href="#ICMP-路由重定向攻击" class="headerlink" title="ICMP 路由重定向攻击"></a>ICMP 路由重定向攻击</h4><ol>
+<li>概念：伪装成路由器发送虚假的ICMP路由路径控制包围，使受害主机选择攻击者指定的路由路径。</li>
+<li>目的：嗅探或假冒攻击。</li>
+<li>软件：Netwox</li>
+<li>防范：<ol>
+<li>根据类型过滤一些ICMP数据包。</li>
+<li>设置防火墙过滤。</li>
+<li>对于重定向报文判断是否来自本地路由器。</li>
+</ol>
+</li>
+</ol>
+<h4 id="RST攻击"><a href="#RST攻击" class="headerlink" title="RST攻击"></a>RST攻击</h4><ol>
+<li>概念：通过伪造TCP 重置报文，强制关闭TCP会话连接。</li>
+<li>场景：恶意拒绝服务攻击，重置入侵，GFW。</li>
+<li>原理：<img src="/../../../../AppData/Roaming/Typora/typora-user-images/1573969256371.png" srcset="/img/loading.gif" lazyload alt="1573969256371"></li>
+<li>条件：通讯目标接收TCP包（IP一致，序列号在窗口内）</li>
+</ol>
+<h4 id="DNS-Spoofing"><a href="#DNS-Spoofing" class="headerlink" title="DNS Spoofing"></a>DNS Spoofing</h4><ol>
+<li>攻击过程：嗅探DNS请求包，注入假冒DNS</li>
+<li>特性：攻击者能够获取攻击所需的所有信息，注入相应包比真的相应包更早到达受害者。受害者可能接收到多个应答包，竞赛法则。</li>
+</ol>
+<h4 id="TCP-x2F-IP网络协议栈攻防措施"><a href="#TCP-x2F-IP网络协议栈攻防措施" class="headerlink" title="TCP&#x2F;IP网络协议栈攻防措施"></a>TCP&#x2F;IP网络协议栈攻防措施</h4><ol>
+<li>网络接口层：防止嗅探。</li>
+<li>互连层：检测和过滤技术，增强防火墙等安全策略；关键服务器静态绑定IP映射表</li>
+<li>传输层：加密传输，安全控制机制。</li>
+<li>应用层：加密，用户级身份认证；数字签名；</li>
+<li>安全协议：<img src="/../../../../AppData/Roaming/Typora/typora-user-images/1573970108538.png" srcset="/img/loading.gif" lazyload alt="1573970108538"></li>
+<li>SYN Flood：服务器收到一个SYN后不立即分配缓冲区。</li>
+</ol>
+<h2 id="第九章-无线网络和移动中断安全威胁"><a href="#第九章-无线网络和移动中断安全威胁" class="headerlink" title="第九章 无线网络和移动中断安全威胁"></a>第九章 无线网络和移动中断安全威胁</h2><ul>
+<li>802.11安全弱点：<ol>
+<li>广播网络，共享介质：没有明确的边界，无法有效控制；很难探知窃听、发送点的位置，难以追溯攻击。</li>
+<li>威胁：窃听、注入、信道抢占&#x2F;干扰、身份假冒</li>
+</ol>
+</li>
+<li>网络连接过程<ol>
+<li>搜索无线网络：信道扫描</li>
+<li>认证</li>
+<li>关联：响应关联强求，DHCP分配IP</li>
+</ol>
+</li>
+<li>网络攻击<ol>
+<li>无线网络踩点：侦察无线网络和接入点，无线踩点：漫步，自行车，驾车</li>
+<li>踩点软件：NetStumbler：基于Windows，GPS，对禁用广播请求的AP无效</li>
+<li>Kismet。Linux</li>
+</ol>
+</li>
+<li>WIFI加密方式<ul>
+<li>不加密：开放网络。</li>
+<li>WEP：RC4，CRC32校验，存在缺陷，极易破解。AirCracl NG破解工具</li>
+<li>WPA&#x2F;WPA2：预先共享密钥，外部身份认证服务（AES等）</li>
+</ul>
+</li>
+<li>WiFi安全机制：<ul>
+<li>MAC地址过滤</li>
+<li>禁止SSID广播</li>
+</ul>
+</li>
+<li>移动终端恶意代码</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Notes/">#Notes</a>
+      
+        <a href="/tags/Web/">#Web</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>网络攻击基础</div>
+      <div>https://adamyoung71.github.io/2019/04/27/2019-4-27-Network-attacking-fundamentals/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Adam</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年4月27日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/07/30/2019-7-30-%E7%94%9F%E4%BA%A7%E5%AE%9E%E4%B9%A0%E6%8A%A5%E5%91%8A/" title="东伦敦大学夏令营">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">东伦敦大学夏令营</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/01/17/2019-1-17-Week-1-Introduction/" title="Week 1 Introduction">
+                        <span class="hidden-mobile">Week 1 Introduction</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

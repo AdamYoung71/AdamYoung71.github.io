@@ -1,0 +1,951 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Adam">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="安全通信协议的一次尝试摘要 当前网络通信安全已经成为小到影响人们生产生活，达到影响社会经济发展的重要因素，而网络通信协议的安全性也就至关重要。本文中作者简要描述了几个经典的密钥交换和认证协议，并对这些协议的可能被攻击的方式和原因进行了描述，总结出了设计安全协议的一般原则。之后作者从这些原则出发，设计出了一个能够抵抗大多数协议攻击方式的密钥交换及认证协议。 一、协议描述1. Needham-Schr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于N-H协议的安全通信协议设计">
+<meta property="og:url" content="https://adamyoung71.github.io/2019/10/01/2019-10-01-%E7%AC%AC%E4%BA%8C%E6%AC%A1%E4%BD%9C%E4%B8%9A/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="安全通信协议的一次尝试摘要 当前网络通信安全已经成为小到影响人们生产生活，达到影响社会经济发展的重要因素，而网络通信协议的安全性也就至关重要。本文中作者简要描述了几个经典的密钥交换和认证协议，并对这些协议的可能被攻击的方式和原因进行了描述，总结出了设计安全协议的一般原则。之后作者从这些原则出发，设计出了一个能够抵抗大多数协议攻击方式的密钥交换及认证协议。 一、协议描述1. Needham-Schr">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://adamyoung71.github.io/img/in-post/post-secure-protocol/N-S-protocol.png">
+<meta property="og:image" content="https://adamyoung71.github.io/img/in-post/post-secure-protocol/Neuman-Stubblebine.png">
+<meta property="og:image" content="https://adamyoung71.github.io/img/in-post/post-secure-protocol/otway-rees.png">
+<meta property="og:image" content="https://adamyoung71.github.io/AppData/Roaming/Typora/typora-user-images/1573794104740.png">
+<meta property="article:published_time" content="2019-10-01T18:40:00.000Z">
+<meta property="article:modified_time" content="2023-01-28T14:33:32.403Z">
+<meta property="article:author" content="杨庭屹">
+<meta property="article:tag" content="N-H protocol">
+<meta property="article:tag" content="Coursework">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://adamyoung71.github.io/img/in-post/post-secure-protocol/N-S-protocol.png">
+  
+  
+  
+  <title>基于N-H协议的安全通信协议设计 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"adamyoung71.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Adam&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="基于N-H协议的安全通信协议设计"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-10-01 18:40" pubdate>
+          2019年10月1日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          54 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">基于N-H协议的安全通信协议设计</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="安全通信协议的一次尝试"><a href="#安全通信协议的一次尝试" class="headerlink" title="安全通信协议的一次尝试"></a>安全通信协议的一次尝试</h1><p><strong>摘要</strong></p>
+<p>当前网络通信安全已经成为小到影响人们生产生活，达到影响社会经济发展的重要因素，而网络通信协议的安全性也就至关重要。本文中作者简要描述了几个经典的密钥交换和认证协议，并对这些协议的可能被攻击的方式和原因进行了描述，总结出了设计安全协议的一般原则。之后作者从这些原则出发，设计出了一个能够抵抗大多数协议攻击方式的密钥交换及认证协议。</p>
+<h3 id="一、协议描述"><a href="#一、协议描述" class="headerlink" title="一、协议描述"></a>一、协议描述</h3><h4 id="1-Needham-Schroeder协议"><a href="#1-Needham-Schroeder协议" class="headerlink" title="1. Needham-Schroeder协议"></a>1. Needham-Schroeder协议</h4><p><strong>协议目的</strong>		基于认证服务器实现双向认证和密钥交换。</p>
+<p><strong>变量表</strong></p>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$T$</td>
+<td>Trent</td>
+</tr>
+<tr>
+<td>$R_i$</td>
+<td>i生成的随机数</td>
+</tr>
+<tr>
+<td>$E_i$</td>
+<td>使用i的密钥进行加密</td>
+</tr>
+<tr>
+<td>$K$</td>
+<td>会话密钥</td>
+</tr>
+<tr>
+<td>$M$</td>
+<td>消息</td>
+</tr>
+<tr>
+<td>$A\ and\ B$</td>
+<td>通信双方（Alice，Bob）</td>
+</tr>
+</tbody></table>
+<p><strong>协议流程</strong></p>
+<ol>
+<li><p>$(A\rightarrow T):A,B,R_A​$</p>
+</li>
+<li><p>$(T\rightarrow A):E_A(R_A,B,K,E_B(K,A))​$</p>
+</li>
+<li><p>$(A\rightarrow B):E_B(K,A)$</p>
+</li>
+<li><p>$(B\rightarrow A):E_k(R_B)$</p>
+</li>
+<li><p>$(A\rightarrow B):E_K(R_B-1)$</p>
+</li>
+<li><p>$(A\leftrightarrow B):E_k(M&#x3D;{\dots})$</p>
+<p><img src="/../img/in-post/post-secure-protocol/N-S-protocol.png" srcset="/img/loading.gif" lazyload alt="N-S-protocol"></p>
+</li>
+</ol>
+<p><strong>协议描述</strong></p>
+<ol>
+<li>Alice想要与Bob进行通信，向认证服务器Trent发送通信双方$A,B$，与一个自己生成的随机数$R_A$。</li>
+<li>Trent在收到Alice的消息后使用其与Alice的共享密钥$E_A$加密前一消息中的随机数，$B$，其为Alice和Bob分配的会话密钥$K$和由Trent与Bob的共享密钥所加密的$(K,A)$。</li>
+<li>Alice收到消息后进行解密，确认随机数和通信方正确后保存会话密钥$K$，并将消息的最后一部分发送给Bob，使得Bob可以知道与其进行通信的对象和会话密钥。</li>
+<li>Bob对消息进行解密后向Alice发送使用会话密钥加密的随机数。</li>
+<li>Alice收到后进行解密并将此随机数减一后再使用会话密钥加密后发回给Bob。</li>
+<li>此时，Alice和Bob的认证和密钥交换已经完成，双方可以在会话密钥下进行保密通信。</li>
+</ol>
+<p><strong>攻击方式</strong></p>
+<ol>
+<li><p>消息重放攻击</p>
+<p>由于在上述流程中消息（4）不具有新鲜性，所以如果攻击者获知以前的一个工作密钥，则可以通过重放消息（4）于Bob建立会话。</p>
+</li>
+</ol>
+<p><strong>攻击原因</strong></p>
+<p>​	攻击者利用消息的再生能力生成诚实用户所期望的消息格式，并重新发送，</p>
+<h4 id="2-Needham-Schroeder公钥认证协议"><a href="#2-Needham-Schroeder公钥认证协议" class="headerlink" title="2. Needham-Schroeder公钥认证协议"></a>2. Needham-Schroeder公钥认证协议</h4><p><strong>协议目的</strong>		通信双方在可信第三方的条件下使用公钥系统建立行的共享密钥并实现认证。</p>
+<p><strong>变量表</strong></p>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$A\ and\ B$</td>
+<td>通信双方Alice与Bob</td>
+</tr>
+<tr>
+<td>$T$</td>
+<td>可信第三方</td>
+</tr>
+<tr>
+<td>$K_{ij}$</td>
+<td>i与j的公共密钥</td>
+</tr>
+<tr>
+<td>$T_i$</td>
+<td>由i生成的时间戳</td>
+</tr>
+<tr>
+<td>$M_i,N_i$</td>
+<td>由i生成的随机数</td>
+</tr>
+<tr>
+<td>$K_i^{-1}$</td>
+<td>$i$的私钥</td>
+</tr>
+</tbody></table>
+<p><strong>协议流程</strong></p>
+<ol>
+<li>$(A\rightarrow T): A,B​$</li>
+<li>$(T\rightarrow A):{K_b,B}_{K_t^{-1}}$</li>
+<li>$(A\rightarrow B): {N_a,A}_{K_b}​$</li>
+<li>$(B\rightarrow T):A,B$</li>
+<li>$(T\rightarrow B):{K_a,A}_{K_t^{-1}}​$</li>
+<li>$(B\rightarrow A): {N_a,N_b}_{K_a}​$</li>
+<li>$(A\rightarrow B): {N_b}<em>{K</em>{b}}​$</li>
+</ol>
+<p><strong>协议描述</strong></p>
+<ol>
+<li>Alice想要与Bob进行通信，首先向Trent表明两人的身份。</li>
+<li>Trent返回使用自己私钥签名的Bob 的公钥。</li>
+<li>Alice使用Bob的公钥加密一个随机数并表明自己的身份。</li>
+<li>Bob使用私钥解密后向Trent确认，发送Alice和自己的身份。</li>
+<li>同样的，Trent返回自己签名的Alice的公钥。至此，Alice和Bob双方已经获得了对方的公钥。</li>
+<li>Bob使用Alice的公钥加密先前受到的随机数和自己产生的另一个随机数。</li>
+<li>Alice使用Bob的公钥回复Bob产生的随机数。</li>
+</ol>
+<p><strong>攻击方式</strong></p>
+<p>中间人攻击：中间人Malice冒充Alice与Bob建立了共享秘密。同时也是预言机攻击，因为Alice与Malice建立通信后Malice就可以获得由Alice无意中解密的Bob的随机数。</p>
+<ol>
+<li>$(A\rightarrow M): {N_a,A}_{K_m}$</li>
+<li>$(M\rightarrow B):{N_a,A}<em>{K</em>{b}}$ </li>
+<li>$(B\rightarrow M):{N_a,N_b}_{K_a}$</li>
+</ol>
+<p><strong>攻击原因</strong></p>
+<p>传递的消息由公钥加密，而公钥是公开的，无法确定消息来源。同时在步骤6，7中Alice无意中将Bob生成的随机数解密，使得攻击者能够利用此解密结果通过Bob最后的验证。</p>
+<h4 id="3-Neuman-Stubblebine协议"><a href="#3-Neuman-Stubblebine协议" class="headerlink" title="3. Neuman-Stubblebine协议"></a>3. Neuman-Stubblebine协议</h4><p><strong>协议目的</strong>		通信双方在可信第三方的条件下实现认证及密钥交换。 </p>
+<p><strong>变量表</strong>			同上。</p>
+<p><strong>协议流程</strong></p>
+<ol>
+<li><p>$(A\rightarrow B):A,N_a$</p>
+</li>
+<li><p>$(B\rightarrow T):B,{A,N_a,T_b}<em>{K</em>{bt}},N_b$</p>
+</li>
+<li><p>$(T\rightarrow A):{B,N_a,K_{ab},T_b}<em>{k</em>{at}},(A,K_{ab},T_b),N_b​$</p>
+</li>
+<li><p>$(A\rightarrow B):{A,K_{ab},T_b}<em>{K</em>{bt}},{N_b}<em>{K</em>{ab}}$</p>
+</li>
+<li><p>$(A\rightarrow B):M_a,{A,K_{ab},T_b}<em>{K</em>{bt}}$</p>
+</li>
+<li><p>$(B\rightarrow A):M_b,{M_a}<em>{K</em>{ab}}​$</p>
+</li>
+<li><p>$(A\rightarrow B):{M_b}<em>{K</em>{ab}}$</p>
+<p><img src="/../img/in-post/post-secure-protocol/Neuman-Stubblebine.png" srcset="/img/loading.gif" lazyload alt="Neuman-Stubblebine"></p>
+</li>
+</ol>
+<p><strong>协议描述</strong></p>
+<ol>
+<li>Alice告知Bob想要与其进行安全通信。将其身份与一随机数发送给Bob。</li>
+<li>Bob收到消息后生成自己的随机数与一个时间戳，并使用自己与Trent的共有密钥加密后发送给Trent。</li>
+<li>Trent收到消息后生成一个会话密钥，还将此会话密钥使用与Bob的共有密钥加密后发送给Alice。</li>
+<li>Alice将消息后半部分转发给Bob，同时验证$N_a​$是否为开始时的值。而Bob则会验证$T_b​$和$N_b​$与开始时一致。</li>
+<li>Alice向Bob发送先前从Trent处收到的信息，并附加一个新的随机数。</li>
+<li>Bob也发送一个新的随机数并将Alice的随机数用会话密钥加密后一并发回。</li>
+<li>Alice将Bob 的随机数使用会话密钥加密后发回，Bob验证无误后，此时通信已经成功建立。</li>
+</ol>
+<p><strong>攻击方式</strong>   </p>
+<ul>
+<li>归因于类型缺陷攻击：由于协议中未定义变量的类型，所以攻击者Malice可以使用一次性的Nonce代替共享密钥，而Malice只需要将此Nonce设置为一个对于当前加解密算法有效的密钥即可。又因为Trent返回的票据与Bob向Trent发送的请求信息有着相似的结构，所以只需要截获Bob所发送的信息，就可以将此信息作为虚假票据发给Bob，而Bob则无法判断其正确性。</li>
+</ul>
+<p><strong>攻击原因</strong></p>
+<p>​	协议中的消息部分的类型信息不明确。消息（2）与消息（4）的加密部分有着非常相似的结构，区别仅仅是第二部分是Nonce还是会话密钥，又因为Nonce是公开的，Alice就可以反射这条消息，而Bob无法确认此消息是否来自Trent，但确实可以使用其与Trent的共享密钥解密，则Bob相信Nonce为共享密钥。则Alice不通过Trent的认证就与Bob建立了共享密钥。</p>
+<h4 id="4-Otway-Rees协议"><a href="#4-Otway-Rees协议" class="headerlink" title="4. Otway-Rees协议"></a>4. Otway-Rees协议</h4><p><strong>协议目的</strong>		使得通信双方通过可信第三方交换会话密钥。</p>
+<p><strong>变量表</strong>		同上。</p>
+<p><strong>协议流程</strong></p>
+<ol>
+<li><p>$(A\rightarrow B):M,A,B,{N_a,M,A,B}<em>{K</em>{at}}​$</p>
+</li>
+<li><p>$(B\rightarrow T):M,A,B,{N_a,M,A,B}<em>{K</em>{at}},{N_b,M,A,B}<em>{K</em>{bt}}​$</p>
+</li>
+<li><p>$(T\rightarrow B):M,{N_a,K_{ab}}<em>{K</em>{at}},{N_b.K_{ab}}<em>{K</em>{bt}}$</p>
+</li>
+<li><p>$(B\rightarrow A):M,{N_a,K_{ab}}<em>{K</em>{at}}$</p>
+<p><img src="/../img/in-post/post-secure-protocol/otway-rees.png" srcset="/img/loading.gif" lazyload alt="otway-rees"></p>
+</li>
+</ol>
+<p><strong>协议描述</strong></p>
+<ol>
+<li>Alice想要与Bob建立通信，向其发送通信双方名称和一Nonce，还有Alice与可信服务器Trent的共享密钥加密的随机数和通信方。</li>
+<li>Bob收到消息后向Trent转发消息的加密部分，并添加使用自己与Trent共享密钥加密的通信双方和自己生成的一个随机数。</li>
+<li>Trent返回用于Alice和Bob分别的共享密钥加密的会话密钥。</li>
+<li>Bob收到消息解密后检查$N_b$是否正确，并把Alice的部分转发给Alice。</li>
+<li>Alice解密后确认$N_a$是否正确，此时双方密钥交换已经完成。</li>
+</ol>
+<p><strong>攻击方式</strong></p>
+<ul>
+<li>归因于类型缺陷攻击：由于Alice在第一条消息中的随机数是以明文形式发送，而且在最后一条消息Alice获取密钥的消息格式与第一条相似，都包含相同而一个随机数，所以攻击者Malice就可以冒充Bob，将Alice发送给其的第一条消息发回给Alice，由于无法判定变量类型，Alice会将随机数外的数据$M||A||B$当作会话密钥，此时Malice就在未经可信第三方Trent的允许下与Alice建立了通信。</li>
+</ul>
+<p><strong>攻击原因</strong></p>
+<p>​	通信主体无法确认消息中变量的类型。在消息（4）中读取到Nonce后Alice就会将之后的任何内容都当作为会话密钥，而且此消息与消息（1）类似，攻击者就利用这一点，又因为M是明文，就可以发回第一条消息，而Alice无法确认消息来源，只能相信消息从Trent来。</p>
+<h3 id="二、安全协议的要点"><a href="#二、安全协议的要点" class="headerlink" title="二、安全协议的要点"></a>二、安全协议的要点</h3><p>协议的安全性主要包括时效性，机密性、完整性、认证性和不可抵赖性。在通信协议中如果没有将这些因素全部考虑在内就会存在可能的安全隐患。</p>
+<h4 id="1-协议缺陷的类型"><a href="#1-协议缺陷的类型" class="headerlink" title="1. 协议缺陷的类型"></a>1. 协议缺陷的类型</h4><ol>
+<li>基本协议缺陷：在安全协议的设计中没有或者很少防范攻击者的攻击。</li>
+<li>口令&#x2F;密钥猜测缺陷：用户从常用词或简单的组合中选取口令，从而使攻击者能够进行口令猜测攻击；或者选取了不安全的伪随机数生成算法构造密钥，使得攻击者可以恢复该密钥。</li>
+<li>陈旧消息攻击（重放攻击）：在通信过程中没有保证消息的新鲜性，从而使得攻击者可以通过重放消息进行攻击。</li>
+<li>中间人攻击：攻击者将自己伪装于通信双方之间进行通信。</li>
+<li>预言机攻击：通信主体无意间为攻击者执行了一个密码运算，此主体被认为用作了预言机，就会可能被诱导执行某个协议的一些步骤从而帮助攻击者得到某些原本无法得到的信息。</li>
+<li>交错攻击：攻击者将某个协议的两个或多个运行实例安排为以交错的方式运行，</li>
+<li>平行会话攻击：在攻击者的安排下一个协议的两个或多个运行并发执行，从而从一个会话中得到其他会话中困难性问题的答案。</li>
+<li>反射攻击：当一个诚实的主体给某个意定的通信方发送消息时，攻击者截获该消息，并将该消息返回给消息的发送者。目的是欺骗消费者提供“预言服务”。</li>
+<li>归因于类型缺陷攻击：由于协议中消息中变量类型不明确导致攻击者可以把其他类型信息当作密钥从而导致协议安全性被破环。</li>
+<li>密码服务滥用攻击：l协议中的密码算法没有提供正确的保护，从而在协议中缺少所需要的密码保护。</li>
+<li>前向保密失败：过去泄露的影响到后来的消息安全。</li>
+</ol>
+<h4 id="2-安全协议"><a href="#2-安全协议" class="headerlink" title="2. 安全协议"></a>2. 安全协议</h4><p>通过以上描述，我们可以总结出安全通信协议所需要的要素：</p>
+<ol>
+<li>需要有随机数或挑战值来确保消息的新鲜性。由于单纯靠时间戳会受到允许时间之内的重放消息，单纯使用挑战值又会因为存储的挑战值越来越多影响性能，故两者将配合使用。</li>
+<li>尽量提供机制认证消息来源，如签名机制。</li>
+<li>不能随意发送所收到加密消息的解密结果，不能充当预言机。</li>
+<li>协议中的各个消息不应能被修改、合成为另外消息的应答。</li>
+<li>协议的两个实例之间不应有任何相关性，且一个实例中的任何消息不应成为其他实例的回应。</li>
+<li>协议应该提供机制确认消息中的变量类型，以此预防归因于类型缺陷的攻击。</li>
+<li>提供机制确保消息完整性。</li>
+<li>过去泄漏的信息不应该影响到后来的消息。</li>
+</ol>
+<h3 id="三、安全协议设计"><a href="#三、安全协议设计" class="headerlink" title="三、安全协议设计"></a>三、安全协议设计</h3><p>基于上述原则，本文将设计一种安全的密钥交换和认证协议，并可以抵抗上述所有的攻击方式。首先需要作出一些必要的假设</p>
+<p><strong>协议假设</strong></p>
+<ul>
+<li>存在可信第三方Trent。</li>
+<li>Trent与任意通信主体都有共享密钥，此密钥可以通过公钥系统进行分发。</li>
+<li>攻击者不能破解任何自己不能解密的内容。</li>
+<li>消息在传播中不会丢失或改变。</li>
+<li>消息的各个部分间需要加上特定填充（padding），而且此填充与消息内容不会碰撞。通信主体在接收到消息后先要进行填充搜索，如在消息$M,A,B,{M,A,B,N_a}<em>{K</em>{at}}$中接收方可以区分共有四个部分，即使可能不知道这四个部分分别是什么消息类型，同时Trent在解密第四部分后同样可以判断出共有四个部分。</li>
+</ul>
+<p><strong>协议流程</strong></p>
+<ol>
+<li><p>$(A\rightarrow B):M,A,B,{N_A,M,A,B}<em>{K</em>{AT}}$</p>
+</li>
+<li><p>$(B\rightarrow T):M,A,B,{N_A,M,A,B}<em>{K</em>{AT}},{N_B,M,A,B}<em>{K</em>{BT}}$</p>
+</li>
+<li><p>$(T\rightarrow B):M,{N_A,M,A,B,K_{AB}}<em>{K</em>{AT}},{N_B,M,A,B,K_{AB}}<em>{K</em>{BT}}​$</p>
+</li>
+<li><p>$(B\rightarrow A):M,A,B,{N_A,M,A,B,K_{AB}}<em>{K</em>{AT}}​$</p>
+</li>
+<li><p>$(A\rightarrow B):M,A,B,{M,N_{A2},A,B}<em>{K</em>{AB}}​$</p>
+</li>
+<li><p>$(B\rightarrow A): M,A,B,{M,N_{A2}-1,A,B}<em>{K</em>{AB}}$</p>
+<p><img src="/../../../../AppData/Roaming/Typora/typora-user-images/1573794104740.png" srcset="/img/loading.gif" lazyload alt="1573794104740"></p>
+</li>
+</ol>
+<p><strong>协议描述</strong></p>
+<ol>
+<li>Alice想要和Bob交换密钥并建立通信，首先确定一个会话序列号$M​$用来标记整个协议流程，表明通信双方，再发送一个由Alice与Trent共享密钥加密的Nonce、会话序列号和双方身份。</li>
+<li>Bob收到Alice的通信请求后，将会话序列号、通信双方、转发Alice的加密内容再加上一个由Bob与Trent共享密钥加密的Nonce、会话序列号和双方身份。</li>
+<li>Trent收到消息后分别解密两块加密内容，确认两块密文中的序列号与通信双方是否与明文中相等，若相等则返回给Bob信息：会话序列号、分别由Trent和Alice、Bob共享密钥加密的包含对应Nonce、会话序列号、同通信双方和会话密钥。</li>
+<li>Bob收到消息后解密自己的部分，并确认Nonce和会话序列号的正确性后，将会话序列号、通信双方和Alice和Trent的加密部分发送给Alice。</li>
+<li>Alice收到消息后解密自己的部分，验证序列号，通信双方和Nonce的正确性，若正确则给Bob发送消息：会话序列号、通信双方和由会话密钥加密的会话序列号、通信双方和一个新的Nonce。</li>
+<li>Bob收到消息并使用会话密钥解密后验证会话序列号的正确性，若正确，使用会话密钥加密会话序列号、Alice的新Nonce-1和通信双方发回给Alice。</li>
+<li>Alice收到并解密认证后，协议结束，双方已完成密钥交换和认证。</li>
+</ol>
+<p><strong>协议分析</strong></p>
+<ul>
+<li>所有通信方在接受消息后首先要判断会话序列号$M​$，如果之后的加密内容中的序列号值不匹配则拒收消息。因为此序列号始终需要匹配，攻击者就不能进行替换，从而保证了协议不会受到重放攻击。</li>
+<li>每一个加密消息中都有会话序列号和要共享密钥的通信双方，防止中间人冒充其中一方。</li>
+<li>前两个Nonce$N_A,N_B$只对Trent可见，而对对方不可见，使得只要可以确认此Nonce，就可以确认它来自Trent。</li>
+<li>假设5确保了接收方不会将消息中的某几个部分当成一个部分，也不会将一个部分分成几个部分，有效地避免了归因于类型缺陷的攻击。</li>
+<li>此协议中的明文部分始终只会有序列号和通信双方，所以反射攻击或平行会话攻击不会使得某一方充当预言机。</li>
+<li>为了更高程度地保证安全性，协议中包含了很多的冗余，而这些冗余也可能会使协议的效率有所降低。</li>
+</ul>
+<h3 id="四、总结"><a href="#四、总结" class="headerlink" title="四、总结"></a>四、总结</h3><p>本文探讨了安全通信协议的重要性，对一些具有代表性的密钥交换和认证协议进行了分析梳理，找到了其易受攻击的方法和原因。由此总结了针对协议攻击的若干类型，进而得出设计安全协议的一般原则。最后，作者通过结合这些原则设计出了一套能够抵抗已知攻击的密钥交换和认证协议，并对其进行了详细的描述和分析。</p>
+<p>通过本次作业，我对通信协议的了解程度得到了很大程度的加深，并且对协议的分析也有了一定的实践经验，作为计算机专业的学生这些知识和技能都会在以后的学习工作中派上用场。更加重要的是这种全面考虑的设计思维将对以后各种各样的任务都有积极影响。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/N-H-protocol/">#N-H protocol</a>
+      
+        <a href="/tags/Coursework/">#Coursework</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>基于N-H协议的安全通信协议设计</div>
+      <div>https://adamyoung71.github.io/2019/10/01/2019-10-01-第二次作业/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Adam</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年10月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/10/12/2019-10-13-TCP%E9%A2%84%E6%B5%8B%E6%94%BB%E5%87%BB%E7%9A%84%E6%94%B9%E8%BF%9B-K%E5%88%86%E6%9F%A5%E6%89%BE%E6%B3%95/" title="Improvement on TCP Sequence Number Inference Attack">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Improvement on TCP Sequence Number Inference Attack</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/08/14/2019-8-14-RC4%E5%AE%9E%E9%AA%8C/" title="RC4实验报告">
+                        <span class="hidden-mobile">RC4实验报告</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
