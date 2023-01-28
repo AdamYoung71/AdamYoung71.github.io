@@ -283,8 +283,10 @@ Solution:
 首先看一下注入点，加了一个 `'OR 1=1 -- ` 后显示了"Attack detected"，也就是说针对常见的注入关键字有检测。
 
 # 5. 二次注入
-```
+
 {% note info %}
 文字 或者 `markdown` 均可
 {% endnote %}
-```
+
+
+<p class="note note-primary">标签</p>
